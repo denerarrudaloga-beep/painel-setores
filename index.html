@@ -1,0 +1,2581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Status dos Setores</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a14;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #12121f, #1a1a2e);
+            border-radius: 20px;
+            padding: 25px 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 1px solid #2a2a4a;
+        }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; flex-wrap: wrap; gap: 15px;
+        }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .header-left h1 {
+            font-size: 26px; font-weight: 700;
+            background: linear-gradient(90deg, #00d4ff, #7b2ffc);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .header-left .badge-ano {
+            background: #2a2a4a; padding: 4px 14px; border-radius: 50px;
+            font-size: 13px; color: #888;
+        }
+        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .info-hoje {
+            background: #0f0f1a; padding: 8px 18px; border-radius: 50px;
+            border: 1px solid #2a2a4a; font-size: 13px; color: #aaa;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .info-hoje .feriado { color: #ff9100; font-weight: 600; }
+        .relogio {
+            background: #0f0f1a; padding: 8px 18px; border-radius: 50px;
+            border: 1px solid #2a2a4a; font-size: 18px; font-weight: 600;
+            color: #00d4ff; font-family: 'Courier New', monospace;
+        }
+        .btn-admin, .btn-alerta, .btn-cloud {
+            border: none; padding: 8px 20px; border-radius: 50px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 13px;
+        }
+        .btn-admin { background: #7b2ffc; color: #fff; }
+        .btn-admin:hover { background: #9b5ffc; transform: scale(1.05); }
+        .btn-alerta {
+            background: #ff9100; color: #000; font-weight: 700;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .btn-alerta:hover { background: #ffab40; transform: scale(1.05); }
+        .btn-alerta.ativo { background: #00c853; color: #fff; }
+        .btn-alerta.ativo:hover { background: #69f0ae; }
+
+        .btn-cloud {
+            background: #0f0f1a; color: #888;
+            border: 1px solid #2a2a4a;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .btn-cloud:hover { border-color: #00bcd4; color: #00bcd4; }
+        .btn-cloud.conectado { background: rgba(0, 200, 83, 0.15); color: #00c853; border-color: #00c853; }
+        .btn-cloud.desativado { background: rgba(255, 23, 68, 0.1); color: #888; border-color: #555; opacity: 0.7; }
+        .btn-cloud.desativado:hover { border-color: #ff1744; color: #ff5252; opacity: 1; }
+        .btn-cloud.erro { background: rgba(255, 23, 68, 0.15); color: #ff5252; border-color: #ff1744; }
+        .btn-cloud.sincronizando { background: rgba(0, 212, 255, 0.15); color: #00d4ff; border-color: #00d4ff; }
+        .btn-cloud.sincronizando::before {
+            content: ''; display: inline-block;
+            width: 10px; height: 10px;
+            border: 2px solid #00d4ff; border-top-color: transparent;
+            border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 4px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .banner-feriado {
+            display: none;
+            background: linear-gradient(90deg, rgba(156, 39, 176, 0.3), rgba(156, 39, 176, 0.1), rgba(156, 39, 176, 0.3));
+            background-size: 200% 100%;
+            border: 2px solid #9c27b0;
+            border-left: 8px solid #9c27b0;
+            border-radius: 14px;
+            padding: 20px 26px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 30px rgba(156, 39, 176, 0.5), inset 0 0 30px rgba(156, 39, 176, 0.1);
+            animation: feriadoBackground 4s ease infinite, slideDown 0.4s ease;
+        }
+        .banner-feriado.ativo { display: block; }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes feriadoBackground {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .banner-feriado .titulo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+            display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+            text-shadow: 0 0 20px rgba(206, 147, 216, 0.9), 0 0 40px rgba(156, 39, 176, 0.6), 0 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: 1px;
+            animation: feriadoPulse 2s ease-in-out infinite;
+            text-transform: uppercase;
+        }
+        @keyframes feriadoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .banner-feriado .conteudo {
+            font-size: 15px;
+            color: #fff;
+            line-height: 1.9;
+            font-weight: 600;
+        }
+        .banner-feriado .conteudo .linha {
+            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            margin: 8px 0;
+            padding: 6px 0;
+        }
+        .banner-feriado .chip-funcionando {
+            background: rgba(0, 200, 83, 0.25);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 800;
+            border: 2px solid #00c853;
+            text-shadow: 0 0 8px rgba(0, 200, 83, 0.8);
+            box-shadow: 0 0 15px rgba(0, 200, 83, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .banner-feriado .chip-fechado {
+            background: rgba(255, 23, 68, 0.25);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 800;
+            border: 2px solid #ff1744;
+            text-shadow: 0 0 8px rgba(255, 23, 68, 0.8);
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .ticker-wrap {
+            display: none;
+            width: 100%;
+            overflow: hidden;
+            background: linear-gradient(90deg, #0f0f1a, #1a1a2e, #0f0f1a);
+            border: 2px solid #2a2a4a;
+            border-left: 8px solid #00d4ff;
+            border-radius: 14px;
+            padding: 16px 0;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+        }
+        .ticker-wrap.ativo { display: block; }
+        .ticker-wrap::before, .ticker-wrap::after {
+            content: '';
+            position: absolute; top: 0; bottom: 0; width: 80px;
+            z-index: 2; pointer-events: none;
+        }
+        .ticker-wrap::before {
+            left: 0;
+            background: linear-gradient(90deg, #12121f, transparent);
+        }
+        .ticker-wrap::after {
+            right: 0;
+            background: linear-gradient(270deg, #12121f, transparent);
+        }
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: ticker 40s linear infinite;
+            padding-left: 100%;
+        }
+        .ticker:hover { animation-play-state: paused; }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        .ticker-item {
+            display: inline-block;
+            padding: 0 50px;
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+            border-right: 2px solid rgba(0, 212, 255, 0.4);
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.9), 0 0 30px rgba(0, 212, 255, 0.5), 0 2px 4px rgba(0,0,0,0.8);
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            animation: tickerGlow 2s ease-in-out infinite alternate;
+        }
+        .ticker-item:last-child { border-right: none; }
+        .ticker-item .emoji {
+            font-size: 26px;
+            margin-right: 10px;
+            display: inline-block;
+            animation: tickerBounce 0.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
+        }
+        @keyframes tickerGlow {
+            0% { text-shadow: 0 0 15px rgba(0, 212, 255, 0.9), 0 0 30px rgba(0, 212, 255, 0.5), 0 2px 4px rgba(0,0,0,0.8); }
+            100% { text-shadow: 0 0 25px rgba(0, 212, 255, 1), 0 0 50px rgba(0, 212, 255, 0.8), 0 2px 4px rgba(0,0,0,0.8); }
+        }
+        @keyframes tickerBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        .avisos-fixos {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .avisos-fixos.ativo { display: flex; }
+        .aviso-fixo {
+            background: linear-gradient(90deg, rgba(255, 145, 0, 0.25), rgba(255, 145, 0, 0.08), rgba(255, 145, 0, 0.25));
+            background-size: 200% 100%;
+            border: 2px solid #ff9100;
+            border-left: 8px solid #ff9100;
+            border-radius: 12px;
+            padding: 18px 24px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 10px rgba(255, 145, 0, 0.8), 0 2px 4px rgba(0,0,0,0.5);
+            display: flex; align-items: center; gap: 16px;
+            animation: avisoPulse 2s ease-in-out infinite, avisoGlow 1.5s ease-in-out infinite alternate;
+            box-shadow: 0 0 20px rgba(255, 145, 0, 0.4), inset 0 0 20px rgba(255, 145, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .aviso-fixo::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: avisoShine 3s linear infinite;
+        }
+        @keyframes avisoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+        }
+        @keyframes avisoGlow {
+            0% { box-shadow: 0 0 20px rgba(255, 145, 0, 0.4), inset 0 0 20px rgba(255, 145, 0, 0.1); }
+            100% { box-shadow: 0 0 35px rgba(255, 145, 0, 0.8), inset 0 0 25px rgba(255, 145, 0, 0.2); }
+        }
+        @keyframes avisoShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        .aviso-fixo .icone {
+            font-size: 36px;
+            animation: avisoBounce 1s ease-in-out infinite;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+        }
+        @keyframes avisoBounce {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.2) rotate(-10deg); }
+            75% { transform: scale(1.2) rotate(10deg); }
+        }
+
+        .aviso-fixo.tipo-urgente {
+            background: linear-gradient(90deg, rgba(255, 23, 68, 0.3), rgba(255, 23, 68, 0.1), rgba(255, 23, 68, 0.3));
+            border-color: #ff1744;
+            border-left-color: #ff1744;
+            animation: avisoPulse 1s ease-in-out infinite, avisoUrgenteGlow 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes avisoUrgenteGlow {
+            0% { box-shadow: 0 0 20px rgba(255, 23, 68, 0.5), inset 0 0 20px rgba(255, 23, 68, 0.15); }
+            100% { box-shadow: 0 0 40px rgba(255, 23, 68, 1), inset 0 0 30px rgba(255, 23, 68, 0.3); }
+        }
+        .aviso-fixo.tipo-sucesso {
+            background: linear-gradient(90deg, rgba(0, 200, 83, 0.25), rgba(0, 200, 83, 0.08), rgba(0, 200, 83, 0.25));
+            border-color: #00c853;
+            border-left-color: #00c853;
+        }
+        .aviso-fixo.tipo-info {
+            background: linear-gradient(90deg, rgba(0, 212, 255, 0.25), rgba(0, 212, 255, 0.08), rgba(0, 212, 255, 0.25));
+            border-color: #00d4ff;
+            border-left-color: #00d4ff;
+        }
+
+        .legenda {
+            display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;
+            padding: 12px 18px; background: #0f0f1a; border-radius: 12px;
+            border: 1px solid #2a2a4a;
+        }
+        .legenda-item {
+            display: flex; align-items: center; gap: 8px;
+            font-size: 13px; color: #aaa;
+        }
+        .legenda-item .bolinha {
+            width: 12px; height: 12px; border-radius: 50%;
+            display: inline-block; flex-shrink: 0;
+        }
+        .bolinha.verde { background: #00c853; }
+        .bolinha.laranja { background: #ff9100; }
+        .bolinha.vermelha { background: #ff1744; }
+        .bolinha.cinza { background: #555; }
+        .bolinha.feriado { background: #9c27b0; }
+        .bolinha.almoco { background: #ffab40; }
+        .bolinha.excecao { background: #00bcd4; }
+        .bolinha.reuniao { background: #ff6b9d; }
+
+        .search-bar {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+            background: #0f0f1a; padding: 8px 16px; border-radius: 12px;
+            border: 1px solid #2a2a4a; transition: 0.3s;
+        }
+        .search-bar:focus-within { border-color: #7b2ffc; box-shadow: 0 0 20px rgba(123, 47, 252, 0.1); }
+        .search-bar .icone-lupa { color: #555; font-size: 18px; }
+        .search-bar input {
+            background: transparent; border: none; color: #fff;
+            font-size: 15px; width: 100%; padding: 8px 0; outline: none;
+        }
+        .search-bar input::placeholder { color: #555; }
+        .search-bar .qtd-resultados { color: #555; font-size: 13px; white-space: nowrap; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+        .card {
+            background: #12121f; border-radius: 14px; padding: 18px 20px;
+            border-left: 5px solid #555; transition: all 0.3s ease;
+            border: 1px solid #1a1a2e;
+        }
+        .card:hover {
+            transform: translateY(-3px); border-color: #2a2a4a;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+        .card.aberto { border-left-color: #00c853; }
+        .card.alerta { border-left-color: #ff9100; }
+        .card.fechado { border-left-color: #ff1744; }
+        .card.indisponivel { border-left-color: #555; opacity: 0.5; }
+        .card.feriado { border-left-color: #9c27b0; }
+        .card.almoco { border-left-color: #ffab40; }
+        .card.excecao { border-left-color: #00bcd4; }
+        .card.reuniao { border-left-color: #ff6b9d; }
+        .card.oculto { display: none; }
+
+        .card-header {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 8px;
+        }
+        .card-titulo { font-size: 16px; font-weight: 700; color: #fff; }
+        .card-subtitulo { font-size: 12px; color: #666; margin-top: 2px; }
+        .card-status {
+            font-size: 11px; font-weight: 600; padding: 3px 12px;
+            border-radius: 50px; background: #0f0f1a;
+            border: 1px solid #2a2a4a; white-space: nowrap;
+        }
+        .card-status.aberto { color: #00c853; border-color: #00c853; }
+        .card-status.alerta { color: #ff9100; border-color: #ff9100; animation: pisca 1.5s infinite; }
+        .card-status.fechado { color: #ff1744; border-color: #ff1744; }
+        .card-status.indisponivel { color: #555; border-color: #555; }
+        .card-status.feriado { color: #ce93d8; border-color: #9c27b0; }
+        .card-status.almoco { color: #ffab40; border-color: #ffab40; }
+        .card-status.excecao { color: #00bcd4; border-color: #00bcd4; }
+        .card-status.reuniao { color: #ff6b9d; border-color: #ff6b9d; }
+        @keyframes pisca { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+        .card-horario {
+            font-size: 13px; color: #888; margin: 8px 0;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+        .badge-feriado {
+            background: #9c27b0; color: #fff; font-size: 10px;
+            padding: 2px 10px; border-radius: 50px; font-weight: 600;
+        }
+        .badge-almoco {
+            background: #ffab40; color: #000; font-size: 10px;
+            padding: 2px 10px; border-radius: 50px; font-weight: 600;
+        }
+        .badge-excecao {
+            background: #00bcd4; color: #000; font-size: 10px;
+            padding: 2px 10px; border-radius: 50px; font-weight: 600;
+        }
+        .badge-reuniao {
+            background: #ff6b9d; color: #fff; font-size: 10px;
+            padding: 2px 10px; border-radius: 50px; font-weight: 600;
+        }
+
+        .card-mensagem {
+            font-size: 14px; padding: 10px 14px; border-radius: 10px;
+            margin-top: 8px; font-weight: 500;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .card-mensagem.aberto { background: rgba(0, 200, 83, 0.12); color: #69f0ae; }
+        .card-mensagem.alerta { background: rgba(255, 145, 0, 0.12); color: #ffab40; }
+        .card-mensagem.fechado { background: rgba(255, 23, 68, 0.12); color: #ff5252; }
+        .card-mensagem.indisponivel { background: rgba(85, 85, 85, 0.12); color: #888; }
+        .card-mensagem.feriado { background: rgba(156, 39, 176, 0.12); color: #ce93d8; }
+        .card-mensagem.almoco { background: rgba(255, 171, 64, 0.12); color: #ffab40; }
+        .card-mensagem.excecao { background: rgba(0, 188, 212, 0.12); color: #4dd0e1; }
+        .card-mensagem.reuniao { background: rgba(255, 107, 157, 0.15); color: #ff6b9d; }
+        .card-mensagem .icone { font-size: 20px; }
+
+        .canais { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+        .canais span {
+            font-size: 11px; background: #0f0f1a; padding: 2px 10px;
+            border-radius: 50px; border: 1px solid #1a1a2e; color: #666;
+        }
+
+        .alerta-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.95); z-index: 9999;
+            justify-content: center; align-items: center; padding: 20px;
+            animation: fadeInAlerta 0.3s ease;
+        }
+        .alerta-overlay.ativo { display: flex; }
+        @keyframes fadeInAlerta { from{opacity:0;} to{opacity:1;} }
+        .alerta-box {
+            background: linear-gradient(145deg, #1a1a2e, #12121f);
+            border-radius: 24px; padding: 50px 60px; max-width: 700px; width: 100%;
+            text-align: center; border: 3px solid #ff9100;
+            box-shadow: 0 0 80px rgba(255, 145, 0, 0.5), 0 20px 60px rgba(0, 0, 0, 0.9);
+            animation: pulseAlerta 1.5s infinite;
+        }
+        @keyframes pulseAlerta {
+            0%,100% { box-shadow: 0 0 80px rgba(255,145,0,0.5), 0 20px 60px rgba(0,0,0,0.9); transform: scale(1); }
+            50% { box-shadow: 0 0 120px rgba(255,145,0,0.8), 0 20px 60px rgba(0,0,0,0.9); transform: scale(1.02); }
+        }
+        .alerta-box.tipo-almoco { border-color: #ffab40; }
+        .alerta-box.tipo-reuniao { border-color: #ff6b9d; }
+        .alerta-icone { font-size: 90px; margin-bottom: 20px; animation: bounceAlerta 1s infinite; }
+        @keyframes bounceAlerta { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-15px);} }
+        .alerta-titulo { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .alerta-setor { font-size: 26px; font-weight: 700; color: #ffab40; margin-bottom: 15px; }
+        .alerta-mensagem { font-size: 20px; color: #ccc; margin-bottom: 25px; line-height: 1.5; }
+        .alerta-tempo { font-size: 16px; color: #888; margin-bottom: 30px; }
+        .alerta-btn {
+            background: #ff9100; color: #000; border: none;
+            padding: 18px 50px; border-radius: 50px; font-size: 20px;
+            font-weight: 800; cursor: pointer; transition: all 0.3s;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 8px 30px rgba(255, 145, 0, 0.5);
+        }
+        .alerta-btn:hover { background: #ffab40; transform: scale(1.08); }
+        .alerta-fila { margin-top: 20px; font-size: 14px; color: #888; }
+
+        .modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0, 0, 0, 0.85); z-index: 999;
+            justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-overlay.aberto { display: flex; }
+        .modal {
+            background: #1a1a2e; border-radius: 20px; padding: 30px;
+            max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto;
+            border: 1px solid #2a2a4a;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+        }
+        .modal-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 20px;
+        }
+        .modal-header h2 { font-size: 22px; color: #fff; }
+        .modal-fechar {
+            background: none; border: none; color: #888;
+            font-size: 28px; cursor: pointer; transition: 0.3s;
+        }
+        .modal-fechar:hover { color: #fff; transform: rotate(90deg); }
+
+        .modal-tabs {
+            display: flex; gap: 8px; margin-bottom: 20px;
+            border-bottom: 1px solid #2a2a4a; padding-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .modal-tab {
+            background: transparent; color: #888; border: none;
+            padding: 10px 18px; border-radius: 10px; font-weight: 600;
+            cursor: pointer; transition: 0.3s; font-size: 13px;
+        }
+        .modal-tab:hover { background: #0f0f1a; color: #fff; }
+        .modal-tab.ativo { background: #7b2ffc; color: #fff; }
+        .modal-tab-content { display: none; }
+        .modal-tab-content.ativo { display: block; }
+
+        .modal h3 { color: #aaa; font-size: 15px; margin: 15px 0 8px 0; }
+        .modal .info-ano {
+            background: #0f0f1a; padding: 10px 15px; border-radius: 10px;
+            border: 1px solid #2a2a4a; margin-bottom: 15px; color: #888;
+            font-size: 14px; display: flex; align-items: center;
+            flex-wrap: wrap; gap: 8px;
+        }
+        .modal .info-ano strong { color: #00d4ff; }
+
+        .modal .feriado-item {
+            display: flex; justify-content: space-between; align-items: center;
+            background: #0f0f1a; padding: 8px 14px; border-radius: 8px;
+            margin-bottom: 6px; border: 1px solid #2a2a4a;
+        }
+        .modal .feriado-item .data { font-weight: 600; color: #fff; font-size: 14px; }
+        .modal .feriado-item .nome { color: #aaa; font-size: 13px; }
+        .modal .feriado-item .btn-remover {
+            background: #ff1744; color: #fff; border: none;
+            padding: 3px 12px; border-radius: 50px; cursor: pointer;
+            font-size: 11px; transition: 0.3s;
+        }
+        .modal .feriado-item .btn-remover:hover { background: #ff5252; }
+
+        .modal .btn-adicionar-feriado {
+            background: #00c853; color: #fff; border: none;
+            padding: 8px 20px; border-radius: 50px; cursor: pointer;
+            font-weight: 600; transition: 0.3s; margin-top: 8px;
+        }
+        .modal .btn-adicionar-feriado:hover { background: #69f0ae; }
+
+        .modal input, .modal select, .modal textarea {
+            background: #0f0f1a; border: 1px solid #2a2a4a; color: #fff;
+            padding: 10px 15px; border-radius: 10px; font-size: 14px;
+            width: 100%; margin-bottom: 8px;
+            font-family: inherit;
+        }
+        .modal input:focus, .modal select:focus, .modal textarea:focus {
+            outline: none; border-color: #7b2ffc;
+        }
+        .modal textarea { resize: vertical; min-height: 60px; }
+
+        .modal .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
+        .modal .form-row input, .modal .form-row select { flex: 1; min-width: 100px; }
+
+        .modal .toggle-container {
+            display: flex; align-items: center; gap: 15px;
+            background: #0f0f1a; padding: 12px 16px; border-radius: 10px;
+            border: 1px solid #2a2a4a; margin: 8px 0;
+        }
+        .modal .toggle-container label { color: #aaa; font-weight: 500; font-size: 14px; }
+        .modal .toggle-container .toggle-status { font-weight: 600; font-size: 13px; }
+        .modal .toggle-container .toggle-status.ativo { color: #00c853; }
+        .modal .toggle-container .toggle-status.inativo { color: #ff1744; }
+
+        .switch {
+            position: relative; width: 44px; height: 24px;
+            background: #555; border-radius: 50px; cursor: pointer; transition: 0.3s;
+            flex-shrink: 0;
+        }
+        .switch.ativo { background: #7b2ffc; }
+        .switch::after {
+            content: ''; position: absolute; top: 2px; left: 2px;
+            width: 20px; height: 20px; background: #fff;
+            border-radius: 50%; transition: 0.3s;
+        }
+        .switch.ativo::after { left: 22px; }
+
+        .modal .btn-salvar {
+            background: #7b2ffc; color: #fff; border: none;
+            padding: 12px 30px; border-radius: 50px; font-weight: 700;
+            cursor: pointer; transition: 0.3s; width: 100%;
+            margin-top: 15px; font-size: 15px;
+        }
+        .modal .btn-salvar:hover { background: #9b5ffc; }
+
+        .modal .btn-importar {
+            background: #ff9100; color: #fff; border: none;
+            padding: 6px 16px; border-radius: 50px; cursor: pointer;
+            font-weight: 600; transition: 0.3s; margin-left: auto; font-size: 12px;
+        }
+        .modal .btn-importar:hover { background: #ffab40; }
+
+        .modal #feriadoAtualInfo {
+            background: #0f0f1a; padding: 10px 16px; border-radius: 10px;
+            border: 1px solid #9c27b0; margin: 8px 0; display: none;
+        }
+        .modal #feriadoAtualInfo .btn-remover {
+            background: #ff1744; color: #fff; border: none;
+            padding: 2px 12px; border-radius: 50px; cursor: pointer;
+            font-size: 11px; margin-left: 10px;
+        }
+        .modal .texto-ajuda {
+            color: #666; font-size: 12px; margin-top: 10px; text-align: center;
+        }
+
+        .excecao-item {
+            background: #0f0f1a; padding: 12px 16px; border-radius: 10px;
+            margin-bottom: 8px; border: 1px solid #2a2a4a;
+            border-left: 4px solid #00bcd4;
+        }
+        .excecao-item.reuniao { border-left-color: #ff6b9d; }
+        .excecao-item .excecao-header {
+            display: flex; justify-content: space-between;
+            align-items: center; margin-bottom: 6px;
+        }
+        .excecao-item .excecao-setor { font-weight: 700; color: #fff; font-size: 14px; }
+        .excecao-item .excecao-data { font-size: 12px; color: #00d4ff; font-weight: 600; }
+        .excecao-item .excecao-desc { font-size: 12px; color: #aaa; }
+        .excecao-item .excecao-tipo {
+            display: inline-block; font-size: 10px; padding: 2px 8px;
+            border-radius: 50px; margin-left: 6px; font-weight: 600;
+        }
+        .excecao-item .excecao-tipo.fechado { background: #ff1744; color: #fff; }
+        .excecao-item .excecao-tipo.especial { background: #ffab40; color: #000; }
+        .excecao-item .excecao-tipo.normal { background: #00c853; color: #fff; }
+        .excecao-item .excecao-tipo.reuniao { background: #ff6b9d; color: #fff; }
+        .excecao-item .btn-remover {
+            background: #ff1744; color: #fff; border: none;
+            padding: 3px 12px; border-radius: 50px; cursor: pointer;
+            font-size: 11px; transition: 0.3s;
+        }
+        .excecao-item .btn-remover:hover { background: #ff5252; }
+
+        .seletor-setor { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .seletor-setor .setor-chip {
+            background: #0f0f1a; border: 1px solid #2a2a4a; color: #aaa;
+            padding: 6px 14px; border-radius: 50px; font-size: 12px;
+            cursor: pointer; transition: 0.3s;
+        }
+        .seletor-setor .setor-chip:hover { border-color: #7b2ffc; color: #fff; }
+        .seletor-setor .setor-chip.selecionado {
+            background: #7b2ffc; border-color: #7b2ffc; color: #fff;
+        }
+
+        .tipo-excecao-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tipo-excecao-btns .tipo-btn {
+            flex: 1; background: #0f0f1a; border: 2px solid #2a2a4a;
+            color: #aaa; padding: 10px; border-radius: 10px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; min-width: 100px;
+        }
+        .tipo-excecao-btns .tipo-btn:hover { border-color: #7b2ffc; }
+        .tipo-excecao-btns .tipo-btn.selecionado {
+            border-color: #00d4ff; color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .aviso-excecao {
+            background: rgba(0, 188, 212, 0.1); border: 1px solid #00bcd4;
+            color: #4dd0e1; padding: 10px 14px; border-radius: 10px;
+            font-size: 12px; margin-bottom: 12px;
+        }
+
+        .info-item {
+            background: #0f0f1a; padding: 12px 16px; border-radius: 10px;
+            margin-bottom: 8px; border: 1px solid #2a2a4a;
+            border-left: 4px solid #00d4ff;
+            display: flex; justify-content: space-between; align-items: center; gap: 10px;
+        }
+        .info-item .info-texto { flex: 1; font-size: 13px; color: #ddd; }
+        .info-item .info-meta { font-size: 10px; color: #666; margin-top: 4px; }
+        .info-item .info-emoji { font-size: 20px; }
+        .info-item .btn-remover {
+            background: #ff1744; color: #fff; border: none;
+            padding: 4px 12px; border-radius: 50px; cursor: pointer;
+            font-size: 11px; transition: 0.3s; flex-shrink: 0;
+        }
+        .info-item .btn-remover:hover { background: #ff5252; }
+
+        .info-emoji-picker {
+            display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
+        }
+        .info-emoji-picker .emoji-btn {
+            background: #0f0f1a; border: 1px solid #2a2a4a;
+            padding: 6px 10px; border-radius: 8px; cursor: pointer;
+            font-size: 16px; transition: 0.3s;
+        }
+        .info-emoji-picker .emoji-btn:hover { border-color: #00d4ff; }
+        .info-emoji-picker .emoji-btn.selecionado {
+            border-color: #00d4ff; background: rgba(0, 212, 255, 0.15);
+        }
+
+        .info-tipo-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+        .info-tipo-btns .info-tipo-btn {
+            flex: 1; background: #0f0f1a; border: 2px solid #2a2a4a;
+            color: #aaa; padding: 8px; border-radius: 10px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: 0.3s; min-width: 100px;
+        }
+        .info-tipo-btns .info-tipo-btn:hover { border-color: #00d4ff; }
+        .info-tipo-btns .info-tipo-btn.selecionado {
+            border-color: #00d4ff; color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .cloud-status-box {
+            background: #0f0f1a; padding: 16px; border-radius: 12px;
+            border: 1px solid #2a2a4a; margin-bottom: 15px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .cloud-status-box .status-dot {
+            width: 14px; height: 14px; border-radius: 50%;
+            background: #555; flex-shrink: 0;
+        }
+        .cloud-status-box .status-dot.online { background: #00c853; box-shadow: 0 0 12px #00c853; }
+        .cloud-status-box .status-dot.offline { background: #ff1744; box-shadow: 0 0 12px #ff1744; }
+        .cloud-status-box .status-dot.pausado { background: #ffab40; box-shadow: 0 0 12px #ffab40; }
+        .cloud-status-box .status-dot.sync { background: #00d4ff; box-shadow: 0 0 12px #00d4ff; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+        .cloud-status-box .status-info { flex: 1; }
+        .cloud-status-box .status-titulo { font-weight: 700; color: #fff; font-size: 14px; margin-bottom: 2px; }
+        .cloud-status-box .status-detalhe { font-size: 12px; color: #888; }
+
+        .cloud-btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        .cloud-btn-group button {
+            flex: 1; min-width: 140px; padding: 12px 20px; border-radius: 10px;
+            border: none; font-weight: 700; cursor: pointer;
+            transition: 0.3s; font-size: 14px;
+        }
+        .cloud-btn-salvar { background: #00bcd4; color: #000; }
+        .cloud-btn-salvar:hover { background: #4dd0e1; }
+        .cloud-btn-testar { background: #7b2ffc; color: #fff; }
+        .cloud-btn-testar:hover { background: #9b5ffc; }
+        .cloud-btn-toggle { background: #00c853; color: #fff; }
+        .cloud-btn-toggle:hover { background: #69f0ae; }
+        .cloud-btn-toggle.desligar { background: #ff1744; }
+        .cloud-btn-toggle.desligar:hover { background: #ff5252; }
+        .cloud-btn-desconectar { background: #ff1744; color: #fff; }
+        .cloud-btn-desconectar:hover { background: #ff5252; }
+        .cloud-btn-group button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .cloud-info {
+            background: rgba(0, 188, 212, 0.08); border: 1px solid #00bcd4;
+            color: #4dd0e1; padding: 12px 16px; border-radius: 10px;
+            font-size: 12px; margin-bottom: 15px; line-height: 1.5;
+        }
+        .cloud-info strong { color: #00d4ff; }
+        .cloud-info code {
+            background: #0a0a14; padding: 2px 6px; border-radius: 4px;
+            font-family: monospace; color: #00d4ff;
+        }
+
+        .cloud-log {
+            background: #0a0a14; border: 1px solid #2a2a4a;
+            border-radius: 10px; padding: 12px;
+            max-height: 150px; overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 11px; color: #888; margin-top: 15px;
+        }
+        .cloud-log .log-item { margin-bottom: 4px; }
+        .cloud-log .log-item.ok { color: #69f0ae; }
+        .cloud-log .log-item.erro { color: #ff5252; }
+        .cloud-log .log-item.info { color: #00d4ff; }
+        .cloud-log .log-item.aviso { color: #ffab40; }
+
+        .cloud-fixed-badge {
+            background: rgba(0, 200, 83, 0.15); border: 1px solid #00c853;
+            color: #69f0ae; padding: 8px 14px; border-radius: 10px;
+            font-size: 12px; margin-bottom: 15px; line-height: 1.5;
+        }
+        .cloud-fixed-badge strong { color: #00c853; }
+
+        @media (max-width: 600px) {
+            .container { padding: 15px; }
+            .header-left h1 { font-size: 20px; }
+            .relogio { font-size: 15px; padding: 6px 12px; }
+            .grid { grid-template-columns: 1fr; }
+            .legenda { flex-direction: column; gap: 4px; }
+            .info-hoje { font-size: 12px; flex-wrap: wrap; }
+            .modal { padding: 20px; }
+            .search-bar { padding: 6px 12px; }
+            .search-bar input { font-size: 13px; }
+            .alerta-box { padding: 30px 25px; }
+            .alerta-titulo { font-size: 24px; }
+            .alerta-setor { font-size: 18px; }
+            .alerta-mensagem { font-size: 15px; }
+            .alerta-icone { font-size: 60px; }
+            .alerta-btn { font-size: 16px; padding: 14px 30px; }
+            .modal-tabs { flex-wrap: wrap; }
+            .modal-tab { padding: 8px 14px; font-size: 12px; }
+            .ticker-item { font-size: 16px; padding: 0 30px; }
+            .ticker-item .emoji { font-size: 20px; }
+            .aviso-fixo { font-size: 16px; padding: 14px 18px; }
+            .aviso-fixo .icone { font-size: 28px; }
+            .banner-feriado .titulo { font-size: 18px; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f0f1a; }
+        ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1>📊 Status dos Setores</h1>
+                <span class="badge-ano" id="anoBadge">2026</span>
+            </div>
+            <div class="header-right">
+                <div class="info-hoje" id="infoHoje">📅 Carregando...</div>
+                <div class="relogio" id="relogio">--:--:--</div>
+                <button class="btn-cloud" id="btnCloudToggle" onclick="toggleCloudSync()" title="Ligar/Desligar sincronização em nuvem">☁️ Nuvem: OFF</button>
+                <button class="btn-cloud" id="btnCloud" onclick="abrirModalCloud()" title="Configurar sincronização em nuvem">⚙️ Config</button>
+                <button class="btn-alerta" id="btnAlerta" onclick="toggleAlertas()">🔔 Alertas: OFF</button>
+                <button class="btn-admin" onclick="abrirModal()">⚙️ Administrar</button>
+            </div>
+        </div>
+
+        <div class="banner-feriado" id="bannerFeriado">
+            <div class="titulo" id="bannerFeriadoTitulo">🗓️ HOJE É FERIADO</div>
+            <div class="conteudo" id="bannerFeriadoConteudo"></div>
+        </div>
+
+        <div class="ticker-wrap" id="tickerWrap">
+            <div class="ticker" id="ticker"></div>
+        </div>
+
+        <div class="avisos-fixos" id="avisosFixos"></div>
+
+        <div class="legenda">
+            <span class="legenda-item"><span class="bolinha verde"></span> Atuando</span>
+            <span class="legenda-item"><span class="bolinha laranja"></span> ⚠️ Próximo ao início/fechamento</span>
+            <span class="legenda-item"><span class="bolinha almoco"></span> 🍽️ Horário de almoço</span>
+            <span class="legenda-item"><span class="bolinha reuniao"></span> 📅 Reunião</span>
+            <span class="legenda-item"><span class="bolinha vermelha"></span> Expediente encerrado</span>
+            <span class="legenda-item"><span class="bolinha cinza"></span> Indisponível hoje</span>
+            <span class="legenda-item"><span class="bolinha feriado"></span> 🗓️ Feriado / Ponto Facultativo</span>
+            <span class="legenda-item"><span class="bolinha excecao"></span> 🔷 Exceção programada</span>
+        </div>
+
+        <div class="search-bar">
+            <span class="icone-lupa">🔍</span>
+            <input type="text" id="inputPesquisa" placeholder="Pesquisar setor..." oninput="filtrarSetores()">
+            <span class="qtd-resultados" id="qtdResultados">9 setores</span>
+        </div>
+
+        <div class="grid" id="gridSetores"></div>
+    </div>
+
+    <div class="alerta-overlay" id="alertaOverlay">
+        <div class="alerta-box" id="alertaBox">
+            <div class="alerta-icone" id="alertaIcone">⚠️</div>
+            <div class="alerta-titulo" id="alertaTitulo">ATENÇÃO</div>
+            <div class="alerta-setor" id="alertaSetor">Setor</div>
+            <div class="alerta-mensagem" id="alertaMensagem">Mensagem</div>
+            <div class="alerta-tempo" id="alertaTempo">🕐 --:--:--</div>
+            <button class="alerta-btn" onclick="fecharAlerta()">✅ ENTENDI</button>
+            <div class="alerta-fila" id="alertaFila"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalCloud">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>☁️ Sincronização em Nuvem (JSONBin.io)</h2>
+                <button class="modal-fechar" onclick="fecharModalCloud()">✕</button>
+            </div>
+
+            <div class="cloud-fixed-badge">
+                ✅ <strong>Configuração embutida no código!</strong> Este painel já vem conectado automaticamente.
+            </div>
+
+            <div class="cloud-status-box">
+                <div class="status-dot" id="cloudStatusDot"></div>
+                <div class="status-info">
+                    <div class="status-titulo" id="cloudStatusTitulo">Verificando...</div>
+                    <div class="status-detalhe" id="cloudStatusDetalhe">Aguardando conexão</div>
+                </div>
+            </div>
+
+            <div class="cloud-info">
+                ℹ️ <strong>Como funciona:</strong> Todas as alterações (feriados, exceções, informativos) são sincronizadas.<br><br>
+                🔑 <strong>Bin ID:</strong> <code id="binIdDisplay">-</code>
+            </div>
+
+            <h3>🔘 Controle de Sincronização</h3>
+            <div class="cloud-btn-group">
+                <button class="cloud-btn-toggle" id="btnCloudToggleModal" onclick="toggleCloudSync()">
+                    ☁️ Ativar/Desativar Sincronização
+                </button>
+            </div>
+
+            <h3>⚙️ Configuração (Avançado)</h3>
+            <input type="text" id="inputBinId" placeholder="Bin ID" readonly style="opacity:0.6;">
+            <input type="password" id="inputApiKey" placeholder="API Key" readonly style="opacity:0.6;">
+
+            <div class="cloud-btn-group">
+                <button class="cloud-btn-salvar" onclick="forcarPush()">⬆️ Enviar para Nuvem</button>
+                <button class="cloud-btn-testar" onclick="forcarPull()">⬇️ Baixar da Nuvem</button>
+            </div>
+            <div class="cloud-btn-group">
+                <button class="cloud-btn-testar" onclick="testarConexaoCloud()" id="btnTestarCloud">🔌 Testar Conexão</button>
+            </div>
+
+            <div class="cloud-log" id="cloudLog">
+                <div class="log-item info">Iniciando...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalAdmin">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>⚙️ Administração</h2>
+                <button class="modal-fechar" onclick="fecharModal()">✕</button>
+            </div>
+
+            <div class="modal-tabs">
+                <button class="modal-tab ativo" onclick="trocarAba('abaFeriados', this)">📅 Feriados</button>
+                <button class="modal-tab" onclick="trocarAba('abaExcecoes', this)">🔷 Exceções</button>
+                <button class="modal-tab" onclick="trocarAba('abaInformativos', this)">📢 Informativos</button>
+            </div>
+
+            <div class="modal-tab-content ativo" id="abaFeriados">
+                <div class="info-ano">
+                    📆 <strong id="anoAtualDisplay">2026</strong> — 
+                    <span id="qtdeFeriadosDisplay">0</span> feriados cadastrados
+                    <button class="btn-importar" onclick="importarFeriadosAno()">🔄 Importar</button>
+                </div>
+
+                <h3>📅 Status do Dia</h3>
+                <div class="toggle-container">
+                    <label>🌞 Hoje é feriado?</label>
+                    <div class="switch" id="switchFeriado" onclick="toggleFeriadoGeral()"></div>
+                    <span class="toggle-status" id="statusFeriadoGeral">Inativo</span>
+                </div>
+
+                <div id="feriadoAtualInfo">
+                    <span style="color:#ce93d8;">🗓️ Feriado ativo: <strong id="nomeFeriadoAtual">-</strong></span>
+                    <button class="btn-remover" onclick="removerFeriadoAtual()">Remover</button>
+                </div>
+
+                <h3>📋 Lista de Feriados (<span id="anoLista">2026</span>)</h3>
+                <div id="listaFeriados"></div>
+
+                <h3>➕ Adicionar Feriado</h3>
+                <div class="form-row">
+                    <input type="date" id="inputDataFeriado">
+                    <input type="text" id="inputNomeFeriado" placeholder="Nome do feriado">
+                </div>
+                <button class="btn-adicionar-feriado" onclick="adicionarFeriado()">➕ Adicionar Feriado</button>
+            </div>
+
+            <div class="modal-tab-content" id="abaExcecoes">
+                <div class="aviso-excecao">
+                    ℹ️ <strong>Exceções por Data</strong> sobrescrevem o horário padrão do setor em uma data específica.
+                </div>
+
+                <h3>🔷 Exceções Cadastradas</h3>
+                <div id="listaExcecoes"></div>
+
+                <h3>➕ Adicionar Exceção</h3>
+                <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">1. Selecione o setor:</label>
+                <div class="seletor-setor" id="seletorSetorExcecao"></div>
+
+                <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">2. Data da exceção:</label>
+                <input type="date" id="inputDataExcecao">
+
+                <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">3. Tipo de exceção:</label>
+                <div class="tipo-excecao-btns">
+                    <button class="tipo-btn selecionado" data-tipo="fechado" onclick="selecionarTipoExcecao('fechado', this)">
+                        🚫 Fechado
+                    </button>
+                    <button class="tipo-btn" data-tipo="especial" onclick="selecionarTipoExcecao('especial', this)">
+                        ⏰ Horário Especial
+                    </button>
+                    <button class="tipo-btn" data-tipo="reuniao" onclick="selecionarTipoExcecao('reuniao', this)">
+                        📅 Reunião
+                    </button>
+                    <button class="tipo-btn" data-tipo="normal" onclick="selecionarTipoExcecao('normal', this)">
+                        ✅ Funciona Normal
+                    </button>
+                </div>
+
+                <div id="camposHorarioEspecial" style="display:none;">
+                    <div class="form-row">
+                        <input type="time" id="inputAbreExcecao" value="09:00" step="60">
+                        <input type="time" id="inputFechaExcecao" value="18:00" step="60">
+                    </div>
+                </div>
+
+                <div id="camposReuniao" style="display:none;">
+                    <div class="form-row">
+                        <input type="time" id="inputReuniaoInicio" value="14:00" step="60" title="Início da reunião">
+                        <input type="time" id="inputReuniaoFim" value="15:00" step="60" title="Fim da reunião">
+                    </div>
+                    <p style="color:#666;font-size:11px;margin:4px 0 8px 0;">
+                        ⏰ Informe o horário de início e fim da reunião
+                    </p>
+                </div>
+
+                <input type="text" id="inputObsExcecao" placeholder="Observação (opcional)">
+                <button class="btn-adicionar-feriado" onclick="adicionarExcecao()" style="background:#00bcd4;">➕ Adicionar Exceção</button>
+            </div>
+
+            <div class="modal-tab-content" id="abaInformativos">
+                <div class="aviso-excecao">
+                    ℹ️ <strong>Informativos</strong> aparecem na faixa rolante (ticker) no topo do painel,
+                    ou como avisos fixos destacados. Sincronizam com a nuvem.
+                </div>
+
+                <h3>📢 Informativos Cadastrados</h3>
+                <div id="listaInformativos"></div>
+
+                <h3>➕ Adicionar Informativo</h3>
+
+                <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">1. Escolha um emoji:</label>
+                <div class="info-emoji-picker" id="infoEmojiPicker"></div>
+
+                <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">2. Texto do informativo:</label>
+                <textarea id="inputTextoInformativo" placeholder="Ex: Setores no feriado 12/10 estarão atuando das 9h às 22h"></textarea>
+
+                <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">3. Tipo de exibição:</label>
+                <div class="info-tipo-btns">
+                    <button class="info-tipo-btn selecionado" data-tipo="ticker" onclick="selecionarTipoInformativo('ticker', this)">
+                        🎬 Ticker (rolante)
+                    </button>
+                    <button class="info-tipo-btn" data-tipo="fixo" onclick="selecionarTipoInformativo('fixo', this)">
+                        📌 Aviso fixo
+                    </button>
+                </div>
+
+                <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">4. Período de exibição (opcional):</label>
+                <div class="form-row">
+                    <input type="date" id="inputInfoDataInicio" title="Início">
+                    <input type="date" id="inputInfoDataFim" title="Fim">
+                </div>
+                <p style="color:#666;font-size:11px;margin-bottom:8px;">Deixe em branco para exibir sempre</p>
+
+                <button class="btn-adicionar-feriado" onclick="adicionarInformativo()" style="background:#00d4ff;color:#000;">➕ Adicionar Informativo</button>
+            </div>
+
+            <button class="btn-salvar" onclick="salvarConfiguracoes()">💾 Salvar Configurações</button>
+            <p class="texto-ajuda">As configurações são salvas localmente e sincronizadas na nuvem (se ativa).</p>
+        </div>
+    </div>
+
+    <script>
+        const CLOUD_BIN_ID_PADRAO = '6ac8e1c5ac6210605a227d9a';
+        const CLOUD_API_KEY_PADRAO = '$2a$10$hWKUrIUoLw0jORTQ5.NAOu.Y95DERp9i3/FkEo0Jni22QFvv4SJVG';
+        const CLOUD_AUTO_PADRAO = true;
+        const CLOUD_ATIVO_PADRAO = true;
+
+        const ANO_ATUAL = new Date().getFullYear();
+        const DURACAO_ALERTA_SEGUNDOS = 5;
+
+        const CLOUD_STORAGE_KEY = 'painelSetoresCloudConfig_v8';
+        let cloudConfig = carregarCloudConfig();
+        let cloudUltimaSync = null;
+        let cloudSyncEmAndamento = false;
+        let cloudLogs = [];
+
+        function carregarCloudConfig() {
+            const padrao = {
+                binId: CLOUD_BIN_ID_PADRAO,
+                apiKey: CLOUD_API_KEY_PADRAO,
+                auto: CLOUD_AUTO_PADRAO,
+                ativo: CLOUD_ATIVO_PADRAO
+            };
+            try {
+                const salvo = localStorage.getItem(CLOUD_STORAGE_KEY);
+                if (salvo) {
+                    const cfg = JSON.parse(salvo);
+                    if (cfg.binId && cfg.apiKey) return { ...padrao, ...cfg };
+                }
+            } catch (e) {}
+            return padrao;
+        }
+
+        function salvarCloudConfig() {
+            try { localStorage.setItem(CLOUD_STORAGE_KEY, JSON.stringify(cloudConfig)); }
+            catch (e) {}
+        }
+
+        function cloudLog(mensagem, tipo = 'info') {
+            const hora = new Date().toLocaleTimeString('pt-BR');
+            cloudLogs.unshift({ hora, mensagem, tipo });
+            if (cloudLogs.length > 30) cloudLogs.pop();
+            renderizarCloudLog();
+        }
+
+        function renderizarCloudLog() {
+            const log = document.getElementById('cloudLog');
+            if (!log) return;
+            log.innerHTML = cloudLogs.map(l => 
+                `<div class="log-item ${l.tipo}">[${l.hora}] ${l.mensagem}</div>`
+            ).join('') || '<div class="log-item info">Nenhuma atividade</div>';
+        }
+
+        function atualizarBtnCloud() {
+            const btnToggle = document.getElementById('btnCloudToggle');
+            const btnConfig = document.getElementById('btnCloud');
+            const btnToggleModal = document.getElementById('btnCloudToggleModal');
+
+            if (btnToggle) {
+                btnToggle.className = 'btn-cloud';
+                if (cloudSyncEmAndamento) {
+                    btnToggle.classList.add('sincronizando');
+                    btnToggle.textContent = '☁️ Sincronizando...';
+                } else if (cloudConfig.ativo) {
+                    btnToggle.classList.add('conectado');
+                    btnToggle.textContent = '☁️ Nuvem: ON';
+                } else {
+                    btnToggle.classList.add('desativado');
+                    btnToggle.textContent = '☁️ Nuvem: OFF';
+                }
+            }
+
+            if (btnConfig) {
+                btnConfig.className = 'btn-cloud';
+                if (cloudConfig.ativo && cloudConfig.binId && cloudConfig.apiKey) {
+                    btnConfig.classList.add('conectado');
+                } else if (!cloudConfig.ativo) {
+                    btnConfig.classList.add('desativado');
+                }
+            }
+
+            if (btnToggleModal) {
+                btnToggleModal.className = 'cloud-btn-toggle' + (cloudConfig.ativo ? ' desligar' : '');
+                btnToggleModal.textContent = cloudConfig.ativo 
+                    ? '🔴 Desativar Sincronização' 
+                    : '🟢 Ativar Sincronização';
+            }
+        }
+
+        function atualizarCloudStatusUI() {
+            const dot = document.getElementById('cloudStatusDot');
+            const titulo = document.getElementById('cloudStatusTitulo');
+            const detalhe = document.getElementById('cloudStatusDetalhe');
+            if (!dot) return;
+            dot.className = 'status-dot';
+            
+            if (cloudSyncEmAndamento) {
+                dot.classList.add('sync');
+                titulo.textContent = 'Sincronizando...';
+                detalhe.textContent = 'Aguarde';
+            } else if (cloudConfig.ativo && cloudConfig.binId && cloudConfig.apiKey) {
+                dot.classList.add('online');
+                titulo.textContent = '🟢 Conectado e sincronizando';
+                const ultSync = cloudUltimaSync ? cloudUltimaSync.toLocaleTimeString('pt-BR') : 'aguardando';
+                detalhe.textContent = `Bin: ${cloudConfig.binId.substring(0, 12)}... | Última sync: ${ultSync}`;
+            } else if (!cloudConfig.ativo) {
+                dot.classList.add('pausado');
+                titulo.textContent = '⏸️ Sincronização pausada';
+                detalhe.textContent = 'Painel funcionando localmente';
+            } else {
+                dot.classList.add('offline');
+                titulo.textContent = '🔴 Desconectado';
+                detalhe.textContent = 'Verifique as credenciais';
+            }
+        }
+
+        function toggleCloudSync() {
+            if (!cloudConfig.binId || !cloudConfig.apiKey) {
+                alert('⚠️ Configure o Bin ID e a API Key primeiro!');
+                abrirModalCloud();
+                return;
+            }
+
+            cloudConfig.ativo = !cloudConfig.ativo;
+            salvarCloudConfig();
+            atualizarBtnCloud();
+            atualizarCloudStatusUI();
+
+            if (cloudConfig.ativo) {
+                cloudLog('🟢 Sincronização ATIVADA', 'ok');
+                setTimeout(() => sincronizarCloud(), 200);
+                alert('✅ Sincronização ATIVADA!\n\nO painel vai enviar e receber atualizações automaticamente.');
+            } else {
+                cloudLog('⏸️ Sincronização PAUSADA', 'aviso');
+                alert('⏸️ Sincronização PAUSADA.\n\nO painel continua funcionando localmente, mas não envia nem recebe atualizações da nuvem.');
+            }
+        }
+
+        async function cloudPull() {
+            if (!cloudConfig.binId || !cloudConfig.apiKey) throw new Error('Sem credenciais');
+            cloudLog('⬇️ Baixando...', 'info');
+            const res = await fetch(`https://api.jsonbin.io/v3/b/${cloudConfig.binId}/latest`, {
+                method: 'GET',
+                headers: { 'X-Master-Key': cloudConfig.apiKey, 'X-Bin-Meta': 'false' }
+            });
+            if (!res.ok) {
+                const err = await res.text();
+                throw new Error(`HTTP ${res.status}: ${err.substring(0, 80)}`);
+            }
+            cloudLog('✅ Download OK', 'ok');
+            return await res.json();
+        }
+
+        async function cloudPush(dados) {
+            if (!cloudConfig.binId || !cloudConfig.apiKey) throw new Error('Sem credenciais');
+            cloudLog('⬆️ Enviando...', 'info');
+            const res = await fetch(`https://api.jsonbin.io/v3/b/${cloudConfig.binId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': cloudConfig.apiKey
+                },
+                body: JSON.stringify(dados)
+            });
+            if (!res.ok) {
+                const err = await res.text();
+                throw new Error(`HTTP ${res.status}: ${err.substring(0, 80)}`);
+            }
+            cloudLog('✅ Upload OK', 'ok');
+            return await res.json();
+        }
+
+        async function sincronizarCloud() {
+            if (cloudSyncEmAndamento) return;
+            if (!cloudConfig.binId || !cloudConfig.apiKey) return;
+            if (!cloudConfig.ativo) {
+                cloudLog('⏸️ Sincronização desativada', 'aviso');
+                return;
+            }
+
+            cloudSyncEmAndamento = true;
+            atualizarBtnCloud();
+            atualizarCloudStatusUI();
+
+            try {
+                const remoto = await cloudPull();
+                if (remoto && remoto.config && remoto.config.ano) {
+                    aplicarConfigRemota(remoto.config);
+                    cloudUltimaSync = new Date();
+                    cloudLog('🔄 Configs aplicadas', 'ok');
+                } else if (remoto && (remoto.init || Object.keys(remoto).length === 0)) {
+                    cloudLog('📤 Bin vazio. Enviando local...', 'aviso');
+                    await enviarConfigParaNuvem();
+                    cloudUltimaSync = new Date();
+                } else {
+                    cloudLog('📤 Enviando local...', 'aviso');
+                    await enviarConfigParaNuvem();
+                    cloudUltimaSync = new Date();
+                }
+            } catch (e) {
+                cloudLog(`❌ ${e.message}`, 'erro');
+            } finally {
+                cloudSyncEmAndamento = false;
+                atualizarBtnCloud();
+                atualizarCloudStatusUI();
+            }
+        }
+
+        function aplicarConfigRemota(cfg) {
+            if (!cfg) return;
+            if (cfg.feriados) feriados = cfg.feriados;
+            if (typeof cfg.feriadoManualAtivo === 'boolean') feriadoManualAtivo = cfg.feriadoManualAtivo;
+            if (cfg.feriadoManualNome !== undefined) feriadoManualNome = cfg.feriadoManualNome;
+            if (cfg.excecoes) excecoes = cfg.excecoes;
+            if (cfg.setores) setores = cfg.setores;
+            if (typeof cfg.alertasAtivos === 'boolean') alertasAtivos = cfg.alertasAtivos;
+            if (cfg.informativos) informativos = cfg.informativos;
+            
+            renderizarTodos();
+            renderizarInformativos();
+            atualizarInfoHoje();
+            const btnAlerta = document.getElementById('btnAlerta');
+            if (alertasAtivos) {
+                btnAlerta.textContent = '🔔 Alertas: ON';
+                btnAlerta.classList.add('ativo');
+            } else {
+                btnAlerta.textContent = '🔔 Alertas: OFF';
+                btnAlerta.classList.remove('ativo');
+            }
+            if (document.getElementById('modalAdmin').classList.contains('aberto')) {
+                atualizarListaFeriados();
+                atualizarListaExcecoes();
+                atualizarListaInformativos();
+                atualizarToggleFeriado();
+                atualizarFeriadoAtualInfo();
+            }
+        }
+
+        async function enviarConfigParaNuvem() {
+            const dados = {
+                config: montarConfigAtual(),
+                atualizadoEm: new Date().toISOString()
+            };
+            await cloudPush(dados);
+        }
+
+        function montarConfigAtual() {
+            return {
+                ano: ANO_ATUAL,
+                feriados: feriados,
+                feriadoManualAtivo: feriadoManualAtivo,
+                feriadoManualNome: feriadoManualNome,
+                setores: setores,
+                excecoes: excecoes,
+                alertasAtivos: alertasAtivos,
+                informativos: informativos
+            };
+        }
+
+        async function salvarNaNuvem() {
+            if (!cloudConfig.binId || !cloudConfig.apiKey) return;
+            if (!cloudConfig.ativo) return;
+            try {
+                await enviarConfigParaNuvem();
+                cloudUltimaSync = new Date();
+                atualizarCloudStatusUI();
+            } catch (e) {
+                cloudLog(`❌ ${e.message}`, 'erro');
+            }
+        }
+
+        function abrirModalCloud() {
+            document.getElementById('modalCloud').classList.add('aberto');
+            document.getElementById('inputBinId').value = cloudConfig.binId || '';
+            document.getElementById('inputApiKey').value = cloudConfig.apiKey || '';
+            document.getElementById('binIdDisplay').textContent = cloudConfig.binId || '-';
+            atualizarCloudStatusUI();
+            atualizarBtnCloud();
+            renderizarCloudLog();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModalCloud() {
+            document.getElementById('modalCloud').classList.remove('aberto');
+            document.body.style.overflow = '';
+        }
+
+        async function testarConexaoCloud() {
+            const btn = document.getElementById('btnTestarCloud');
+            btn.disabled = true;
+            btn.textContent = '⏳ Testando...';
+            cloudSyncEmAndamento = true;
+            atualizarBtnCloud();
+            atualizarCloudStatusUI();
+            try {
+                await cloudPull();
+                cloudLog('✅ Conexão OK!', 'ok');
+                cloudUltimaSync = new Date();
+                alert('✅ Conexão bem-sucedida!');
+            } catch (e) {
+                cloudLog(`❌ ${e.message}`, 'erro');
+                alert(`❌ Erro:\n\n${e.message}`);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '🔌 Testar Conexão';
+                cloudSyncEmAndamento = false;
+                atualizarBtnCloud();
+                atualizarCloudStatusUI();
+            }
+        }
+
+        async function forcarPull() {
+            if (!cloudConfig.ativo) {
+                if (!confirm('⚠️ Sincronização está desativada. Ativar agora?')) return;
+                cloudConfig.ativo = true;
+                salvarCloudConfig();
+                atualizarBtnCloud();
+                atualizarCloudStatusUI();
+            }
+            await sincronizarCloud();
+            alert('✅ Configurações atualizadas da nuvem!');
+        }
+
+        async function forcarPush() {
+            if (!cloudConfig.ativo) {
+                if (!confirm('⚠️ Sincronização está desativada. Ativar agora?')) return;
+                cloudConfig.ativo = true;
+                salvarCloudConfig();
+                atualizarBtnCloud();
+                atualizarCloudStatusUI();
+            }
+            cloudSyncEmAndamento = true;
+            atualizarBtnCloud();
+            try {
+                await enviarConfigParaNuvem();
+                cloudUltimaSync = new Date();
+                cloudLog('✅ Enviado', 'ok');
+                alert('✅ Configuração enviada para a nuvem!');
+            } catch (e) {
+                cloudLog(`❌ ${e.message}`, 'erro');
+                alert(`❌ Erro:\n${e.message}`);
+            } finally {
+                cloudSyncEmAndamento = false;
+                atualizarBtnCloud();
+                atualizarCloudStatusUI();
+            }
+        }
+
+        function calcularPascoa(ano) {
+            const a = ano % 19, b = Math.floor(ano / 100), c = ano % 100;
+            const d = Math.floor(b / 4), e = b % 4;
+            const f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3);
+            const h = (19 * a + b - d - g + 15) % 30;
+            const i = Math.floor(c / 4), k = c % 4;
+            const l = (32 + 2 * e + 2 * i - h - k) % 7;
+            const m = Math.floor((a + 11 * h + 22 * l) / 451);
+            const mes = Math.floor((h + l - 7 * m + 114) / 31);
+            const dia = ((h + l - 7 * m + 114) % 31) + 1;
+            return new Date(ano, mes - 1, dia);
+        }
+
+        function gerarFeriadosPorAno(ano) {
+            const feriados = [];
+            const fixos = [
+                { data: '01/01', nome: 'Confraternização Universal' },
+                { data: '21/04', nome: 'Tiradentes' },
+                { data: '01/05', nome: 'Dia do Trabalho' },
+                { data: '07/09', nome: 'Independência do Brasil' },
+                { data: '12/10', nome: 'Nossa Senhora Aparecida' },
+                { data: '02/11', nome: 'Finados' },
+                { data: '15/11', nome: 'Proclamação da República' },
+                { data: '20/11', nome: 'Consciência Negra' },
+                { data: '25/12', nome: 'Natal' },
+            ];
+            fixos.forEach(f => feriados.push({ data: f.data, nome: f.nome, tipo: 'nacional' }));
+
+            const pascoa = calcularPascoa(ano);
+            const carnaval = new Date(pascoa); carnaval.setDate(pascoa.getDate() - 47);
+            feriados.push({ data: `${String(carnaval.getDate()).padStart(2,'0')}/${String(carnaval.getMonth()+1).padStart(2,'0')}`, nome: 'Carnaval (Terça)', tipo: 'facultativo' });
+            const segCarnaval = new Date(carnaval); segCarnaval.setDate(carnaval.getDate() - 1);
+            feriados.push({ data: `${String(segCarnaval.getDate()).padStart(2,'0')}/${String(segCarnaval.getMonth()+1).padStart(2,'0')}`, nome: 'Carnaval (Segunda)', tipo: 'facultativo' });
+            const quaCinzas = new Date(carnaval); quaCinzas.setDate(carnaval.getDate() + 1);
+            feriados.push({ data: `${String(quaCinzas.getDate()).padStart(2,'0')}/${String(quaCinzas.getMonth()+1).padStart(2,'0')}`, nome: 'Quarta de Cinzas', tipo: 'facultativo' });
+            const corpus = new Date(pascoa); corpus.setDate(pascoa.getDate() + 60);
+            feriados.push({ data: `${String(corpus.getDate()).padStart(2,'0')}/${String(corpus.getMonth()+1).padStart(2,'0')}`, nome: 'Corpus Christi', tipo: 'nacional' });
+            const sexta = new Date(pascoa); sexta.setDate(pascoa.getDate() - 2);
+            feriados.push({ data: `${String(sexta.getDate()).padStart(2,'0')}/${String(sexta.getMonth()+1).padStart(2,'0')}`, nome: 'Sexta-feira Santa', tipo: 'nacional' });
+            feriados.push({ data: '09/07', nome: 'Revolução Constitucionalista (SP)', tipo: 'estadual' });
+            feriados.push({ data: '25/01', nome: 'Aniversário de São Paulo (SP)', tipo: 'municipal' });
+
+            return feriados;
+        }
+
+        function carregarConfiguracoes() {
+            try {
+                const salvo = localStorage.getItem('painelSetoresConfig_v8');
+                if (salvo) return JSON.parse(salvo);
+            } catch (e) {}
+            return null;
+        }
+
+        function salvarConfiguracoesNoStorage() {
+            try { localStorage.setItem('painelSetoresConfig_v8', JSON.stringify(montarConfigAtual())); }
+            catch (e) {}
+        }
+
+        let configSalva = carregarConfiguracoes();
+        let feriados, feriadoManualAtivo = false, feriadoManualNome = '';
+        let alertasAtivos = false, excecoes = [], informativos = [];
+
+        if (configSalva && configSalva.ano === ANO_ATUAL) {
+            feriados = configSalva.feriados;
+            feriadoManualAtivo = configSalva.feriadoManualAtivo || false;
+            feriadoManualNome = configSalva.feriadoManualNome || '';
+            alertasAtivos = configSalva.alertasAtivos || false;
+            excecoes = configSalva.excecoes || [];
+            informativos = configSalva.informativos || [];
+        } else {
+            feriados = gerarFeriadosPorAno(ANO_ATUAL);
+        }
+
+        const SETORES_PADRAO = [{
+            id: 'cross', nome: '🔄 CROSS',
+            subtitulo: 'Mudança de Endereço | Alteração de Plano | Reativação',
+            canais: ['📞 Telefonia', '💬 WhatsApp'],
+            horarios: [{ dias: [1,2,3,4,5], abre: 8, fecha: 19 }, { dias: [6], abre: 8, fecha: 12 }],
+            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
+        }, {
+            id: 'negociacao', nome: '💰 Negociação',
+            subtitulo: 'Acordos e Renegociação de Dívidas',
+            canais: ['📞 Telefonia', '💬 WhatsApp'],
+            horarios: [{ dias: [1,2,3,4], abre: 8, fecha: 17.5 }, { dias: [5], abre: 8, fecha: 16.5 }],
+            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
+        }, {
+            id: 'cx-cancelamento', nome: '📋 CX Cancelamento',
+            subtitulo: 'Cancelamento & Retenção',
+            canais: ['📞 Telefonia', '💬 WhatsApp'],
+            horarios: [{ dias: [1,2,3,4,5], abre: 9, fecha: 17 }],
+            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
+        }, {
+            id: 'vendas', nome: '🛒 Vendas',
+            subtitulo: 'Novas Contratações e Planos',
+            canais: ['📞 Telefonia', '💬 WhatsApp Business'],
+            horarios: [{ dias: [1,2,3,4,5], abre: 8, fecha: 22 }, { dias: [6], abre: 10, fecha: 22 }, { dias: [0], abre: 12, fecha: 21 }],
+            alertaMinutos: 30, funcionaEmFeriado: true, temAlmoco: false
+        }, {
+            id: 'loga', nome: '📞 LOGA / W-Comercial Digital',
+            subtitulo: 'Fila Digital & Ouvidoria',
+            canais: ['📞 Telefonia', '💬 WhatsApp Digital'],
+            horarios: [{ dias: [1,2,3,4,5], abre: 9, fecha: 22 }, { dias: [6], abre: 9, fecha: 18 }],
+            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
+        }, {
+            id: 'loja-linhares', nome: '🏪 Loja Linhares',
+            subtitulo: 'Atendimento Presencial',
+            canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+            horarios: [{ dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5 }, { dias: [6], abre: 8, fecha: 12 }],
+            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2
+        }, {
+            id: 'loja-teixeira', nome: '🏪 Loja Teixeira',
+            subtitulo: 'Atendimento Presencial',
+            canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+            horarios: [{ dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5 }, { dias: [6], abre: 8, fecha: 12 }],
+            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2
+        }, {
+            id: 'loja-sao-matheus', nome: '🏪 Loja São Matheus',
+            subtitulo: 'Atendimento Presencial',
+            canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+            horarios: [{ dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5 }, { dias: [6], abre: 8, fecha: 12 }],
+            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2
+        }, {
+            id: 'loja-itapua', nome: '🏪 Loja Itapuã',
+            subtitulo: 'Atendimento Presencial',
+            canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+            horarios: [{ dias: [1,2,3,4,5], abre: 8, fecha: 17.5 }],
+            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
+        }];
+
+        let setores = configSalva ? configSalva.setores : JSON.parse(JSON.stringify(SETORES_PADRAO));
+
+        function dataParaStr(dateObj) {
+            const dia = String(dateObj.getDate()).padStart(2, '0');
+            const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
+            return `${dia}/${mes}`;
+        }
+
+        function buscarExcecaoHoje(setorId) {
+            const agora = new Date();
+            return excecoes.find(e => e.setorId === setorId && e.data === dataParaStr(agora));
+        }
+
+        function infoEstaAtivo(info) {
+            if (!info) return false;
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            if (info.dataInicio) {
+                const ini = new Date(info.dataInicio + 'T00:00:00');
+                if (hoje < ini) return false;
+            }
+            if (info.dataFim) {
+                const fim = new Date(info.dataFim + 'T23:59:59');
+                if (hoje > fim) return false;
+            }
+            return true;
+        }
+
+        function detectarTipoAviso(texto) {
+            const t = texto.toLowerCase();
+            if (t.includes('urgente') || t.includes('atenção') || t.includes('atencao') || 
+                t.includes('importante') || t.includes('emergência') || t.includes('emergencia') ||
+                t.includes('fechado') || t.includes('cancelado')) {
+                return 'tipo-urgente';
+            }
+            if (t.includes('ok') || t.includes('sucesso') || t.includes('liberado') || 
+                t.includes('funcionando') || t.includes('ativo')) {
+                return 'tipo-sucesso';
+            }
+            if (t.includes('info') || t.includes('novidade') || t.includes('aviso')) {
+                return 'tipo-info';
+            }
+            return '';
+        }
+
+        function renderizarInformativos() {
+            const ativos = informativos.filter(infoEstaAtivo);
+            const tickerItens = ativos.filter(i => i.tipo === 'ticker');
+            const fixos = ativos.filter(i => i.tipo === 'fixo');
+
+            const tickerWrap = document.getElementById('tickerWrap');
+            const ticker = document.getElementById('ticker');
+            if (tickerItens.length > 0) {
+                const html = tickerItens.map(i => 
+                    `<span class="ticker-item"><span class="emoji">${i.emoji || '📢'}</span>${i.texto}</span>`
+                ).join('');
+                ticker.innerHTML = html + html;
+                tickerWrap.classList.add('ativo');
+            } else {
+                tickerWrap.classList.remove('ativo');
+                ticker.innerHTML = '';
+            }
+
+            const avisosFixos = document.getElementById('avisosFixos');
+            if (fixos.length > 0) {
+                avisosFixos.innerHTML = fixos.map(i => {
+                    const classeExtra = detectarTipoAviso(i.texto);
+                    return `<div class="aviso-fixo ${classeExtra}"><span class="icone">${i.emoji || '⚠️'}</span><span>${i.texto}</span></div>`;
+                }).join('');
+                avisosFixos.classList.add('ativo');
+            } else {
+                avisosFixos.classList.remove('ativo');
+                avisosFixos.innerHTML = '';
+            }
+
+            renderizarBannerFeriado();
+        }
+
+        function renderizarBannerFeriado() {
+            const banner = document.getElementById('bannerFeriado');
+            const feriado = hojeEhFeriado();
+            
+            if (!feriado) {
+                banner.classList.remove('ativo');
+                return;
+            }
+
+            const funcionando = [];
+            const fechados = [];
+            const especiais = [];
+
+            setores.forEach(setor => {
+                const excecao = buscarExcecaoHoje(setor.id);
+                
+                if (excecao) {
+                    if (excecao.tipo === 'fechado') {
+                        fechados.push(setor.nome);
+                    } else if (excecao.tipo === 'especial') {
+                        especiais.push(`${setor.nome} (${formatarHora(excecao.abre)}-${formatarHora(excecao.fecha)})`);
+                    } else if (excecao.tipo === 'normal') {
+                        funcionando.push(setor.nome);
+                    }
+                } else if (setor.funcionaEmFeriado) {
+                    funcionando.push(setor.nome);
+                } else {
+                    fechados.push(setor.nome);
+                }
+            });
+
+            let conteudo = '';
+            
+            if (funcionando.length > 0) {
+                conteudo += `<div class="linha"><strong style="color:#69f0ae;">✅ Funcionando:</strong> `;
+                conteudo += funcionando.map(f => `<span class="chip-funcionando">${f}</span>`).join(' ');
+                conteudo += `</div>`;
+            }
+            if (especiais.length > 0) {
+                conteudo += `<div class="linha"><strong style="color:#ffab40;">⏰ Horário especial:</strong> `;
+                conteudo += especiais.map(f => `<span class="chip-funcionando" style="border-color:#ffab40;color:#ffab40;background:rgba(255,171,64,0.15);">${f}</span>`).join(' ');
+                conteudo += `</div>`;
+            }
+            if (fechados.length > 0) {
+                conteudo += `<div class="linha"><strong style="color:#ff5252;">🚫 Fechados:</strong> `;
+                conteudo += fechados.map(f => `<span class="chip-fechado">${f}</span>`).join(' ');
+                conteudo += `</div>`;
+            }
+
+            document.getElementById('bannerFeriadoTitulo').innerHTML = `🗓️ HOJE É FERIADO: ${nomeFeriado(feriado).toUpperCase()}`;
+            document.getElementById('bannerFeriadoConteudo').innerHTML = conteudo;
+            banner.classList.add('ativo');
+        }
+
+        let filaAlertas = [], alertaAtual = null, alertasJaDisparados = {};
+        let audioContext = null, somInterval = null, somTimeout = null;
+        const DURACAO_SOM_ALERTA = DURACAO_ALERTA_SEGUNDOS * 1000;
+
+        function initAudioContext() {
+            if (!audioContext) {
+                try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+            }
+            if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+        }
+
+        function tocarBipe(freq = 880, dur = 0.3, vol = 0.3) {
+            if (!audioContext) return;
+            try {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(vol, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + dur);
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.start(audioContext.currentTime);
+                osc.stop(audioContext.currentTime + dur);
+            } catch (e) {}
+        }
+
+        function iniciarSomAlerta() {
+            pararSomAlerta();
+            if (!audioContext) return;
+
+            const inicio = Date.now();
+
+            const tocarSequencia = () => {
+                if (Date.now() - inicio >= DURACAO_SOM_ALERTA) {
+                    pararSomAlerta();
+                    return;
+                }
+                tocarBipe(880, 0.15, 0.5);
+                setTimeout(() => tocarBipe(1100, 0.15, 0.5), 200);
+                setTimeout(() => tocarBipe(880, 0.15, 0.5), 400);
+            };
+
+            tocarSequencia();
+            somInterval = setInterval(tocarSequencia, 1500);
+
+            somTimeout = setTimeout(() => {
+                pararSomAlerta();
+            }, DURACAO_SOM_ALERTA);
+        }
+
+        function pararSomAlerta() {
+            if (somInterval) { clearInterval(somInterval); somInterval = null; }
+            if (somTimeout) { clearTimeout(somTimeout); somTimeout = null; }
+        }
+
+        function verificarAlertas() {
+            if (!alertasAtivos) return;
+            const agora = new Date();
+            const hora = agora.getHours() + (agora.getMinutes() / 60);
+
+            setores.forEach(setor => {
+                const statusInfo = obterStatusSetor(setor);
+                if (statusInfo.status !== 'alerta' && statusInfo.status !== 'almoco' && statusInfo.status !== 'reuniao') return;
+                const horarioHoje = getHorarioHoje(setor);
+                if (!horarioHoje) return;
+
+                let tipoAlerta, valor, mensagem;
+                if (statusInfo.status === 'almoco') {
+                    tipoAlerta = 'almoco';
+                    valor = Math.round(setor.almocoFim * 60);
+                    mensagem = `Iniciou o horário de almoço. Retorno às ${formatarHora(setor.almocoFim)}.`;
+                } else if (statusInfo.status === 'reuniao') {
+                    tipoAlerta = 'reuniao';
+                    valor = Math.round((statusInfo.excecao && statusInfo.excecao.fim ? statusInfo.excecao.fim : 0) * 60);
+                    mensagem = statusInfo.descricao;
+                } else {
+                    if (hora < horarioHoje.abre) {
+                        tipoAlerta = 'abertura';
+                        valor = Math.round(horarioHoje.abre * 60);
+                        mensagem = `Abre em breve às ${formatarHora(horarioHoje.abre)}!`;
+                    } else {
+                        tipoAlerta = 'fechamento';
+                        valor = Math.round(horarioHoje.fecha * 60);
+                        mensagem = `Fecha em breve às ${formatarHora(horarioHoje.fecha)}!`;
+                    }
+                }
+
+                const chave = `${setor.id}_${tipoAlerta}_${valor}_${new Date().toDateString()}`;
+                if (alertasJaDisparados[chave]) return;
+                alertasJaDisparados[chave] = true;
+                filaAlertas.push({ setor, status: statusInfo.status, tipo: tipoAlerta, mensagem });
+            });
+
+            if (!alertaAtual && filaAlertas.length > 0) exibirProximoAlerta();
+        }
+
+        function exibirProximoAlerta() {
+            if (filaAlertas.length === 0) { alertaAtual = null; return; }
+            alertaAtual = filaAlertas.shift();
+            const overlay = document.getElementById('alertaOverlay');
+            const box = document.getElementById('alertaBox');
+            const icone = document.getElementById('alertaIcone');
+            const titulo = document.getElementById('alertaTitulo');
+            const setorEl = document.getElementById('alertaSetor');
+            const mensagemEl = document.getElementById('alertaMensagem');
+            const tempoEl = document.getElementById('alertaTempo');
+            const filaEl = document.getElementById('alertaFila');
+            const btnEntendi = document.querySelector('.alerta-btn');
+
+            box.className = 'alerta-box';
+            if (alertaAtual.tipo === 'almoco') {
+                box.classList.add('tipo-almoco');
+                icone.textContent = '🍽️';
+                titulo.textContent = 'HORÁRIO DE ALMOÇO';
+            } else if (alertaAtual.tipo === 'reuniao') {
+                box.classList.add('tipo-reuniao');
+                icone.textContent = '📅';
+                titulo.textContent = 'SETOR EM REUNIÃO';
+            } else if (alertaAtual.tipo === 'abertura') {
+                icone.textContent = '⏰';
+                titulo.textContent = 'ABERTURA EM BREVE';
+            } else {
+                icone.textContent = '⚠️';
+                titulo.textContent = 'FECHAMENTO EM BREVE';
+            }
+
+            setorEl.textContent = alertaAtual.setor.nome;
+            mensagemEl.textContent = alertaAtual.mensagem;
+            filaEl.textContent = filaAlertas.length > 0 ? `+ ${filaAlertas.length} alerta(s) na fila` : '';
+
+            overlay.classList.add('ativo');
+            initAudioContext();
+            iniciarSomAlerta();
+            tentarTelaCheia();
+
+            let segundosRestantes = DURACAO_ALERTA_SEGUNDOS;
+            tempoEl.textContent = `🕐 Fechando em ${segundosRestantes}s...`;
+            btnEntendi.textContent = `✅ ENTENDI (${segundosRestantes}s)`;
+
+            if (window._alertaTempoInterval) clearInterval(window._alertaTempoInterval);
+            window._alertaTempoInterval = setInterval(() => {
+                if (!alertaAtual) return;
+                segundosRestantes--;
+                if (segundosRestantes <= 0) {
+                    clearInterval(window._alertaTempoInterval);
+                    window._alertaTempoInterval = null;
+                    fecharAlerta();
+                    return;
+                }
+                tempoEl.textContent = `🕐 Fechando em ${segundosRestantes}s...`;
+                btnEntendi.textContent = `✅ ENTENDI (${segundosRestantes}s)`;
+            }, 1000);
+
+            if (window._alertaAutoFecharTimeout) clearTimeout(window._alertaAutoFecharTimeout);
+            window._alertaAutoFecharTimeout = setTimeout(() => {
+                if (alertaAtual) fecharAlerta();
+            }, DURACAO_SOM_ALERTA);
+        }
+
+        function tentarTelaCheia() {
+            try {
+                const el = document.documentElement;
+                if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+            } catch (e) {}
+        }
+
+        function sairTelaCheia() {
+            try {
+                if (document.fullscreenElement) {
+                    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                }
+            } catch (e) {}
+        }
+
+        function fecharAlerta() {
+            pararSomAlerta();
+            if (window._alertaTempoInterval) {
+                clearInterval(window._alertaTempoInterval);
+                window._alertaTempoInterval = null;
+            }
+            if (window._alertaAutoFecharTimeout) {
+                clearTimeout(window._alertaAutoFecharTimeout);
+                window._alertaAutoFecharTimeout = null;
+            }
+            document.getElementById('alertaOverlay').classList.remove('ativo');
+            sairTelaCheia();
+            alertaAtual = null;
+            setTimeout(() => { if (filaAlertas.length > 0) exibirProximoAlerta(); }, 400);
+        }
+
+        function toggleAlertas() {
+            alertasAtivos = !alertasAtivos;
+            const btn = document.getElementById('btnAlerta');
+            if (alertasAtivos) {
+                btn.textContent = '🔔 Alertas: ON';
+                btn.classList.add('ativo');
+                initAudioContext();
+                verificarAlertas();
+            } else {
+                btn.textContent = '🔔 Alertas: OFF';
+                btn.classList.remove('ativo');
+                pararSomAlerta();
+                if (alertaAtual) fecharAlerta();
+                filaAlertas = [];
+            }
+            salvarConfiguracoesNoStorage();
+            salvarNaNuvem();
+        }
+
+        function resetDiarioAlertas() {
+            const agora = new Date();
+            const prox = new Date(agora);
+            prox.setHours(24, 0, 0, 0);
+            setTimeout(() => {
+                alertasJaDisparados = {};
+                resetDiarioAlertas();
+            }, prox - agora);
+        }
+
+        function hojeEhFeriado() {
+            const agora = new Date();
+            const dataStr = dataParaStr(agora);
+            if (feriadoManualAtivo) return { data: dataStr, nome: feriadoManualNome || 'Feriado (manual)', manual: true };
+            const enc = feriados.find(f => f.data === dataStr);
+            if (enc) return { data: dataStr, nome: enc.nome, manual: false };
+            return null;
+        }
+
+        function nomeFeriado(fi) { return fi ? (fi.nome || 'Feriado') : ''; }
+
+        function formatarHora(valor) {
+            const h = Math.floor(valor);
+            const m = Math.round((valor - h) * 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}h`;
+        }
+
+        function horaParaDecimal(str) {
+            const [h, m] = str.split(':').map(Number);
+            return h + (m / 60);
+        }
+
+        function obterStatusSetor(setor) {
+            const agora = new Date();
+            const dia = agora.getDay();
+            const hora = agora.getHours() + (agora.getMinutes() / 60);
+            const feriado = hojeEhFeriado();
+            const excecao = buscarExcecaoHoje(setor.id);
+
+            if (excecao) {
+                if (excecao.tipo === 'fechado') {
+                    return { status: 'excecao', mensagem: '🚫 Exceção: Sem expediente', descricao: excecao.obs || 'Data com exceção programada', cor: 'excecao', excecao };
+                }
+                if (excecao.tipo === 'reuniao') {
+                    const inicioReuniao = excecao.inicio || 14;
+                    const fimReuniao = excecao.fim || 15;
+                    // Só mostra "em reunião" durante o horário da reunião
+                    if (hora >= inicioReuniao && hora < fimReuniao) {
+                        const minRestantes = Math.round((fimReuniao - hora) * 60);
+                        return { 
+                            status: 'reuniao', 
+                            mensagem: '📅 Setor em reunião', 
+                            descricao: `Retorna em ${minRestantes} min (${formatarHora(fimReuniao)})`, 
+                            cor: 'reuniao', 
+                            excecao 
+                        };
+                    }
+                    // Antes da reunião começar
+                    if (hora < inicioReuniao) {
+                        return { 
+                            status: 'excecao', 
+                            mensagem: `📅 Reunião às ${formatarHora(inicioReuniao)}`, 
+                            descricao: `Reunião: ${formatarHora(inicioReuniao)} - ${formatarHora(fimReuniao)}`, 
+                            cor: 'excecao', 
+                            excecao 
+                        };
+                    }
+                    // Após a reunião, volta ao normal
+                }
+                if (excecao.tipo === 'especial') {
+                    const { abre: abreEsp, fecha: fechaEsp } = excecao;
+                    const minAlerta = setor.alertaMinutos || 30;
+                    if (hora < abreEsp) {
+                        const min = Math.round((abreEsp - hora) * 60);
+                        if (min <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${min} min!`, descricao: `Horário especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'alerta', excecao };
+                        return { status: 'excecao', mensagem: `🔷 Exceção: abre ${formatarHora(abreEsp)}`, descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'excecao', excecao };
+                    }
+                    if (hora >= abreEsp && hora <= fechaEsp) {
+                        const minFechar = Math.round((fechaEsp - hora) * 60);
+                        if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`, descricao: `Especial até ${formatarHora(fechaEsp)}`, cor: 'alerta', excecao };
+                        return { status: 'aberto', mensagem: '✅ Atuando (exceção)', descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'aberto', excecao };
+                    }
+                    return { status: 'fechado', mensagem: '❌ Exceção encerrada', descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'fechado', excecao };
+                }
+            }
+
+            if (feriado && !setor.funcionaEmFeriado && (!excecao || excecao.tipo !== 'normal')) {
+                return { status: 'feriado', mensagem: `🗓️ Feriado: ${nomeFeriado(feriado)}`, descricao: 'Sem expediente hoje', cor: 'feriado' };
+            }
+
+            let horarioHoje = null;
+            for (const h of setor.horarios) {
+                if (h.dias.includes(dia)) { horarioHoje = h; break; }
+            }
+            if (!horarioHoje) {
+                if (feriado && setor.funcionaEmFeriado) {
+                    for (const h of setor.horarios) {
+                        if (h.dias.includes(1) || h.dias.includes(2) || h.dias.includes(3) || h.dias.includes(4) || h.dias.includes(5)) {
+                            horarioHoje = h; break;
+                        }
+                    }
+                }
+                if (!horarioHoje) return { status: 'indisponivel', mensagem: '❌ Indisponível hoje', descricao: 'Sem atendimento neste dia', cor: 'indisponivel' };
+            }
+
+            const { abre, fecha } = horarioHoje;
+            const minAlerta = setor.alertaMinutos || 30;
+
+            if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim) {
+                if (hora >= setor.almocoInicio && hora < setor.almocoFim) {
+                    const minVoltar = Math.round((setor.almocoFim - hora) * 60);
+                    return { status: 'almoco', mensagem: '🍽️ Horário de almoço', descricao: `Volta em ${minVoltar} min (${formatarHora(setor.almocoFim)})`, cor: 'almoco' };
+                }
+            }
+
+            if (hora >= abre && hora <= fecha) {
+                const minFechar = Math.round((fecha - hora) * 60);
+                if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`, descricao: `Últimos atendimentos até ${formatarHora(fecha)}`, cor: 'alerta' };
+                return { status: 'aberto', mensagem: '✅ Atuando normalmente', descricao: `Até ${formatarHora(fecha)}`, cor: 'aberto' };
+            }
+
+            if (hora < abre) {
+                const minAbrir = Math.round((abre - hora) * 60);
+                if (minAbrir <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${minAbrir} min!`, descricao: 'Prepare-se para o início', cor: 'alerta' };
+                return { status: 'fechado', mensagem: `⏳ Fechado - abre ${formatarHora(abre)}`, descricao: `Volta às ${formatarHora(abre)}`, cor: 'fechado' };
+            }
+
+            return { status: 'fechado', mensagem: '❌ Expediente encerrado', descricao: 'Volta amanhã', cor: 'fechado' };
+        }
+
+        function getHorarioHoje(setor) {
+            const dia = new Date().getDay();
+            const feriado = hojeEhFeriado();
+            const excecao = buscarExcecaoHoje(setor.id);
+            if (excecao && excecao.tipo === 'especial') return { dias: [0,1,2,3,4,5,6], abre: excecao.abre, fecha: excecao.fecha };
+            if (feriado && setor.funcionaEmFeriado) {
+                for (const h of setor.horarios) {
+                    if (h.dias.includes(1) || h.dias.includes(2) || h.dias.includes(3) || h.dias.includes(4) || h.dias.includes(5)) return h;
+                }
+            }
+            for (const h of setor.horarios) if (h.dias.includes(dia)) return h;
+            return null;
+        }
+
+        function renderizarCard(setor) {
+            const statusInfo = obterStatusSetor(setor);
+            const horarioHoje = getHorarioHoje(setor);
+            const feriado = hojeEhFeriado();
+            const excecaoHoje = buscarExcecaoHoje(setor.id);
+
+            let horarioTexto = '📅 Indisponível hoje';
+            if (horarioHoje) horarioTexto = `🕐 ${formatarHora(horarioHoje.abre)} - ${formatarHora(horarioHoje.fecha)}`;
+            if (statusInfo.status === 'feriado') horarioTexto = `🗓️ ${statusInfo.mensagem}`;
+            if (excecaoHoje && excecaoHoje.tipo === 'fechado') horarioTexto = '🚫 Sem expediente (exceção)';
+            if (excecaoHoje && excecaoHoje.tipo === 'reuniao') {
+                horarioTexto = `📅 Reunião: ${formatarHora(excecaoHoje.inicio || 14)} - ${formatarHora(excecaoHoje.fim || 15)}`;
+            }
+
+            const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+            const diaAtual = dias[new Date().getDay()];
+            let infoDia = `Hoje (${diaAtual})`;
+            if (feriado) infoDia = `🗓️ ${nomeFeriado(feriado)} (${diaAtual})`;
+
+            let badgeExtra = '';
+            if (feriado && feriado.manual) badgeExtra = '<span class="badge-feriado">⚠️ Manual</span>';
+            else if (feriado && statusInfo.status !== 'feriado' && !excecaoHoje) badgeExtra = '<span class="badge-feriado">Funciona em feriado</span>';
+            if (excecaoHoje) {
+                if (excecaoHoje.tipo === 'reuniao') {
+                    badgeExtra += `<span class="badge-reuniao">📅 Reunião</span>`;
+                } else {
+                    badgeExtra += `<span class="badge-excecao">🔷 Exceção: ${excecaoHoje.tipo}</span>`;
+                }
+            }
+            if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && (!excecaoHoje || excecaoHoje.tipo !== 'fechado')) {
+                badgeExtra += `<span class="badge-almoco">🍽️ Almoço: ${formatarHora(setor.almocoInicio)}-${formatarHora(setor.almocoFim)}</span>`;
+            }
+
+            return `
+                <div class="card ${statusInfo.cor}" data-nome="${setor.nome.toLowerCase()}">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-titulo">${setor.nome}</div>
+                            <div class="card-subtitulo">${setor.subtitulo}</div>
+                        </div>
+                        <span class="card-status ${statusInfo.status}">${statusInfo.mensagem.split(' ').slice(0,3).join(' ')}</span>
+                    </div>
+                    <div class="card-horario">
+                        <span>${horarioTexto}</span>
+                        <span style="color:#555;margin:0 4px;">•</span>
+                        <span style="font-size:12px;color:#666;">${infoDia}</span>
+                        ${badgeExtra}
+                    </div>
+                    <div class="card-mensagem ${statusInfo.cor}">
+                        <span class="icone">${statusInfo.mensagem.split(' ')[0]}</span>
+                        <span>${statusInfo.mensagem} — ${statusInfo.descricao}</span>
+                    </div>
+                    <div class="canais">${setor.canais.map(c => `<span>${c}</span>`).join('')}</div>
+                </div>
+            `;
+        }
+
+        function renderizarTodos() {
+            document.getElementById('gridSetores').innerHTML = setores.map(s => renderizarCard(s)).join('');
+            atualizarContador();
+        }
+
+        function filtrarSetores() {
+            const termo = document.getElementById('inputPesquisa').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.card');
+            let visiveis = 0;
+            cards.forEach(card => {
+                const nome = card.getAttribute('data-nome') || '';
+                if (termo === '' || nome.includes(termo)) { card.classList.remove('oculto'); visiveis++; }
+                else card.classList.add('oculto');
+            });
+            document.getElementById('qtdResultados').textContent = `${visiveis} setor${visiveis > 1 ? 'es' : ''}`;
+        }
+
+        function atualizarContador() {
+            const total = document.querySelectorAll('.card:not(.oculto)').length;
+            document.getElementById('qtdResultados').textContent = `${total} setor${total > 1 ? 'es' : ''}`;
+        }
+
+        function atualizarRelogio() {
+            const agora = new Date();
+            const h = String(agora.getHours()).padStart(2, '0');
+            const m = String(agora.getMinutes()).padStart(2, '0');
+            const s = String(agora.getSeconds()).padStart(2, '0');
+            document.getElementById('relogio').textContent = `${h}:${m}:${s}`;
+        }
+
+        function atualizarInfoHoje() {
+            const agora = new Date();
+            const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+            const hoje = dias[agora.getDay()];
+            const dia = String(agora.getDate()).padStart(2, '0');
+            const mes = String(agora.getMonth() + 1).padStart(2, '0');
+            const ano = agora.getFullYear();
+            document.getElementById('anoBadge').textContent = ano;
+            const feriado = hojeEhFeriado();
+            let texto = `📅 ${hoje}, ${dia}/${mes}/${ano}`;
+            if (feriado) {
+                const manual = feriado.manual ? ' ⚠️ Manual' : '';
+                texto += ` 🗓️ <span class="feriado">${nomeFeriado(feriado)}${manual}</span>`;
+            }
+            document.getElementById('infoHoje').innerHTML = texto;
+        }
+
+        function trocarAba(abaId, btn) {
+            document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('ativo'));
+            document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('ativo'));
+            btn.classList.add('ativo');
+            document.getElementById(abaId).classList.add('ativo');
+        }
+
+        function abrirModal() {
+            document.getElementById('modalAdmin').classList.add('aberto');
+            document.getElementById('anoAtualDisplay').textContent = ANO_ATUAL;
+            document.getElementById('anoLista').textContent = ANO_ATUAL;
+            document.getElementById('qtdeFeriadosDisplay').textContent = feriados.length;
+            const hoje = new Date();
+            const ano = hoje.getFullYear();
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            document.getElementById('inputDataFeriado').value = `${ano}-${mes}-${dia}`;
+            document.getElementById('inputDataExcecao').value = `${ano}-${mes}-${dia}`;
+            atualizarListaFeriados();
+            atualizarListaExcecoes();
+            atualizarListaInformativos();
+            renderizarSeletorSetores();
+            renderizarEmojiPicker();
+            atualizarToggleFeriado();
+            atualizarFeriadoAtualInfo();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModal() {
+            document.getElementById('modalAdmin').classList.remove('aberto');
+            document.body.style.overflow = '';
+        }
+
+        function atualizarListaFeriados() {
+            const container = document.getElementById('listaFeriados');
+            if (feriados.length === 0) {
+                container.innerHTML = '<p style="color:#666;">Nenhum feriado cadastrado.</p>';
+                return;
+            }
+            const ordenados = [...feriados].sort((a, b) => {
+                const [d1, m1] = a.data.split('/').map(Number);
+                const [d2, m2] = b.data.split('/').map(Number);
+                if (m1 !== m2) return m1 - m2;
+                return d1 - d2;
+            });
+            container.innerHTML = ordenados.map(f => {
+                const idx = feriados.indexOf(f);
+                const tb = f.tipo ? `<span style="font-size:10px; background:#2a2a4a; padding:2px 8px; border-radius:50px; margin-left:5px;">${f.tipo}</span>` : '';
+                return `
+                    <div class="feriado-item">
+                        <div><span class="data">${f.data}</span><span class="nome">${f.nome || 'Feriado'} ${tb}</span></div>
+                        <button class="btn-remover" onclick="removerFeriado(${idx})">Remover</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        let setorSelecionadoExcecao = null;
+        let tipoExcecaoSelecionado = 'fechado';
+
+        function renderizarSeletorSetores() {
+            const container = document.getElementById('seletorSetorExcecao');
+            container.innerHTML = setores.map(s => `
+                <button class="setor-chip ${setorSelecionadoExcecao === s.id ? 'selecionado' : ''}" onclick="selecionarSetorExcecao('${s.id}')">
+                    ${s.nome}
+                </button>
+            `).join('');
+        }
+
+        function selecionarSetorExcecao(setorId) {
+            setorSelecionadoExcecao = setorId;
+            renderizarSeletorSetores();
+        }
+
+        function selecionarTipoExcecao(tipo, btn) {
+            tipoExcecaoSelecionado = tipo;
+            document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('selecionado'));
+            btn.classList.add('selecionado');
+            document.getElementById('camposHorarioEspecial').style.display = tipo === 'especial' ? 'block' : 'none';
+            document.getElementById('camposReuniao').style.display = tipo === 'reuniao' ? 'block' : 'none';
+        }
+
+        function atualizarListaExcecoes() {
+            const container = document.getElementById('listaExcecoes');
+            if (excecoes.length === 0) {
+                container.innerHTML = '<p style="color:#666;">Nenhuma exceção cadastrada.</p>';
+                return;
+            }
+            const ordenadas = [...excecoes].sort((a, b) => {
+                const [d1, m1] = a.data.split('/').map(Number);
+                const [d2, m2] = b.data.split('/').map(Number);
+                if (m1 !== m2) return m1 - m2;
+                return d1 - d2;
+            });
+            container.innerHTML = ordenadas.map(e => {
+                const idx = excecoes.indexOf(e);
+                const setor = setores.find(s => s.id === e.setorId);
+                const nomeSetor = setor ? setor.nome : e.setorId;
+                let desc = '';
+                let classeReuniao = '';
+                if (e.tipo === 'fechado') desc = '🚫 Sem expediente';
+                else if (e.tipo === 'normal') desc = '✅ Funciona normalmente';
+                else if (e.tipo === 'especial') desc = `⏰ ${formatarHora(e.abre)} - ${formatarHora(e.fecha)}`;
+                else if (e.tipo === 'reuniao') {
+                    desc = `📅 Reunião: ${formatarHora(e.inicio || 14)} - ${formatarHora(e.fim || 15)}`;
+                    classeReuniao = 'reuniao';
+                }
+                if (e.obs) desc += ` — ${e.obs}`;
+                return `
+                    <div class="excecao-item ${classeReuniao}">
+                        <div class="excecao-header">
+                            <div>
+                                <span class="excecao-data">${e.data}</span>
+                                <span class="excecao-setor" style="margin-left:8px;">${nomeSetor}</span>
+                                <span class="excecao-tipo ${e.tipo}">${e.tipo}</span>
+                            </div>
+                            <button class="btn-remover" onclick="removerExcecao(${idx})">Remover</button>
+                        </div>
+                        <div class="excecao-desc">${desc}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function adicionarExcecao() {
+            if (!setorSelecionadoExcecao) { alert('Selecione um setor!'); return; }
+            const dataInput = document.getElementById('inputDataExcecao');
+            if (!dataInput.value) { alert('Selecione uma data!'); return; }
+            const dataObj = new Date(dataInput.value + 'T00:00:00');
+            const dataStr = dataParaStr(dataObj);
+            const existente = excecoes.findIndex(e => e.setorId === setorSelecionadoExcecao && e.data === dataStr);
+            if (existente >= 0) {
+                if (!confirm(`Já existe exceção para este setor em ${dataStr}. Substituir?`)) return;
+                excecoes.splice(existente, 1);
+            }
+            const nova = {
+                setorId: setorSelecionadoExcecao, data: dataStr,
+                tipo: tipoExcecaoSelecionado,
+                obs: document.getElementById('inputObsExcecao').value.trim() || ''
+            };
+            if (tipoExcecaoSelecionado === 'especial') {
+                const ab = document.getElementById('inputAbreExcecao').value;
+                const fe = document.getElementById('inputFechaExcecao').value;
+                if (!ab || !fe) { alert('Preencha os horários!'); return; }
+                nova.abre = horaParaDecimal(ab);
+                nova.fecha = horaParaDecimal(fe);
+            }
+            if (tipoExcecaoSelecionado === 'reuniao') {
+                const ini = document.getElementById('inputReuniaoInicio').value;
+                const fim = document.getElementById('inputReuniaoFim').value;
+                if (!ini || !fim) { alert('Preencha o horário da reunião!'); return; }
+                nova.inicio = horaParaDecimal(ini);
+                nova.fim = horaParaDecimal(fim);
+                if (nova.fim <= nova.inicio) { alert('O horário de fim deve ser maior que o de início!'); return; }
+            }
+            excecoes.push(nova);
+            document.getElementById('inputObsExcecao').value = '';
+            atualizarListaExcecoes();
+            renderizarTodos();
+            renderizarInformativos();
+            atualizarInfoHoje();
+            salvarConfiguracoesNoStorage();
+            salvarNaNuvem();
+            alert(`✅ Exceção adicionada!`);
+        }
+
+        function removerExcecao(index) {
+            if (confirm('Remover esta exceção?')) {
+                excecoes.splice(index, 1);
+                atualizarListaExcecoes();
+                renderizarTodos();
+                renderizarInformativos();
+                salvarConfiguracoesNoStorage();
+                salvarNaNuvem();
+            }
+        }
+
+        const EMOJIS_DISPONIVEIS = ['📢', '⚠️', '🗓️', '🏪', '📋', '⏰', '🔔', '💡', '📌', '🚨', 'ℹ️', '🎯', '📞', '✅', '❌'];
+        let emojiSelecionado = '📢';
+        let tipoInformativoSelecionado = 'ticker';
+
+        function renderizarEmojiPicker() {
+            const picker = document.getElementById('infoEmojiPicker');
+            picker.innerHTML = EMOJIS_DISPONIVEIS.map(e => `
+                <button class="emoji-btn ${emojiSelecionado === e ? 'selecionado' : ''}" onclick="selecionarEmoji('${e}')">${e}</button>
+            `).join('');
+        }
+
+        function selecionarEmoji(emoji) {
+            emojiSelecionado = emoji;
+            renderizarEmojiPicker();
+        }
+
+        function selecionarTipoInformativo(tipo, btn) {
+            tipoInformativoSelecionado = tipo;
+            document.querySelectorAll('.info-tipo-btn').forEach(b => b.classList.remove('selecionado'));
+            btn.classList.add('selecionado');
+        }
+
+        function atualizarListaInformativos() {
+            const container = document.getElementById('listaInformativos');
+            if (informativos.length === 0) {
+                container.innerHTML = '<p style="color:#666;">Nenhum informativo cadastrado.</p>';
+                return;
+            }
+            container.innerHTML = informativos.map((info, idx) => {
+                const ativo = infoEstaAtivo(info);
+                let meta = info.tipo === 'ticker' ? '🎬 Ticker' : '📌 Fixo';
+                if (info.dataInicio || info.dataFim) {
+                    meta += ` | ${info.dataInicio || '...'} → ${info.dataFim || '...'}`;
+                }
+                const statusBadge = ativo 
+                    ? '<span style="color:#69f0ae;font-size:10px;">● ATIVO</span>' 
+                    : '<span style="color:#666;font-size:10px;">○ inativo</span>';
+                return `
+                    <div class="info-item" style="${!ativo ? 'opacity:0.5;' : ''}">
+                        <div class="info-emoji">${info.emoji || '📢'}</div>
+                        <div class="info-texto">
+                            ${info.texto}
+                            <div class="info-meta">${meta} ${statusBadge}</div>
+                        </div>
+                        <button class="btn-remover" onclick="removerInformativo(${idx})">Remover</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function adicionarInformativo() {
+            const texto = document.getElementById('inputTextoInformativo').value.trim();
+            if (!texto) { alert('Digite o texto do informativo!'); return; }
+            const nova = {
+                emoji: emojiSelecionado,
+                texto: texto,
+                tipo: tipoInformativoSelecionado,
+                dataInicio: document.getElementById('inputInfoDataInicio').value || null,
+                dataFim: document.getElementById('inputInfoDataFim').value || null,
+                criadoEm: new Date().toISOString()
+            };
+            informativos.push(nova);
+            document.getElementById('inputTextoInformativo').value = '';
+            document.getElementById('inputInfoDataInicio').value = '';
+            document.getElementById('inputInfoDataFim').value = '';
+            atualizarListaInformativos();
+            renderizarInformativos();
+            salvarConfiguracoesNoStorage();
+            salvarNaNuvem();
+            alert('✅ Informativo adicionado!');
+        }
+
+        function removerInformativo(index) {
+            if (confirm('Remover este informativo?')) {
+                informativos.splice(index, 1);
+                atualizarListaInformativos();
+                renderizarInformativos();
+                salvarConfiguracoesNoStorage();
+                salvarNaNuvem();
+            }
+        }
+
+        function atualizarToggleFeriado() {
+            const toggle = document.getElementById('switchFeriado');
+            const status = document.getElementById('statusFeriadoGeral');
+            if (feriadoManualAtivo) {
+                toggle.classList.add('ativo');
+                status.textContent = 'Ativo (Feriado manual)';
+                status.className = 'toggle-status ativo';
+            } else {
+                toggle.classList.remove('ativo');
+                status.textContent = 'Inativo';
+                status.className = 'toggle-status inativo';
+            }
+        }
+
+        function atualizarFeriadoAtualInfo() {
+            const div = document.getElementById('feriadoAtualInfo');
+            const nomeSpan = document.getElementById('nomeFeriadoAtual');
+            const f = hojeEhFeriado();
+            if (f && f.manual) {
+                div.style.display = 'block';
+                nomeSpan.textContent = f.nome || 'Feriado (manual)';
+            } else div.style.display = 'none';
+        }
+
+        function toggleFeriadoGeral() {
+            feriadoManualAtivo = !feriadoManualAtivo;
+            if (feriadoManualAtivo && !feriadoManualNome) {
+                const nome = prompt('Digite o nome do feriado:');
+                if (nome) feriadoManualNome = nome;
+                else feriadoManualAtivo = false;
+            }
+            if (!feriadoManualAtivo) feriadoManualNome = '';
+            atualizarToggleFeriado();
+            atualizarFeriadoAtualInfo();
+            renderizarTodos();
+            renderizarInformativos();
+            atualizarInfoHoje();
+            salvarConfiguracoesNoStorage();
+            salvarNaNuvem();
+        }
+
+        function removerFeriado(index) {
+            if (confirm(`Remover "${feriados[index].data} - ${feriados[index].nome}"?`)) {
+                feriados.splice(index, 1);
+                atualizarListaFeriados();
+                document.getElementById('qtdeFeriadosDisplay').textContent = feriados.length;
+                renderizarTodos();
+                renderizarInformativos();
+                atualizarInfoHoje();
+                salvarConfiguracoesNoStorage();
+                salvarNaNuvem();
+            }
+        }
+
+        function removerFeriadoAtual() {
+            if (confirm('Desativar o feriado manual?')) {
+                feriadoManualAtivo = false;
+                feriadoManualNome = '';
+                atualizarToggleFeriado();
+                atualizarFeriadoAtualInfo();
+                renderizarTodos();
+                renderizarInformativos();
+                atualizarInfoHoje();
+                salvarConfiguracoesNoStorage();
+                salvarNaNuvem();
+            }
+        }
+
+        function adicionarFeriado() {
+            const dataInput = document.getElementById('inputDataFeriado');
+            const nomeInput = document.getElementById('inputNomeFeriado');
+            if (!dataInput.value) { alert('Selecione uma data!'); return; }
+            const dataObj = new Date(dataInput.value + 'T00:00:00');
+            const dataStr = dataParaStr(dataObj);
+            const nome = nomeInput.value.trim() || `Feriado ${dataStr}`;
+            if (feriados.find(f => f.data === dataStr)) { alert(`O feriado ${dataStr} já está cadastrado!`); return; }
+            feriados.push({ data: dataStr, nome, tipo: 'personalizado' });
+            nomeInput.value = '';
+            atualizarListaFeriados();
+            document.getElementById('qtdeFeriadosDisplay').textContent = feriados.length;
+            renderizarTodos();
+            renderizarInformativos();
+            atualizarInfoHoje();
+            salvarConfiguracoesNoStorage();
+            salvarNaNuvem();
+            alert(`✅ Feriado ${dataStr} adicionado!`);
+        }
+
+        function importarFeriadosAno() {
+            if (confirm(`Importar feriados padrão para ${ANO_ATUAL}?`)) {
+                feriados = gerarFeriadosPorAno(ANO_ATUAL);
+                atualizarListaFeriados();
+                document.getElementById('qtdeFeriadosDisplay').textContent = feriados.length;
+                renderizarTodos();
+                renderizarInformativos();
+                atualizarInfoHoje();
+                salvarConfiguracoesNoStorage();
+                salvarNaNuvem();
+                alert(`✅ Feriados de ${ANO_ATUAL} importados!`);
+            }
+        }
+
+        function salvarConfiguracoes() {
+            salvarConfiguracoesNoStorage();
+            salvarNaNuvem();
+            fecharModal();
+            renderizarTodos();
+            renderizarInformativos();
+            atualizarInfoHoje();
+            alert('💾 Configurações salvas!');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (document.getElementById('alertaOverlay').classList.contains('ativo')) fecharAlerta();
+                else if (document.getElementById('modalCloud').classList.contains('aberto')) fecharModalCloud();
+                else fecharModal();
+            }
+        });
+
+        document.getElementById('modalAdmin').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) fecharModal();
+        });
+        document.getElementById('modalCloud').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) fecharModalCloud();
+        });
+
+        renderizarTodos();
+        renderizarInformativos();
+        atualizarRelogio();
+        atualizarInfoHoje();
+
+        if (alertasAtivos) {
+            const btn = document.getElementById('btnAlerta');
+            btn.textContent = '🔔 Alertas: ON';
+            btn.classList.add('ativo');
+        }
+
+        atualizarBtnCloud();
+        atualizarCloudStatusUI();
+
+        setInterval(atualizarRelogio, 1000);
+        setInterval(renderizarTodos, 30000);
+        setInterval(renderizarInformativos, 60000);
+        setInterval(atualizarInfoHoje, 60000);
+        setInterval(verificarAlertas, 15000);
+
+        setInterval(() => {
+            if (cloudConfig.ativo && cloudConfig.auto && !cloudSyncEmAndamento) sincronizarCloud();
+        }, 30000);
+
+        resetDiarioAlertas();
+        if (alertasAtivos) setTimeout(verificarAlertas, 2000);
+
+        setTimeout(() => {
+            if (cloudConfig.ativo) {
+                cloudLog('🚀 Sincronização inicial...', 'info');
+                sincronizarCloud();
+            } else {
+                cloudLog('⏸️ Sincronização desativada', 'aviso');
+            }
+        }, 800);
+
+        document.addEventListener('click', function desbloquearAudio() {
+            initAudioContext();
+            document.removeEventListener('click', desbloquearAudio);
+        }, { once: true });
+
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                renderizarTodos();
+                renderizarInformativos();
+                atualizarRelogio();
+                atualizarInfoHoje();
+                if (alertasAtivos) verificarAlertas();
+                if (cloudConfig.ativo) sincronizarCloud();
+            }
+        });
+
+        console.log(`📊 Painel iniciado - ${ANO_ATUAL}`);
+        console.log(`☁️ Nuvem: ${cloudConfig.ativo ? 'ATIVA' : 'PAUSADA'}`);
+        console.log(`🔊 Alerta: ${DURACAO_ALERTA_SEGUNDOS}s`);
+
+        window.abrirModal = abrirModal;
+        window.fecharModal = fecharModal;
+        window.abrirModalCloud = abrirModalCloud;
+        window.fecharModalCloud = fecharModalCloud;
+        window.toggleFeriadoGeral = toggleFeriadoGeral;
+        window.removerFeriado = removerFeriado;
+        window.removerFeriadoAtual = removerFeriadoAtual;
+        window.adicionarFeriado = adicionarFeriado;
+        window.salvarConfiguracoes = salvarConfiguracoes;
+        window.importarFeriadosAno = importarFeriadosAno;
+        window.filtrarSetores = filtrarSetores;
+        window.toggleAlertas = toggleAlertas;
+        window.fecharAlerta = fecharAlerta;
+        window.trocarAba = trocarAba;
+        window.selecionarSetorExcecao = selecionarSetorExcecao;
+        window.selecionarTipoExcecao = selecionarTipoExcecao;
+        window.adicionarExcecao = adicionarExcecao;
+        window.removerExcecao = removerExcecao;
+        window.testarConexaoCloud = testarConexaoCloud;
+        window.forcarPull = forcarPull;
+        window.forcarPush = forcarPush;
+        window.toggleCloudSync = toggleCloudSync;
+        window.selecionarEmoji = selecionarEmoji;
+        window.selecionarTipoInformativo = selecionarTipoInformativo;
+        window.adicionarInformativo = adicionarInformativo;
+        window.removerInformativo = removerInformativo;
+    </script>
+
+</body>
+</html>
