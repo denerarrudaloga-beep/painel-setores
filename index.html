@@ -1245,7 +1245,7 @@
 
                     <h3>⚙️ Configurações extras</h3>
                     <div class="toggle-container">
-                        <label>🍽️ Tem horário de almoço?</label>
+                        <label>🍽️ Tem horário de almoço? (apenas seg-sex)</label>
                         <div class="switch" id="switchTemAlmoco" onclick="toggleTemAlmocoEdicao()"></div>
                         <span class="toggle-status" id="statusTemAlmoco">Inativo</span>
                     </div>
@@ -1531,7 +1531,6 @@
             if (cfg.excecoes) excecoes = cfg.excecoes;
             if (cfg.setores) {
                 setores = cfg.setores;
-                // Garante que todos os setores tenham modo definido e endereço
                 setores.forEach(setor => {
                     if (setor.horarios) {
                         setor.horarios.forEach(h => {
@@ -1749,8 +1748,6 @@
         }
 
         // ===== SETORES PADRÃO =====
-        // semModo: true = não mostra a barra de atendimento (usado pelas lojas presenciais)
-        // endereco: endereço físico da loja (opcional)
         const SETORES_PADRAO = [
             {
                 id: 'cross', nome: '🔄 CROSS',
@@ -1844,7 +1841,6 @@
 
         let setores = configSalva && configSalva.setores ? configSalva.setores : JSON.parse(JSON.stringify(SETORES_PADRAO));
 
-        // Garante que todos os setores tenham modo definido e endereço
         setores.forEach(setor => {
             if (setor.horarios) {
                 setor.horarios.forEach(h => {
@@ -2235,7 +2231,24 @@
             return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
         }
 
-        // ===== RETORNA O MODO DE ATENDIMENTO ATUAL DO SETOR =====
+        // ===== CALCULA PRÓXIMO DIA ÚTIL DO SETOR =====
+        function calcularProximoDiaUtil(setor) {
+            const hoje = new Date();
+            const diaHoje = hoje.getDay();
+            const nomesDias = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+            
+            for (let i = 1; i <= 7; i++) {
+                const proximoDia = (diaHoje + i) % 7;
+                const temHorario = setor.horarios.some(h => h.dias.includes(proximoDia));
+                
+                if (temHorario) {
+                    if (i === 1) return 'amanhã';
+                    return `na ${nomesDias[proximoDia]}`;
+                }
+            }
+            return null;
+        }
+
         function getModoAtendimentoHoje(setor) {
             if (setor.semModo) return null;
 
@@ -2322,13 +2335,19 @@
                         }
                     }
                 }
-                if (!horarioHoje) return { status: 'indisponivel', mensagem: '❌ Indisponível hoje', descricao: 'Sem atendimento neste dia', cor: 'indisponivel', modo: null };
+                if (!horarioHoje) {
+                    const proximoDia = calcularProximoDiaUtil(setor);
+                    const desc = proximoDia ? `Sem atendimento — volta ${proximoDia}` : 'Sem atendimento neste dia';
+                    return { status: 'indisponivel', mensagem: '❌ Indisponível hoje', descricao: desc, cor: 'indisponivel', modo: null };
+                }
             }
 
             const { abre, fecha } = horarioHoje;
             const minAlerta = setor.alertaMinutos || 30;
 
-            if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim) {
+            // ===== ALMOÇO APENAS EM DIAS ÚTEIS (SEG-SEX) =====
+            const ehDiaUtil = dia >= 1 && dia <= 5;
+            if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && ehDiaUtil) {
                 if (hora >= setor.almocoInicio && hora < setor.almocoFim) {
                     const minVoltar = Math.round((setor.almocoFim - hora) * 60);
                     return { status: 'almoco', mensagem: '🍽️ Horário de almoço', descricao: `Volta em ${minVoltar} min (${formatarHora(setor.almocoFim)})`, cor: 'almoco', modo: null };
@@ -2347,7 +2366,15 @@
                 return { status: 'fechado', mensagem: `⏳ Fechado - abre ${formatarHora(abre)}`, descricao: `Volta às ${formatarHora(abre)}`, cor: 'fechado', modo };
             }
 
-            return { status: 'fechado', mensagem: '❌ Expediente encerrado', descricao: 'Volta amanhã', cor: 'fechado', modo: null };
+            // ===== EXPEDIENTE ENCERRADO: CALCULA O PRÓXIMO DIA ÚTIL =====
+            const proximoDia = calcularProximoDiaUtil(setor);
+            return { 
+                status: 'fechado', 
+                mensagem: '❌ Expediente encerrado', 
+                descricao: proximoDia ? `Volta ${proximoDia}` : 'Volta em breve', 
+                cor: 'fechado', 
+                modo: null 
+            };
         }
 
         function getHorarioHoje(setor) {
@@ -2394,11 +2421,13 @@
                     badgeExtra += `<span class="badge-excecao">🔷 Exceção: ${excecaoHoje.tipo}</span>`;
                 }
             }
-            if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && (!excecaoHoje || excecaoHoje.tipo !== 'fechado')) {
+            // ===== BADGE DE ALMOÇO: apenas em dias úteis (seg-sex) =====
+            const diaSemanaHoje = new Date().getDay();
+            const ehDiaUtilHoje = diaSemanaHoje >= 1 && diaSemanaHoje <= 5;
+            if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && ehDiaUtilHoje && (!excecaoHoje || excecaoHoje.tipo !== 'fechado')) {
                 badgeExtra += `<span class="badge-almoco">🍽️ Almoço: ${formatarHora(setor.almocoInicio)}-${formatarHora(setor.almocoFim)}</span>`;
             }
 
-            // ===== BARRA DE ATENDIMENTO =====
             let atendimentoHtml = '';
             if (!setor.semModo) {
                 if (modoAtual) {
@@ -2419,7 +2448,6 @@
                 }
             }
 
-            // ===== ENDEREÇO =====
             let enderecoHtml = '';
             if (setor.endereco && setor.endereco.trim() !== '') {
                 enderecoHtml = `
@@ -2882,9 +2910,6 @@
             alert('💾 Configurações salvas!');
         }
 
-        // ============================================================
-        // ===== EDITOR DE HORÁRIOS, MODOS E ENDEREÇO DOS SETORES =====
-        // ============================================================
         let setorEditandoId = null;
         let horariosEditando = [];
 
@@ -2916,7 +2941,6 @@
             renderizarEditorHorarios();
             atualizarPreviewHorario();
 
-            // Preenche o endereço
             document.getElementById('inputEnderecoSetor').value = setor.endereco || '';
 
             const temAlmoco = !!setor.temAlmoco;
@@ -3054,9 +3078,7 @@
             preview.innerHTML = `<strong>📋 Resumo:</strong><br>${linhas.map(l => '• ' + l).join('<br>')}`;
         }
 
-        function atualizarPreviewEndereco() {
-            // Apenas para atualizar visualmente se necessário
-        }
+        function atualizarPreviewEndereco() {}
 
         function salvarEdicaoSetor() {
             const setor = setores.find(s => s.id === setorEditandoId);
@@ -3076,7 +3098,6 @@
                 modo: setor.semModo ? 'ambos' : (h.modo || 'ambos')
             }));
 
-            // Salva o endereço
             setor.endereco = document.getElementById('inputEnderecoSetor').value.trim();
 
             const temAlmoco = document.getElementById('switchTemAlmoco').classList.contains('ativo');
@@ -3201,6 +3222,7 @@
         console.log(`📊 Painel iniciado - ${ANO_ATUAL}`);
         console.log(`☁️ Nuvem: ${cloudConfig.ativo ? 'ATIVA' : 'PAUSADA'}`);
         console.log(`🔊 Alerta: ${DURACAO_ALERTA_SEGUNDOS}s`);
+        console.log(`🍽️ Almoço: apenas seg-sex`);
 
         window.abrirModal = abrirModal;
         window.fecharModal = fecharModal;
@@ -3228,7 +3250,6 @@
         window.selecionarTipoInformativo = selecionarTipoInformativo;
         window.adicionarInformativo = adicionarInformativo;
         window.removerInformativo = removerInformativo;
-
         window.selecionarSetorParaEditar = selecionarSetorParaEditar;
         window.toggleDiaHorario = toggleDiaHorario;
         window.alterarHoraEditor = alterarHoraEditor;
