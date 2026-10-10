@@ -323,6 +323,9 @@
         .bolinha.almoco { background: #ffab40; }
         .bolinha.excecao { background: #00bcd4; }
         .bolinha.reuniao { background: #ff6b9d; }
+        .bolinha.whatsapp { background: #25d366; }
+        .bolinha.telefonia { background: #2196f3; }
+        .bolinha.ambos { background: #9c27b0; }
 
         .search-bar {
             display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
@@ -402,6 +405,108 @@
         .badge-reuniao {
             background: #ff6b9d; color: #fff; font-size: 10px;
             padding: 2px 10px; border-radius: 50px; font-weight: 600;
+        }
+
+        .badge-modo {
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            letter-spacing: 0.3px;
+        }
+        .badge-modo.whatsapp {
+            background: rgba(37, 211, 102, 0.15);
+            color: #25d366;
+            border: 1px solid #25d366;
+        }
+        .badge-modo.telefonia {
+            background: rgba(33, 150, 243, 0.15);
+            color: #42a5f5;
+            border: 1px solid #2196f3;
+        }
+        .badge-modo.ambos {
+            background: rgba(156, 39, 176, 0.15);
+            color: #ce93d8;
+            border: 1px solid #9c27b0;
+        }
+        .badge-modo.indisponivel {
+            background: rgba(85, 85, 85, 0.15);
+            color: #888;
+            border: 1px solid #555;
+        }
+
+        .card-atendimento {
+            margin-top: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid;
+        }
+        .card-atendimento.whatsapp {
+            background: rgba(37, 211, 102, 0.08);
+            border-color: rgba(37, 211, 102, 0.4);
+            color: #25d366;
+        }
+        .card-atendimento.telefonia {
+            background: rgba(33, 150, 243, 0.08);
+            border-color: rgba(33, 150, 243, 0.4);
+            color: #42a5f5;
+        }
+        .card-atendimento.ambos {
+            background: rgba(156, 39, 176, 0.08);
+            border-color: rgba(156, 39, 176, 0.4);
+            color: #ce93d8;
+        }
+        .card-atendimento.indisponivel {
+            background: rgba(85, 85, 85, 0.08);
+            border-color: rgba(85, 85, 85, 0.4);
+            color: #888;
+        }
+        .card-atendimento .atend-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.7;
+            font-weight: 700;
+        }
+        .card-atendimento .atend-valor {
+            font-size: 14px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Endereço no card */
+        .card-endereco {
+            margin-top: 10px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: rgba(0, 188, 212, 0.08);
+            border: 1px solid rgba(0, 188, 212, 0.35);
+            color: #4dd0e1;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.5;
+        }
+        .card-endereco .endereco-icone {
+            font-size: 16px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .card-endereco .endereco-texto {
+            color: #a5f3fc;
         }
 
         .card-mensagem {
@@ -762,7 +867,6 @@
         }
         .cloud-fixed-badge strong { color: #00c853; }
 
-        /* ===== EDITOR DE SETORES ===== */
         .editor-horario-item {
             background: #0f0f1a; padding: 12px; border-radius: 10px;
             margin-bottom: 8px; border: 1px solid #2a2a4a;
@@ -792,6 +896,36 @@
             font-size: 14px; transition: 0.3s; flex-shrink: 0;
         }
         .editor-horario-item .btn-remover-linha:hover { background: #ff5252; }
+
+        .editor-modo {
+            display: flex; gap: 6px; margin-top: 8px;
+            padding-top: 8px; border-top: 1px dashed #2a2a4a;
+        }
+        .editor-modo .modo-btn {
+            flex: 1; background: #12121f; border: 2px solid #2a2a4a;
+            color: #888; padding: 8px 6px; border-radius: 8px;
+            font-size: 11px; font-weight: 700; cursor: pointer;
+            transition: 0.3s; text-align: center; line-height: 1.3;
+        }
+        .editor-modo .modo-btn:hover { border-color: #555; color: #fff; }
+        .editor-modo .modo-btn.selecionado.whatsapp {
+            border-color: #25d366; color: #25d366;
+            background: rgba(37, 211, 102, 0.1);
+            box-shadow: 0 0 10px rgba(37, 211, 102, 0.3);
+        }
+        .editor-modo .modo-btn.selecionado.telefonia {
+            border-color: #2196f3; color: #42a5f5;
+            background: rgba(33, 150, 243, 0.1);
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+        }
+        .editor-modo .modo-btn.selecionado.ambos {
+            border-color: #9c27b0; color: #ce93d8;
+            background: rgba(156, 39, 176, 0.1);
+            box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
+        }
+        .editor-modo .modo-btn .modo-emoji {
+            display: block; font-size: 16px; margin-bottom: 2px;
+        }
 
         .btn-add-linha {
             background: rgba(0, 188, 212, 0.15); color: #4dd0e1;
@@ -824,6 +958,21 @@
             font-size: 12px; margin-top: 10px;
         }
         .preview-horario strong { color: #00c853; }
+
+        /* Campo de endereço no editor */
+        .campo-endereco-editor {
+            background: #0f0f1a; padding: 12px 16px; border-radius: 10px;
+            border: 1px solid #2a2a4a; border-left: 3px solid #00bcd4;
+            margin-top: 10px;
+        }
+        .campo-endereco-editor label {
+            color: #4dd0e1; font-size: 12px; font-weight: 700;
+            display: block; margin-bottom: 6px; text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .campo-endereco-editor input {
+            margin-bottom: 0;
+        }
 
         @media (max-width: 600px) {
             .container { padding: 15px; }
@@ -895,10 +1044,17 @@
             <span class="legenda-item"><span class="bolinha excecao"></span> 🔷 Exceção programada</span>
         </div>
 
+        <div class="legenda" style="border-color:#2a2a4a;">
+            <span class="legenda-item" style="color:#aaa;font-weight:700;">Atendimento:</span>
+            <span class="legenda-item"><span class="bolinha whatsapp"></span> 💬 Somente WhatsApp</span>
+            <span class="legenda-item"><span class="bolinha telefonia"></span> 📞 Somente Telefonia</span>
+            <span class="legenda-item"><span class="bolinha ambos"></span> 📞💬 Telefonia + WhatsApp</span>
+        </div>
+
         <div class="search-bar">
             <span class="icone-lupa">🔍</span>
             <input type="text" id="inputPesquisa" placeholder="Pesquisar setor..." oninput="filtrarSetores()">
-            <span class="qtd-resultados" id="qtdResultados">9 setores</span>
+            <span class="qtd-resultados" id="qtdResultados">8 setores</span>
         </div>
 
         <div class="grid" id="gridSetores"></div>
@@ -936,7 +1092,7 @@
             </div>
 
             <div class="cloud-info">
-                ℹ️ <strong>Como funciona:</strong> Todas as alterações (feriados, exceções, informativos) são sincronizadas.<br><br>
+                ℹ️ <strong>Como funciona:</strong> Todas as alterações (feriados, exceções, informativos, setores) são sincronizadas.<br><br>
                 🔑 <strong>Bin ID:</strong> <code id="binIdDisplay">-</code>
             </div>
 
@@ -1061,10 +1217,9 @@
                 <button class="btn-adicionar-feriado" onclick="adicionarExcecao()" style="background:#00bcd4;">➕ Adicionar Exceção</button>
             </div>
 
-            <!-- NOVA ABA: SETORES -->
             <div class="modal-tab-content" id="abaSetores">
                 <div class="aviso-excecao">
-                    ℹ️ <strong>Edite os horários padrão</strong> de cada setor. As exceções por data (na aba Exceções) sobrescrevem estes valores em dias específicos.
+                    ℹ️ <strong>Edite os horários padrão</strong>, o <strong>modo de atendimento</strong> e o <strong>endereço</strong> de cada setor. As exceções por data sobrescrevem estes valores em dias específicos.
                 </div>
 
                 <h3>🏢 Selecione o setor para editar:</h3>
@@ -1075,11 +1230,18 @@
                         <strong>📋 Resumo atual:</strong> selecione um setor
                     </div>
 
-                    <h3>⏰ Faixas de horário</h3>
+                    <h3>⏰ Faixas de horário e modo de atendimento</h3>
                     <div id="horariosEditor"></div>
                     <button class="btn-add-linha" onclick="adicionarLinhaHorario()">➕ Adicionar faixa de horário</button>
 
                     <h3>⚙️ Configurações extras</h3>
+
+                    <!-- Campo de endereço -->
+                    <div class="campo-endereco-editor">
+                        <label>📍 Endereço da loja / setor</label>
+                        <input type="text" id="inputEnderecoSetor" placeholder="Ex: Av. Rui Barbosa, n° 603 - Centro, Linhares - ES">
+                    </div>
+
                     <div class="toggle-container">
                         <label>🍽️ Tem horário de almoço?</label>
                         <div class="switch" id="switchTemAlmoco" onclick="toggleTemAlmocoEdicao()"></div>
@@ -1159,6 +1321,13 @@
         let cloudUltimaSync = null;
         let cloudSyncEmAndamento = false;
         let cloudLogs = [];
+
+        // ===== MODO DE ATENDIMENTO =====
+        const MODOS_ATENDIMENTO = {
+            'whatsapp': { label: 'Somente WhatsApp', emoji: '💬', curto: 'WhatsApp', cor: 'whatsapp' },
+            'telefonia': { label: 'Somente Telefonia', emoji: '📞', curto: 'Telefonia', cor: 'telefonia' },
+            'ambos': { label: 'Telefonia + WhatsApp', emoji: '📞💬', curto: 'Telefonia + WhatsApp', cor: 'ambos' }
+        };
 
         function carregarCloudConfig() {
             const padrao = {
@@ -1358,7 +1527,17 @@
             if (typeof cfg.feriadoManualAtivo === 'boolean') feriadoManualAtivo = cfg.feriadoManualAtivo;
             if (cfg.feriadoManualNome !== undefined) feriadoManualNome = cfg.feriadoManualNome;
             if (cfg.excecoes) excecoes = cfg.excecoes;
-            if (cfg.setores) setores = cfg.setores;
+            if (cfg.setores) {
+                setores = cfg.setores;
+                // Garante que todos os setores tenham modo definido
+                setores.forEach(setor => {
+                    if (setor.horarios) {
+                        setor.horarios.forEach(h => {
+                            if (!h.modo) h.modo = 'ambos';
+                        });
+                    }
+                });
+            }
             if (typeof cfg.alertasAtivos === 'boolean') alertasAtivos = cfg.alertasAtivos;
             if (cfg.informativos) informativos = cfg.informativos;
             
@@ -1540,14 +1719,14 @@
 
         function carregarConfiguracoes() {
             try {
-                const salvo = localStorage.getItem('painelSetoresConfig_v8');
+                const salvo = localStorage.getItem('painelSetoresConfig_v9');
                 if (salvo) return JSON.parse(salvo);
             } catch (e) {}
             return null;
         }
 
         function salvarConfiguracoesNoStorage() {
-            try { localStorage.setItem('painelSetoresConfig_v8', JSON.stringify(montarConfigAtual())); }
+            try { localStorage.setItem('painelSetoresConfig_v9', JSON.stringify(montarConfigAtual())); }
             catch (e) {}
         }
 
@@ -1566,63 +1745,108 @@
             feriados = gerarFeriadosPorAno(ANO_ATUAL);
         }
 
-        const SETORES_PADRAO = [{
-            id: 'cross', nome: '🔄 CROSS',
-            subtitulo: 'Mudança de Endereço | Alteração de Plano | Reativação',
-            canais: ['📞 Telefonia', '💬 WhatsApp'],
-            horarios: [{ dias: [1,2,3,4,5], abre: 8, fecha: 19 }, { dias: [6], abre: 8, fecha: 12 }],
-            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
-        }, {
-            id: 'negociacao', nome: '💰 Negociação',
-            subtitulo: 'Acordos e Renegociação de Dívidas',
-            canais: ['📞 Telefonia', '💬 WhatsApp'],
-            horarios: [{ dias: [1,2,3,4], abre: 8, fecha: 17.5 }, { dias: [5], abre: 8, fecha: 16.5 }],
-            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
-        }, {
-            id: 'cx-cancelamento', nome: '📋 CX Cancelamento',
-            subtitulo: 'Cancelamento & Retenção',
-            canais: ['📞 Telefonia', '💬 WhatsApp'],
-            horarios: [{ dias: [1,2,3,4,5], abre: 9, fecha: 17 }],
-            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
-        }, {
-            id: 'vendas', nome: '🛒 Vendas',
-            subtitulo: 'Novas Contratações e Planos',
-            canais: ['📞 Telefonia', '💬 WhatsApp Business'],
-            horarios: [{ dias: [1,2,3,4,5], abre: 8, fecha: 22 }, { dias: [6], abre: 10, fecha: 22 }, { dias: [0], abre: 12, fecha: 21 }],
-            alertaMinutos: 30, funcionaEmFeriado: true, temAlmoco: false
-        }, {
-            id: 'loga', nome: '📞 LOGA / W-Comercial Digital',
-            subtitulo: 'Fila Digital & Ouvidoria',
-            canais: ['📞 Telefonia', '💬 WhatsApp Digital'],
-            horarios: [{ dias: [1,2,3,4,5], abre: 9, fecha: 22 }, { dias: [6], abre: 9, fecha: 18 }],
-            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
-        }, {
-            id: 'loja-linhares', nome: '🏪 Loja Linhares',
-            subtitulo: 'Atendimento Presencial',
-            canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
-            horarios: [{ dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5 }, { dias: [6], abre: 8, fecha: 12 }],
-            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2
-        }, {
-            id: 'loja-teixeira', nome: '🏪 Loja Teixeira',
-            subtitulo: 'Atendimento Presencial',
-            canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
-            horarios: [{ dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5 }, { dias: [6], abre: 8, fecha: 12 }],
-            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2
-        }, {
-            id: 'loja-sao-matheus', nome: '🏪 Loja São Matheus',
-            subtitulo: 'Atendimento Presencial',
-            canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
-            horarios: [{ dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5 }, { dias: [6], abre: 8, fecha: 12 }],
-            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2
-        }, {
-            id: 'loja-itapua', nome: '🏪 Loja Itapuã',
-            subtitulo: 'Atendimento Presencial',
-            canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
-            horarios: [{ dias: [1,2,3,4,5], abre: 8, fecha: 17.5 }],
-            alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
-        }];
+        // ===== SETORES PADRÃO (COM ENDEREÇOS) =====
+        const SETORES_PADRAO = [
+            {
+                id: 'cross', nome: '🔄 CROSS',
+                subtitulo: 'Mudança de Endereço | Alteração de Plano | Reativação',
+                canais: ['📞 Telefonia', '💬 WhatsApp'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 19, modo: 'ambos' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
+                semModo: false, endereco: ''
+            },
+            {
+                id: 'negociacao', nome: '💰 Negociação',
+                subtitulo: 'Acordos e Renegociação de Dívidas',
+                canais: ['📞 Telefonia', '💬 WhatsApp'],
+                horarios: [
+                    { dias: [1,2,3,4], abre: 8, fecha: 17.5, modo: 'ambos' },
+                    { dias: [5], abre: 8, fecha: 16.5, modo: 'telefonia' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
+                semModo: false, endereco: ''
+            },
+            {
+                id: 'cx-cancelamento', nome: '📋 CX Cancelamento LOGA/JAN',
+                subtitulo: 'Cancelamento & Retenção',
+                canais: ['📞 Telefonia', '💬 WhatsApp'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 9, fecha: 17, modo: 'ambos' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
+                semModo: false, endereco: ''
+            },
+            {
+                id: 'vendas', nome: '🛒 Vendas',
+                subtitulo: 'Novas Contratações e Planos',
+                canais: ['📞 Telefonia', '💬 WhatsApp Business'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 22, modo: 'ambos' },
+                    { dias: [6], abre: 10, fecha: 22, modo: 'ambos' },
+                    { dias: [0], abre: 12, fecha: 21, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: true, temAlmoco: false,
+                semModo: false, endereco: ''
+            },
+            {
+                id: 'loja-linhares', nome: '🏪 Loja Linhares',
+                subtitulo: 'Atendimento Presencial',
+                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'ambos' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: true, endereco: 'Av. Rui Barbosa, n° 603 - Centro, Linhares - ES'
+            },
+            {
+                id: 'loja-teixeira', nome: '🏪 Loja Teixeira',
+                subtitulo: 'Atendimento Presencial',
+                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'ambos' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: true, endereco: 'R. Teixeira de Freitas, 199 - Centro'
+            },
+            {
+                id: 'loja-sao-matheus', nome: '🏪 Loja São Matheus',
+                subtitulo: 'Atendimento Presencial',
+                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'ambos' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: true, endereco: 'Av. José Tozzi, 2056, Centro'
+            },
+            {
+                id: 'loja-itapua', nome: '🏪 Loja Itapuã',
+                subtitulo: 'Atendimento Presencial',
+                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 17.5, modo: 'ambos' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
+                semModo: true, endereco: 'R. Juiz Alexandre Martins de Castro Filho, 6 - Itapuã, Vila Velha'
+            }
+        ];
 
         let setores = configSalva && configSalva.setores ? configSalva.setores : JSON.parse(JSON.stringify(SETORES_PADRAO));
+
+        // Garante que todos os setores tenham modo definido e endereço
+        setores.forEach(setor => {
+            if (setor.horarios) {
+                setor.horarios.forEach(h => {
+                    if (!h.modo) h.modo = 'ambos';
+                });
+            }
+            if (setor.endereco === undefined) setor.endereco = '';
+        });
 
         function dataParaStr(dateObj) {
             const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -1720,7 +1944,8 @@
                     if (excecao.tipo === 'fechado') {
                         fechados.push(setor.nome);
                     } else if (excecao.tipo === 'especial') {
-                        especiais.push(`${setor.nome} (${formatarHora(excecao.abre)}-${formatarHora(excecao.fecha)})`);
+                        const modoTxt = (excecao.modo && MODOS_ATENDIMENTO[excecao.modo] && !setor.semModo) ? ` [${MODOS_ATENDIMENTO[excecao.modo].emoji}]` : '';
+                        especiais.push(`${setor.nome} (${formatarHora(excecao.abre)}-${formatarHora(excecao.fecha)})${modoTxt}`);
                     } else if (excecao.tipo === 'normal') {
                         funcionando.push(setor.nome);
                     }
@@ -2004,16 +2229,32 @@
             return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
         }
 
+        function getModoAtendimentoHoje(setor) {
+            if (setor.semModo) return null;
+
+            const excecao = buscarExcecaoHoje(setor.id);
+            
+            if (excecao && excecao.tipo === 'especial' && excecao.modo) {
+                return excecao.modo;
+            }
+            
+            const horarioHoje = getHorarioHoje(setor);
+            if (!horarioHoje) return null;
+            
+            return horarioHoje.modo || 'ambos';
+        }
+
         function obterStatusSetor(setor) {
             const agora = new Date();
             const dia = agora.getDay();
             const hora = agora.getHours() + (agora.getMinutes() / 60);
             const feriado = hojeEhFeriado();
             const excecao = buscarExcecaoHoje(setor.id);
+            const modo = getModoAtendimentoHoje(setor);
 
             if (excecao) {
                 if (excecao.tipo === 'fechado') {
-                    return { status: 'excecao', mensagem: '🚫 Exceção: Sem expediente', descricao: excecao.obs || 'Data com exceção programada', cor: 'excecao', excecao };
+                    return { status: 'excecao', mensagem: '🚫 Exceção: Sem expediente', descricao: excecao.obs || 'Data com exceção programada', cor: 'excecao', excecao, modo: null };
                 }
                 if (excecao.tipo === 'reuniao') {
                     const inicioReuniao = excecao.inicio || 14;
@@ -2025,7 +2266,8 @@
                             mensagem: '📅 Setor em reunião', 
                             descricao: `Retorna em ${minRestantes} min (${formatarHora(fimReuniao)})`, 
                             cor: 'reuniao', 
-                            excecao 
+                            excecao, 
+                            modo: null 
                         };
                     }
                     if (hora < inicioReuniao) {
@@ -2034,29 +2276,31 @@
                             mensagem: `📅 Reunião às ${formatarHora(inicioReuniao)}`, 
                             descricao: `Reunião: ${formatarHora(inicioReuniao)} - ${formatarHora(fimReuniao)}`, 
                             cor: 'excecao', 
-                            excecao 
+                            excecao,
+                            modo: modo
                         };
                     }
                 }
                 if (excecao.tipo === 'especial') {
                     const { abre: abreEsp, fecha: fechaEsp } = excecao;
                     const minAlerta = setor.alertaMinutos || 30;
+                    const modoEsp = excecao.modo || modo;
                     if (hora < abreEsp) {
                         const min = Math.round((abreEsp - hora) * 60);
-                        if (min <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${min} min!`, descricao: `Horário especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'alerta', excecao };
-                        return { status: 'excecao', mensagem: `🔷 Exceção: abre ${formatarHora(abreEsp)}`, descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'excecao', excecao };
+                        if (min <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${min} min!`, descricao: `Horário especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'alerta', excecao, modo: modoEsp };
+                        return { status: 'excecao', mensagem: `🔷 Exceção: abre ${formatarHora(abreEsp)}`, descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'excecao', excecao, modo: modoEsp };
                     }
                     if (hora >= abreEsp && hora <= fechaEsp) {
                         const minFechar = Math.round((fechaEsp - hora) * 60);
-                        if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`, descricao: `Especial até ${formatarHora(fechaEsp)}`, cor: 'alerta', excecao };
-                        return { status: 'aberto', mensagem: '✅ Atuando (exceção)', descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'aberto', excecao };
+                        if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`, descricao: `Especial até ${formatarHora(fechaEsp)}`, cor: 'alerta', excecao, modo: modoEsp };
+                        return { status: 'aberto', mensagem: '✅ Atuando (exceção)', descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'aberto', excecao, modo: modoEsp };
                     }
-                    return { status: 'fechado', mensagem: '❌ Exceção encerrada', descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'fechado', excecao };
+                    return { status: 'fechado', mensagem: '❌ Exceção encerrada', descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'fechado', excecao, modo: null };
                 }
             }
 
             if (feriado && !setor.funcionaEmFeriado && (!excecao || excecao.tipo !== 'normal')) {
-                return { status: 'feriado', mensagem: `🗓️ Feriado: ${nomeFeriado(feriado)}`, descricao: 'Sem expediente hoje', cor: 'feriado' };
+                return { status: 'feriado', mensagem: `🗓️ Feriado: ${nomeFeriado(feriado)}`, descricao: 'Sem expediente hoje', cor: 'feriado', modo: null };
             }
 
             let horarioHoje = null;
@@ -2071,7 +2315,7 @@
                         }
                     }
                 }
-                if (!horarioHoje) return { status: 'indisponivel', mensagem: '❌ Indisponível hoje', descricao: 'Sem atendimento neste dia', cor: 'indisponivel' };
+                if (!horarioHoje) return { status: 'indisponivel', mensagem: '❌ Indisponível hoje', descricao: 'Sem atendimento neste dia', cor: 'indisponivel', modo: null };
             }
 
             const { abre, fecha } = horarioHoje;
@@ -2080,30 +2324,30 @@
             if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim) {
                 if (hora >= setor.almocoInicio && hora < setor.almocoFim) {
                     const minVoltar = Math.round((setor.almocoFim - hora) * 60);
-                    return { status: 'almoco', mensagem: '🍽️ Horário de almoço', descricao: `Volta em ${minVoltar} min (${formatarHora(setor.almocoFim)})`, cor: 'almoco' };
+                    return { status: 'almoco', mensagem: '🍽️ Horário de almoço', descricao: `Volta em ${minVoltar} min (${formatarHora(setor.almocoFim)})`, cor: 'almoco', modo: null };
                 }
             }
 
             if (hora >= abre && hora <= fecha) {
                 const minFechar = Math.round((fecha - hora) * 60);
-                if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`, descricao: `Últimos atendimentos até ${formatarHora(fecha)}`, cor: 'alerta' };
-                return { status: 'aberto', mensagem: '✅ Atuando normalmente', descricao: `Até ${formatarHora(fecha)}`, cor: 'aberto' };
+                if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`, descricao: `Últimos atendimentos até ${formatarHora(fecha)}`, cor: 'alerta', modo };
+                return { status: 'aberto', mensagem: '✅ Atuando normalmente', descricao: `Até ${formatarHora(fecha)}`, cor: 'aberto', modo };
             }
 
             if (hora < abre) {
                 const minAbrir = Math.round((abre - hora) * 60);
-                if (minAbrir <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${minAbrir} min!`, descricao: 'Prepare-se para o início', cor: 'alerta' };
-                return { status: 'fechado', mensagem: `⏳ Fechado - abre ${formatarHora(abre)}`, descricao: `Volta às ${formatarHora(abre)}`, cor: 'fechado' };
+                if (minAbrir <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${minAbrir} min!`, descricao: 'Prepare-se para o início', cor: 'alerta', modo };
+                return { status: 'fechado', mensagem: `⏳ Fechado - abre ${formatarHora(abre)}`, descricao: `Volta às ${formatarHora(abre)}`, cor: 'fechado', modo };
             }
 
-            return { status: 'fechado', mensagem: '❌ Expediente encerrado', descricao: 'Volta amanhã', cor: 'fechado' };
+            return { status: 'fechado', mensagem: '❌ Expediente encerrado', descricao: 'Volta amanhã', cor: 'fechado', modo: null };
         }
 
         function getHorarioHoje(setor) {
             const dia = new Date().getDay();
             const feriado = hojeEhFeriado();
             const excecao = buscarExcecaoHoje(setor.id);
-            if (excecao && excecao.tipo === 'especial') return { dias: [0,1,2,3,4,5,6], abre: excecao.abre, fecha: excecao.fecha };
+            if (excecao && excecao.tipo === 'especial') return { dias: [0,1,2,3,4,5,6], abre: excecao.abre, fecha: excecao.fecha, modo: excecao.modo || 'ambos' };
             if (feriado && setor.funcionaEmFeriado) {
                 for (const h of setor.horarios) {
                     if (h.dias.includes(1) || h.dias.includes(2) || h.dias.includes(3) || h.dias.includes(4) || h.dias.includes(5)) return h;
@@ -2118,6 +2362,7 @@
             const horarioHoje = getHorarioHoje(setor);
             const feriado = hojeEhFeriado();
             const excecaoHoje = buscarExcecaoHoje(setor.id);
+            const modoAtual = statusInfo.modo;
 
             let horarioTexto = '📅 Indisponível hoje';
             if (horarioHoje) horarioTexto = `🕐 ${formatarHora(horarioHoje.abre)} - ${formatarHora(horarioHoje.fecha)}`;
@@ -2146,6 +2391,38 @@
                 badgeExtra += `<span class="badge-almoco">🍽️ Almoço: ${formatarHora(setor.almocoInicio)}-${formatarHora(setor.almocoFim)}</span>`;
             }
 
+            // ===== BARRA DE ATENDIMENTO (só para setores que NÃO são semModo) =====
+            let atendimentoHtml = '';
+            if (!setor.semModo) {
+                if (modoAtual) {
+                    const info = MODOS_ATENDIMENTO[modoAtual];
+                    atendimentoHtml = `
+                        <div class="card-atendimento ${info.cor}">
+                            <span class="atend-label">Atendimento agora</span>
+                            <span class="atend-valor">${info.emoji} ${info.label}</span>
+                        </div>
+                    `;
+                } else {
+                    atendimentoHtml = `
+                        <div class="card-atendimento indisponivel">
+                            <span class="atend-label">Atendimento</span>
+                            <span class="atend-valor">🚫 Sem atendimento</span>
+                        </div>
+                    `;
+                }
+            }
+
+            // ===== ENDEREÇO (se houver) =====
+            let enderecoHtml = '';
+            if (setor.endereco && setor.endereco.trim() !== '') {
+                enderecoHtml = `
+                    <div class="card-endereco">
+                        <span class="endereco-icone">📍</span>
+                        <span class="endereco-texto">${setor.endereco}</span>
+                    </div>
+                `;
+            }
+
             return `
                 <div class="card ${statusInfo.cor}" data-nome="${setor.nome.toLowerCase()}">
                     <div class="card-header">
@@ -2161,6 +2438,8 @@
                         <span style="font-size:12px;color:#666;">${infoDia}</span>
                         ${badgeExtra}
                     </div>
+                    ${enderecoHtml}
+                    ${atendimentoHtml}
                     <div class="card-mensagem ${statusInfo.cor}">
                         <span class="icone">${statusInfo.mensagem.split(' ')[0]}</span>
                         <span>${statusInfo.mensagem} — ${statusInfo.descricao}</span>
@@ -2323,7 +2602,10 @@
                 let classeReuniao = '';
                 if (e.tipo === 'fechado') desc = '🚫 Sem expediente';
                 else if (e.tipo === 'normal') desc = '✅ Funciona normalmente';
-                else if (e.tipo === 'especial') desc = `⏰ ${formatarHora(e.abre)} - ${formatarHora(e.fecha)}`;
+                else if (e.tipo === 'especial') {
+                    const modoTxt = (e.modo && MODOS_ATENDIMENTO[e.modo] && !(setor && setor.semModo)) ? ` [${MODOS_ATENDIMENTO[e.modo].emoji} ${MODOS_ATENDIMENTO[e.modo].curto}]` : '';
+                    desc = `⏰ ${formatarHora(e.abre)} - ${formatarHora(e.fecha)}${modoTxt}`;
+                }
                 else if (e.tipo === 'reuniao') {
                     desc = `📅 Reunião: ${formatarHora(e.inicio || 14)} - ${formatarHora(e.fim || 15)}`;
                     classeReuniao = 'reuniao';
@@ -2367,6 +2649,7 @@
                 if (!ab || !fe) { alert('Preencha os horários!'); return; }
                 nova.abre = horaParaDecimal(ab);
                 nova.fecha = horaParaDecimal(fe);
+                nova.modo = 'ambos';
             }
             if (tipoExcecaoSelecionado === 'reuniao') {
                 const ini = document.getElementById('inputReuniaoInicio').value;
@@ -2593,7 +2876,7 @@
         }
 
         // ============================================================
-        // ===== EDITOR DE HORÁRIOS DOS SETORES =====
+        // ===== EDITOR DE HORÁRIOS, MODOS E ENDEREÇOS DOS SETORES =====
         // ============================================================
         let setorEditandoId = null;
         let horariosEditando = [];
@@ -2614,15 +2897,21 @@
             const setor = setores.find(s => s.id === id);
             if (!setor) return;
 
-            // Clona os horários para edição (não altera o original até salvar)
-            horariosEditando = setor.horarios.map(h => ({ dias: [...h.dias], abre: h.abre, fecha: h.fecha }));
+            horariosEditando = setor.horarios.map(h => ({ 
+                dias: [...h.dias], 
+                abre: h.abre, 
+                fecha: h.fecha,
+                modo: h.modo || 'ambos'
+            }));
 
             document.getElementById('painelEditarSetor').style.display = 'block';
             renderizarSeletorEdicao();
             renderizarEditorHorarios();
             atualizarPreviewHorario();
 
-            // Almoço
+            // Endereço
+            document.getElementById('inputEnderecoSetor').value = setor.endereco || '';
+
             const temAlmoco = !!setor.temAlmoco;
             document.getElementById('switchTemAlmoco').classList.toggle('ativo', temAlmoco);
             document.getElementById('statusTemAlmoco').textContent = temAlmoco ? 'Ativo' : 'Inativo';
@@ -2633,7 +2922,6 @@
             if (setor.almocoFim != null) document.getElementById('inputAlmocoFim').value = decimalParaHoraStr(setor.almocoFim);
             else document.getElementById('inputAlmocoFim').value = '13:00';
 
-            // Funciona em feriado
             const funcFer = !!setor.funcionaEmFeriado;
             document.getElementById('switchFuncionaFeriado').classList.toggle('ativo', funcFer);
             document.getElementById('statusFuncionaFeriado').textContent = funcFer ? 'Ativo' : 'Inativo';
@@ -2643,6 +2931,9 @@
         function renderizarEditorHorarios() {
             const diasNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
             const container = document.getElementById('horariosEditor');
+            const setor = setores.find(s => s.id === setorEditandoId);
+            const mostrarModo = setor && !setor.semModo;
+
             container.innerHTML = horariosEditando.map((h, idx) => `
                 <div class="editor-horario-item">
                     <div class="editor-dias">
@@ -2658,6 +2949,26 @@
                                onchange="alterarHoraEditor(${idx}, 'fecha', this.value)">
                         <button class="btn-remover-linha" onclick="removerLinhaHorario(${idx})" title="Remover faixa">🗑️</button>
                     </div>
+                    ${mostrarModo ? `
+                    <div class="editor-modo">
+                        <button class="modo-btn whatsapp ${h.modo === 'whatsapp' ? 'selecionado' : ''}" 
+                                onclick="alterarModoEditor(${idx}, 'whatsapp')">
+                            <span class="modo-emoji">💬</span>Somente WhatsApp
+                        </button>
+                        <button class="modo-btn telefonia ${h.modo === 'telefonia' ? 'selecionado' : ''}" 
+                                onclick="alterarModoEditor(${idx}, 'telefonia')">
+                            <span class="modo-emoji">📞</span>Somente Telefonia
+                        </button>
+                        <button class="modo-btn ambos ${h.modo === 'ambos' ? 'selecionado' : ''}" 
+                                onclick="alterarModoEditor(${idx}, 'ambos')">
+                            <span class="modo-emoji">📞💬</span>Telefonia + WhatsApp
+                        </button>
+                    </div>
+                    ` : `
+                    <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #2a2a4a;font-size:11px;color:#666;">
+                        🏢 Setor sem modo de atendimento (presencial)
+                    </div>
+                    `}
                 </div>
             `).join('') || '<p style="color:#666;font-size:13px;">Nenhuma faixa cadastrada. Clique em "Adicionar faixa".</p>';
             atualizarPreviewHorario();
@@ -2679,6 +2990,11 @@
             atualizarPreviewHorario();
         }
 
+        function alterarModoEditor(idxHorario, modo) {
+            horariosEditando[idxHorario].modo = modo;
+            renderizarEditorHorarios();
+        }
+
         function removerLinhaHorario(idx) {
             if (!confirm('Remover esta faixa de horário?')) return;
             horariosEditando.splice(idx, 1);
@@ -2686,7 +3002,7 @@
         }
 
         function adicionarLinhaHorario() {
-            horariosEditando.push({ dias: [1,2,3,4,5], abre: 9, fecha: 18 });
+            horariosEditando.push({ dias: [1,2,3,4,5], abre: 9, fecha: 18, modo: 'ambos' });
             renderizarEditorHorarios();
         }
 
@@ -2710,6 +3026,8 @@
         function atualizarPreviewHorario() {
             const preview = document.getElementById('previewHorario');
             if (!preview) return;
+            const setor = setores.find(s => s.id === setorEditandoId);
+            const mostrarModo = setor && !setor.semModo;
             const diasNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
             if (horariosEditando.length === 0) {
                 preview.innerHTML = '<strong>📋 Resumo:</strong> Nenhuma faixa configurada';
@@ -2719,7 +3037,12 @@
                 const dias = h.dias.length > 0 
                     ? h.dias.map(d => diasNomes[d]).join(', ')
                     : '⚠️ sem dias';
-                return `${dias}: ${decimalParaHoraStr(h.abre)} - ${decimalParaHoraStr(h.fecha)}`;
+                let modoTxt = '';
+                if (mostrarModo) {
+                    const modoInfo = MODOS_ATENDIMENTO[h.modo || 'ambos'];
+                    modoTxt = ` ${modoInfo.emoji} ${modoInfo.curto}`;
+                }
+                return `${dias}: ${decimalParaHoraStr(h.abre)} - ${decimalParaHoraStr(h.fecha)}${modoTxt}`;
             });
             preview.innerHTML = `<strong>📋 Resumo:</strong><br>${linhas.map(l => '• ' + l).join('<br>')}`;
         }
@@ -2728,14 +3051,22 @@
             const setor = setores.find(s => s.id === setorEditandoId);
             if (!setor) { alert('Selecione um setor primeiro!'); return; }
 
-            // Validações
             for (const h of horariosEditando) {
                 if (h.dias.length === 0) { alert('⚠️ Cada faixa de horário precisa ter ao menos 1 dia selecionado!'); return; }
                 if (h.fecha <= h.abre) { alert('⚠️ O horário de fechamento deve ser maior que o de abertura!'); return; }
+                if (!setor.semModo && !h.modo) { alert('⚠️ Selecione um modo de atendimento em cada faixa!'); return; }
             }
             if (horariosEditando.length === 0) { alert('⚠️ Adicione ao menos uma faixa de horário!'); return; }
 
-            setor.horarios = horariosEditando.map(h => ({ dias: [...h.dias], abre: h.abre, fecha: h.fecha }));
+            setor.horarios = horariosEditando.map(h => ({ 
+                dias: [...h.dias], 
+                abre: h.abre, 
+                fecha: h.fecha,
+                modo: setor.semModo ? 'ambos' : (h.modo || 'ambos')
+            }));
+
+            // Endereço
+            setor.endereco = document.getElementById('inputEnderecoSetor').value.trim();
 
             const temAlmoco = document.getElementById('switchTemAlmoco').classList.contains('ativo');
             setor.temAlmoco = temAlmoco;
@@ -2759,7 +3090,7 @@
             renderizarInformativos();
             salvarConfiguracoesNoStorage();
             salvarNaNuvem();
-            alert(`✅ Horários de "${setor.nome}" atualizados com sucesso!`);
+            alert(`✅ Dados de "${setor.nome}" atualizados com sucesso!`);
         }
 
         function resetarSetorPadrao() {
@@ -2778,6 +3109,8 @@
             if (padrao.almocoFim != null) setor.almocoFim = padrao.almocoFim;
             else delete setor.almocoFim;
             setor.funcionaEmFeriado = padrao.funcionaEmFeriado || false;
+            setor.semModo = padrao.semModo || false;
+            setor.endereco = padrao.endereco || '';
 
             selecionarSetorParaEditar(setorEditandoId);
             renderizarTodos();
@@ -2885,10 +3218,10 @@
         window.adicionarInformativo = adicionarInformativo;
         window.removerInformativo = removerInformativo;
 
-        // Editor de setores
         window.selecionarSetorParaEditar = selecionarSetorParaEditar;
         window.toggleDiaHorario = toggleDiaHorario;
         window.alterarHoraEditor = alterarHoraEditor;
+        window.alterarModoEditor = alterarModoEditor;
         window.removerLinhaHorario = removerLinhaHorario;
         window.adicionarLinhaHorario = adicionarLinhaHorario;
         window.toggleTemAlmocoEdicao = toggleTemAlmocoEdicao;
