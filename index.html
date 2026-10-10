@@ -485,28 +485,24 @@
             gap: 6px;
         }
 
-        /* Endereço no card */
         .card-endereco {
-            margin-top: 10px;
-            padding: 8px 14px;
-            border-radius: 10px;
-            background: rgba(0, 188, 212, 0.08);
-            border: 1px solid rgba(0, 188, 212, 0.35);
-            color: #4dd0e1;
+            margin-top: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(0, 212, 255, 0.06);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             font-size: 12px;
-            font-weight: 600;
+            color: #8ab4d4;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 8px;
-            line-height: 1.5;
         }
-        .card-endereco .endereco-icone {
+        .card-endereco .end-icone {
             font-size: 16px;
             flex-shrink: 0;
-            margin-top: 1px;
         }
-        .card-endereco .endereco-texto {
-            color: #a5f3fc;
+        .card-endereco .end-texto {
+            line-height: 1.4;
         }
 
         .card-mensagem {
@@ -959,19 +955,26 @@
         }
         .preview-horario strong { color: #00c853; }
 
-        /* Campo de endereço no editor */
-        .campo-endereco-editor {
-            background: #0f0f1a; padding: 12px 16px; border-radius: 10px;
-            border: 1px solid #2a2a4a; border-left: 3px solid #00bcd4;
+        .endereco-editor {
+            background: rgba(0, 212, 255, 0.06);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 12px 14px;
             margin-top: 10px;
         }
-        .campo-endereco-editor label {
-            color: #4dd0e1; font-size: 12px; font-weight: 700;
-            display: block; margin-bottom: 6px; text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .endereco-editor label {
+            color: #8ab4d4;
+            font-size: 12px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
         }
-        .campo-endereco-editor input {
+        .endereco-editor input {
             margin-bottom: 0;
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+        .endereco-editor input:focus {
+            border-color: #00d4ff;
         }
 
         @media (max-width: 600px) {
@@ -1234,14 +1237,13 @@
                     <div id="horariosEditor"></div>
                     <button class="btn-add-linha" onclick="adicionarLinhaHorario()">➕ Adicionar faixa de horário</button>
 
-                    <h3>⚙️ Configurações extras</h3>
-
-                    <!-- Campo de endereço -->
-                    <div class="campo-endereco-editor">
-                        <label>📍 Endereço da loja / setor</label>
-                        <input type="text" id="inputEnderecoSetor" placeholder="Ex: Av. Rui Barbosa, n° 603 - Centro, Linhares - ES">
+                    <h3>📍 Endereço</h3>
+                    <div class="endereco-editor">
+                        <label>📍 Endereço da loja (deixe em branco para setores sem endereço):</label>
+                        <input type="text" id="inputEnderecoSetor" placeholder="Ex: Av. Rui Barbosa, n° 603 - Centro" onchange="atualizarPreviewEndereco()">
                     </div>
 
+                    <h3>⚙️ Configurações extras</h3>
                     <div class="toggle-container">
                         <label>🍽️ Tem horário de almoço?</label>
                         <div class="switch" id="switchTemAlmoco" onclick="toggleTemAlmocoEdicao()"></div>
@@ -1529,13 +1531,14 @@
             if (cfg.excecoes) excecoes = cfg.excecoes;
             if (cfg.setores) {
                 setores = cfg.setores;
-                // Garante que todos os setores tenham modo definido
+                // Garante que todos os setores tenham modo definido e endereço
                 setores.forEach(setor => {
                     if (setor.horarios) {
                         setor.horarios.forEach(h => {
                             if (!h.modo) h.modo = 'ambos';
                         });
                     }
+                    if (setor.endereco === undefined) setor.endereco = '';
                 });
             }
             if (typeof cfg.alertasAtivos === 'boolean') alertasAtivos = cfg.alertasAtivos;
@@ -1745,7 +1748,9 @@
             feriados = gerarFeriadosPorAno(ANO_ATUAL);
         }
 
-        // ===== SETORES PADRÃO (COM ENDEREÇOS) =====
+        // ===== SETORES PADRÃO =====
+        // semModo: true = não mostra a barra de atendimento (usado pelas lojas presenciais)
+        // endereco: endereço físico da loja (opcional)
         const SETORES_PADRAO = [
             {
                 id: 'cross', nome: '🔄 CROSS',
@@ -1791,6 +1796,7 @@
                 alertaMinutos: 30, funcionaEmFeriado: true, temAlmoco: false,
                 semModo: false, endereco: ''
             },
+            
             {
                 id: 'loja-linhares', nome: '🏪 Loja Linhares',
                 subtitulo: 'Atendimento Presencial',
@@ -1800,7 +1806,7 @@
                     { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
                 ],
                 alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
-                semModo: true, endereco: 'Av. Rui Barbosa, n° 603 - Centro, Linhares - ES'
+                semModo: true, endereco: 'Av. Rui Barbosa, n° 603 - Centro'
             },
             {
                 id: 'loja-teixeira', nome: '🏪 Loja Teixeira',
@@ -1822,7 +1828,7 @@
                     { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
                 ],
                 alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
-                semModo: true, endereco: 'Av. José Tozzi, 2056, Centro'
+                semModo: true, endereco: 'Av. José Tozzi, 2056 - Centro'
             },
             {
                 id: 'loja-itapua', nome: '🏪 Loja Itapuã',
@@ -2229,6 +2235,7 @@
             return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
         }
 
+        // ===== RETORNA O MODO DE ATENDIMENTO ATUAL DO SETOR =====
         function getModoAtendimentoHoje(setor) {
             if (setor.semModo) return null;
 
@@ -2391,7 +2398,7 @@
                 badgeExtra += `<span class="badge-almoco">🍽️ Almoço: ${formatarHora(setor.almocoInicio)}-${formatarHora(setor.almocoFim)}</span>`;
             }
 
-            // ===== BARRA DE ATENDIMENTO (só para setores que NÃO são semModo) =====
+            // ===== BARRA DE ATENDIMENTO =====
             let atendimentoHtml = '';
             if (!setor.semModo) {
                 if (modoAtual) {
@@ -2412,13 +2419,13 @@
                 }
             }
 
-            // ===== ENDEREÇO (se houver) =====
+            // ===== ENDEREÇO =====
             let enderecoHtml = '';
             if (setor.endereco && setor.endereco.trim() !== '') {
                 enderecoHtml = `
                     <div class="card-endereco">
-                        <span class="endereco-icone">📍</span>
-                        <span class="endereco-texto">${setor.endereco}</span>
+                        <span class="end-icone">📍</span>
+                        <span class="end-texto">${setor.endereco}</span>
                     </div>
                 `;
             }
@@ -2438,8 +2445,8 @@
                         <span style="font-size:12px;color:#666;">${infoDia}</span>
                         ${badgeExtra}
                     </div>
-                    ${enderecoHtml}
                     ${atendimentoHtml}
+                    ${enderecoHtml}
                     <div class="card-mensagem ${statusInfo.cor}">
                         <span class="icone">${statusInfo.mensagem.split(' ')[0]}</span>
                         <span>${statusInfo.mensagem} — ${statusInfo.descricao}</span>
@@ -2876,7 +2883,7 @@
         }
 
         // ============================================================
-        // ===== EDITOR DE HORÁRIOS, MODOS E ENDEREÇOS DOS SETORES =====
+        // ===== EDITOR DE HORÁRIOS, MODOS E ENDEREÇO DOS SETORES =====
         // ============================================================
         let setorEditandoId = null;
         let horariosEditando = [];
@@ -2909,7 +2916,7 @@
             renderizarEditorHorarios();
             atualizarPreviewHorario();
 
-            // Endereço
+            // Preenche o endereço
             document.getElementById('inputEnderecoSetor').value = setor.endereco || '';
 
             const temAlmoco = !!setor.temAlmoco;
@@ -3047,6 +3054,10 @@
             preview.innerHTML = `<strong>📋 Resumo:</strong><br>${linhas.map(l => '• ' + l).join('<br>')}`;
         }
 
+        function atualizarPreviewEndereco() {
+            // Apenas para atualizar visualmente se necessário
+        }
+
         function salvarEdicaoSetor() {
             const setor = setores.find(s => s.id === setorEditandoId);
             if (!setor) { alert('Selecione um setor primeiro!'); return; }
@@ -3065,7 +3076,7 @@
                 modo: setor.semModo ? 'ambos' : (h.modo || 'ambos')
             }));
 
-            // Endereço
+            // Salva o endereço
             setor.endereco = document.getElementById('inputEnderecoSetor').value.trim();
 
             const temAlmoco = document.getElementById('switchTemAlmoco').classList.contains('ativo');
@@ -3090,7 +3101,7 @@
             renderizarInformativos();
             salvarConfiguracoesNoStorage();
             salvarNaNuvem();
-            alert(`✅ Dados de "${setor.nome}" atualizados com sucesso!`);
+            alert(`✅ Configurações de "${setor.nome}" atualizadas com sucesso!`);
         }
 
         function resetarSetorPadrao() {
@@ -3228,6 +3239,7 @@
         window.toggleFuncionaFeriadoEdicao = toggleFuncionaFeriadoEdicao;
         window.salvarEdicaoSetor = salvarEdicaoSetor;
         window.resetarSetorPadrao = resetarSetorPadrao;
+        window.atualizarPreviewEndereco = atualizarPreviewEndereco;
     </script>
 
 </body>
