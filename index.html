@@ -762,6 +762,69 @@
         }
         .cloud-fixed-badge strong { color: #00c853; }
 
+        /* ===== EDITOR DE SETORES ===== */
+        .editor-horario-item {
+            background: #0f0f1a; padding: 12px; border-radius: 10px;
+            margin-bottom: 8px; border: 1px solid #2a2a4a;
+            border-left: 3px solid #7b2ffc;
+        }
+        .editor-dias {
+            display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;
+        }
+        .editor-dias .dia-btn {
+            background: #12121f; border: 1px solid #2a2a4a; color: #888;
+            padding: 5px 12px; border-radius: 50px; font-size: 11px;
+            cursor: pointer; transition: 0.3s; font-weight: 600;
+        }
+        .editor-dias .dia-btn:hover { border-color: #7b2ffc; color: #fff; }
+        .editor-dias .dia-btn.selecionado {
+            background: #7b2ffc; border-color: #7b2ffc; color: #fff;
+        }
+        .editor-horario-item .linha-horas {
+            display: flex; gap: 8px; align-items: center;
+        }
+        .editor-horario-item .linha-horas input[type="time"] {
+            flex: 1; margin-bottom: 0;
+        }
+        .editor-horario-item .btn-remover-linha {
+            background: #ff1744; color: #fff; border: none;
+            padding: 10px 14px; border-radius: 10px; cursor: pointer;
+            font-size: 14px; transition: 0.3s; flex-shrink: 0;
+        }
+        .editor-horario-item .btn-remover-linha:hover { background: #ff5252; }
+
+        .btn-add-linha {
+            background: rgba(0, 188, 212, 0.15); color: #4dd0e1;
+            border: 2px dashed #00bcd4; padding: 12px;
+            border-radius: 10px; cursor: pointer; width: 100%;
+            font-weight: 600; transition: 0.3s; font-size: 13px;
+            margin-bottom: 10px;
+        }
+        .btn-add-linha:hover { background: rgba(0, 188, 212, 0.25); }
+
+        .btn-salvar-setor {
+            background: #7b2ffc; color: #fff; border: none;
+            padding: 14px 30px; border-radius: 50px; font-weight: 700;
+            cursor: pointer; transition: 0.3s; width: 100%;
+            font-size: 14px; margin-top: 10px;
+        }
+        .btn-salvar-setor:hover { background: #9b5ffc; }
+
+        .btn-resetar-setor {
+            background: #ff9100; color: #000; border: none;
+            padding: 10px 20px; border-radius: 50px; font-weight: 700;
+            cursor: pointer; transition: 0.3s; width: 100%;
+            font-size: 12px; margin-top: 8px;
+        }
+        .btn-resetar-setor:hover { background: #ffab40; }
+
+        .preview-horario {
+            background: rgba(0, 200, 83, 0.08); border: 1px solid #00c853;
+            color: #69f0ae; padding: 10px 14px; border-radius: 10px;
+            font-size: 12px; margin-top: 10px;
+        }
+        .preview-horario strong { color: #00c853; }
+
         @media (max-width: 600px) {
             .container { padding: 15px; }
             .header-left h1 { font-size: 20px; }
@@ -912,6 +975,7 @@
             <div class="modal-tabs">
                 <button class="modal-tab ativo" onclick="trocarAba('abaFeriados', this)">📅 Feriados</button>
                 <button class="modal-tab" onclick="trocarAba('abaExcecoes', this)">🔷 Exceções</button>
+                <button class="modal-tab" onclick="trocarAba('abaSetores', this)">🏢 Setores</button>
                 <button class="modal-tab" onclick="trocarAba('abaInformativos', this)">📢 Informativos</button>
             </div>
 
@@ -995,6 +1059,48 @@
 
                 <input type="text" id="inputObsExcecao" placeholder="Observação (opcional)">
                 <button class="btn-adicionar-feriado" onclick="adicionarExcecao()" style="background:#00bcd4;">➕ Adicionar Exceção</button>
+            </div>
+
+            <!-- NOVA ABA: SETORES -->
+            <div class="modal-tab-content" id="abaSetores">
+                <div class="aviso-excecao">
+                    ℹ️ <strong>Edite os horários padrão</strong> de cada setor. As exceções por data (na aba Exceções) sobrescrevem estes valores em dias específicos.
+                </div>
+
+                <h3>🏢 Selecione o setor para editar:</h3>
+                <div class="seletor-setor" id="seletorSetorEditar"></div>
+
+                <div id="painelEditarSetor" style="display:none;">
+                    <div class="preview-horario" id="previewHorario">
+                        <strong>📋 Resumo atual:</strong> selecione um setor
+                    </div>
+
+                    <h3>⏰ Faixas de horário</h3>
+                    <div id="horariosEditor"></div>
+                    <button class="btn-add-linha" onclick="adicionarLinhaHorario()">➕ Adicionar faixa de horário</button>
+
+                    <h3>⚙️ Configurações extras</h3>
+                    <div class="toggle-container">
+                        <label>🍽️ Tem horário de almoço?</label>
+                        <div class="switch" id="switchTemAlmoco" onclick="toggleTemAlmocoEdicao()"></div>
+                        <span class="toggle-status" id="statusTemAlmoco">Inativo</span>
+                    </div>
+                    <div id="camposAlmocoEdicao" style="display:none;">
+                        <div class="form-row">
+                            <input type="time" id="inputAlmocoInicio" step="60">
+                            <input type="time" id="inputAlmocoFim" step="60">
+                        </div>
+                    </div>
+
+                    <div class="toggle-container">
+                        <label>🗓️ Funciona em feriados?</label>
+                        <div class="switch" id="switchFuncionaFeriado" onclick="toggleFuncionaFeriadoEdicao()"></div>
+                        <span class="toggle-status" id="statusFuncionaFeriado">Inativo</span>
+                    </div>
+
+                    <button class="btn-salvar-setor" onclick="salvarEdicaoSetor()">💾 Salvar alterações deste setor</button>
+                    <button class="btn-resetar-setor" onclick="resetarSetorPadrao()">🔄 Restaurar padrão de fábrica</button>
+                </div>
             </div>
 
             <div class="modal-tab-content" id="abaInformativos">
@@ -1273,6 +1379,7 @@
                 atualizarListaInformativos();
                 atualizarToggleFeriado();
                 atualizarFeriadoAtualInfo();
+                renderizarSeletorEdicao();
             }
         }
 
@@ -1515,7 +1622,7 @@
             alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false
         }];
 
-        let setores = configSalva ? configSalva.setores : JSON.parse(JSON.stringify(SETORES_PADRAO));
+        let setores = configSalva && configSalva.setores ? configSalva.setores : JSON.parse(JSON.stringify(SETORES_PADRAO));
 
         function dataParaStr(dateObj) {
             const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -1891,6 +1998,12 @@
             return h + (m / 60);
         }
 
+        function decimalParaHoraStr(dec) {
+            const h = Math.floor(dec);
+            const m = Math.round((dec - h) * 60);
+            return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+        }
+
         function obterStatusSetor(setor) {
             const agora = new Date();
             const dia = agora.getDay();
@@ -1905,7 +2018,6 @@
                 if (excecao.tipo === 'reuniao') {
                     const inicioReuniao = excecao.inicio || 14;
                     const fimReuniao = excecao.fim || 15;
-                    // Só mostra "em reunião" durante o horário da reunião
                     if (hora >= inicioReuniao && hora < fimReuniao) {
                         const minRestantes = Math.round((fimReuniao - hora) * 60);
                         return { 
@@ -1916,7 +2028,6 @@
                             excecao 
                         };
                     }
-                    // Antes da reunião começar
                     if (hora < inicioReuniao) {
                         return { 
                             status: 'excecao', 
@@ -1926,7 +2037,6 @@
                             excecao 
                         };
                     }
-                    // Após a reunião, volta ao normal
                 }
                 if (excecao.tipo === 'especial') {
                     const { abre: abreEsp, fecha: fechaEsp } = excecao;
@@ -2112,6 +2222,9 @@
             document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('ativo'));
             btn.classList.add('ativo');
             document.getElementById(abaId).classList.add('ativo');
+            if (abaId === 'abaSetores') {
+                renderizarSeletorEdicao();
+            }
         }
 
         function abrirModal() {
@@ -2132,6 +2245,7 @@
             renderizarEmojiPicker();
             atualizarToggleFeriado();
             atualizarFeriadoAtualInfo();
+            renderizarSeletorEdicao();
             document.body.style.overflow = 'hidden';
         }
 
@@ -2478,6 +2592,201 @@
             alert('💾 Configurações salvas!');
         }
 
+        // ============================================================
+        // ===== EDITOR DE HORÁRIOS DOS SETORES =====
+        // ============================================================
+        let setorEditandoId = null;
+        let horariosEditando = [];
+
+        function renderizarSeletorEdicao() {
+            const container = document.getElementById('seletorSetorEditar');
+            if (!container) return;
+            container.innerHTML = setores.map(s => `
+                <button class="setor-chip ${setorEditandoId === s.id ? 'selecionado' : ''}" 
+                        onclick="selecionarSetorParaEditar('${s.id}')">
+                    ${s.nome}
+                </button>
+            `).join('');
+        }
+
+        function selecionarSetorParaEditar(id) {
+            setorEditandoId = id;
+            const setor = setores.find(s => s.id === id);
+            if (!setor) return;
+
+            // Clona os horários para edição (não altera o original até salvar)
+            horariosEditando = setor.horarios.map(h => ({ dias: [...h.dias], abre: h.abre, fecha: h.fecha }));
+
+            document.getElementById('painelEditarSetor').style.display = 'block';
+            renderizarSeletorEdicao();
+            renderizarEditorHorarios();
+            atualizarPreviewHorario();
+
+            // Almoço
+            const temAlmoco = !!setor.temAlmoco;
+            document.getElementById('switchTemAlmoco').classList.toggle('ativo', temAlmoco);
+            document.getElementById('statusTemAlmoco').textContent = temAlmoco ? 'Ativo' : 'Inativo';
+            document.getElementById('statusTemAlmoco').className = 'toggle-status ' + (temAlmoco ? 'ativo' : 'inativo');
+            document.getElementById('camposAlmocoEdicao').style.display = temAlmoco ? 'block' : 'none';
+            if (setor.almocoInicio != null) document.getElementById('inputAlmocoInicio').value = decimalParaHoraStr(setor.almocoInicio);
+            else document.getElementById('inputAlmocoInicio').value = '12:00';
+            if (setor.almocoFim != null) document.getElementById('inputAlmocoFim').value = decimalParaHoraStr(setor.almocoFim);
+            else document.getElementById('inputAlmocoFim').value = '13:00';
+
+            // Funciona em feriado
+            const funcFer = !!setor.funcionaEmFeriado;
+            document.getElementById('switchFuncionaFeriado').classList.toggle('ativo', funcFer);
+            document.getElementById('statusFuncionaFeriado').textContent = funcFer ? 'Ativo' : 'Inativo';
+            document.getElementById('statusFuncionaFeriado').className = 'toggle-status ' + (funcFer ? 'ativo' : 'inativo');
+        }
+
+        function renderizarEditorHorarios() {
+            const diasNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            const container = document.getElementById('horariosEditor');
+            container.innerHTML = horariosEditando.map((h, idx) => `
+                <div class="editor-horario-item">
+                    <div class="editor-dias">
+                        ${diasNomes.map((d, i) => `
+                            <button class="dia-btn ${h.dias.includes(i) ? 'selecionado' : ''}" 
+                                    onclick="toggleDiaHorario(${idx}, ${i})">${d}</button>
+                        `).join('')}
+                    </div>
+                    <div class="linha-horas">
+                        <input type="time" value="${decimalParaHoraStr(h.abre)}" step="60"
+                               onchange="alterarHoraEditor(${idx}, 'abre', this.value)">
+                        <input type="time" value="${decimalParaHoraStr(h.fecha)}" step="60"
+                               onchange="alterarHoraEditor(${idx}, 'fecha', this.value)">
+                        <button class="btn-remover-linha" onclick="removerLinhaHorario(${idx})" title="Remover faixa">🗑️</button>
+                    </div>
+                </div>
+            `).join('') || '<p style="color:#666;font-size:13px;">Nenhuma faixa cadastrada. Clique em "Adicionar faixa".</p>';
+            atualizarPreviewHorario();
+        }
+
+        function toggleDiaHorario(idxHorario, dia) {
+            const h = horariosEditando[idxHorario];
+            if (!h) return;
+            const i = h.dias.indexOf(dia);
+            if (i >= 0) h.dias.splice(i, 1);
+            else h.dias.push(dia);
+            h.dias.sort();
+            renderizarEditorHorarios();
+        }
+
+        function alterarHoraEditor(idxHorario, campo, valor) {
+            if (!valor) return;
+            horariosEditando[idxHorario][campo] = horaParaDecimal(valor);
+            atualizarPreviewHorario();
+        }
+
+        function removerLinhaHorario(idx) {
+            if (!confirm('Remover esta faixa de horário?')) return;
+            horariosEditando.splice(idx, 1);
+            renderizarEditorHorarios();
+        }
+
+        function adicionarLinhaHorario() {
+            horariosEditando.push({ dias: [1,2,3,4,5], abre: 9, fecha: 18 });
+            renderizarEditorHorarios();
+        }
+
+        function toggleTemAlmocoEdicao() {
+            const sw = document.getElementById('switchTemAlmoco');
+            sw.classList.toggle('ativo');
+            const ativo = sw.classList.contains('ativo');
+            document.getElementById('statusTemAlmoco').textContent = ativo ? 'Ativo' : 'Inativo';
+            document.getElementById('statusTemAlmoco').className = 'toggle-status ' + (ativo ? 'ativo' : 'inativo');
+            document.getElementById('camposAlmocoEdicao').style.display = ativo ? 'block' : 'none';
+        }
+
+        function toggleFuncionaFeriadoEdicao() {
+            const sw = document.getElementById('switchFuncionaFeriado');
+            sw.classList.toggle('ativo');
+            const ativo = sw.classList.contains('ativo');
+            document.getElementById('statusFuncionaFeriado').textContent = ativo ? 'Ativo' : 'Inativo';
+            document.getElementById('statusFuncionaFeriado').className = 'toggle-status ' + (ativo ? 'ativo' : 'inativo');
+        }
+
+        function atualizarPreviewHorario() {
+            const preview = document.getElementById('previewHorario');
+            if (!preview) return;
+            const diasNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            if (horariosEditando.length === 0) {
+                preview.innerHTML = '<strong>📋 Resumo:</strong> Nenhuma faixa configurada';
+                return;
+            }
+            const linhas = horariosEditando.map(h => {
+                const dias = h.dias.length > 0 
+                    ? h.dias.map(d => diasNomes[d]).join(', ')
+                    : '⚠️ sem dias';
+                return `${dias}: ${decimalParaHoraStr(h.abre)} - ${decimalParaHoraStr(h.fecha)}`;
+            });
+            preview.innerHTML = `<strong>📋 Resumo:</strong><br>${linhas.map(l => '• ' + l).join('<br>')}`;
+        }
+
+        function salvarEdicaoSetor() {
+            const setor = setores.find(s => s.id === setorEditandoId);
+            if (!setor) { alert('Selecione um setor primeiro!'); return; }
+
+            // Validações
+            for (const h of horariosEditando) {
+                if (h.dias.length === 0) { alert('⚠️ Cada faixa de horário precisa ter ao menos 1 dia selecionado!'); return; }
+                if (h.fecha <= h.abre) { alert('⚠️ O horário de fechamento deve ser maior que o de abertura!'); return; }
+            }
+            if (horariosEditando.length === 0) { alert('⚠️ Adicione ao menos uma faixa de horário!'); return; }
+
+            setor.horarios = horariosEditando.map(h => ({ dias: [...h.dias], abre: h.abre, fecha: h.fecha }));
+
+            const temAlmoco = document.getElementById('switchTemAlmoco').classList.contains('ativo');
+            setor.temAlmoco = temAlmoco;
+            if (temAlmoco) {
+                const ini = document.getElementById('inputAlmocoInicio').value;
+                const fim = document.getElementById('inputAlmocoFim').value;
+                if (!ini || !fim) { alert('⚠️ Preencha o horário de almoço!'); return; }
+                const iDec = horaParaDecimal(ini);
+                const fDec = horaParaDecimal(fim);
+                if (fDec <= iDec) { alert('⚠️ O fim do almoço deve ser maior que o início!'); return; }
+                setor.almocoInicio = iDec;
+                setor.almocoFim = fDec;
+            } else {
+                delete setor.almocoInicio;
+                delete setor.almocoFim;
+            }
+
+            setor.funcionaEmFeriado = document.getElementById('switchFuncionaFeriado').classList.contains('ativo');
+
+            renderizarTodos();
+            renderizarInformativos();
+            salvarConfiguracoesNoStorage();
+            salvarNaNuvem();
+            alert(`✅ Horários de "${setor.nome}" atualizados com sucesso!`);
+        }
+
+        function resetarSetorPadrao() {
+            if (!setorEditandoId) return;
+            const padrao = SETORES_PADRAO.find(s => s.id === setorEditandoId);
+            if (!padrao) { alert('⚠️ Não há padrão definido para este setor.'); return; }
+            if (!confirm(`Restaurar "${padrao.nome}" para o padrão de fábrica?\n\nSuas alterações neste setor serão perdidas.`)) return;
+
+            const setor = setores.find(s => s.id === setorEditandoId);
+            if (!setor) return;
+
+            setor.horarios = JSON.parse(JSON.stringify(padrao.horarios));
+            setor.temAlmoco = padrao.temAlmoco || false;
+            if (padrao.almocoInicio != null) setor.almocoInicio = padrao.almocoInicio;
+            else delete setor.almocoInicio;
+            if (padrao.almocoFim != null) setor.almocoFim = padrao.almocoFim;
+            else delete setor.almocoFim;
+            setor.funcionaEmFeriado = padrao.funcionaEmFeriado || false;
+
+            selecionarSetorParaEditar(setorEditandoId);
+            renderizarTodos();
+            renderizarInformativos();
+            salvarConfiguracoesNoStorage();
+            salvarNaNuvem();
+            alert('🔄 Setor restaurado ao padrão!');
+        }
+
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 if (document.getElementById('alertaOverlay').classList.contains('ativo')) fecharAlerta();
@@ -2575,6 +2884,17 @@
         window.selecionarTipoInformativo = selecionarTipoInformativo;
         window.adicionarInformativo = adicionarInformativo;
         window.removerInformativo = removerInformativo;
+
+        // Editor de setores
+        window.selecionarSetorParaEditar = selecionarSetorParaEditar;
+        window.toggleDiaHorario = toggleDiaHorario;
+        window.alterarHoraEditor = alterarHoraEditor;
+        window.removerLinhaHorario = removerLinhaHorario;
+        window.adicionarLinhaHorario = adicionarLinhaHorario;
+        window.toggleTemAlmocoEdicao = toggleTemAlmocoEdicao;
+        window.toggleFuncionaFeriadoEdicao = toggleFuncionaFeriadoEdicao;
+        window.salvarEdicaoSetor = salvarEdicaoSetor;
+        window.resetarSetorPadrao = resetarSetorPadrao;
     </script>
 
 </body>
