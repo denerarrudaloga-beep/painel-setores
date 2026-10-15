@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📊 Status dos Setores</title>
+
+    <!-- 🔥 Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import { getFirestore, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDqClU03S_H_ALZaKDI5AtXS8OJHiukLz4",
+        authDomain: "painel-d26dc.firebaseapp.com",
+        projectId: "painel-d26dc",
+        storageBucket: "painel-d26dc.firebasestorage.app",
+        messagingSenderId: "206257933563",
+        appId: "1:206257933563:web:bdf0275b1a9f34a7b1345e",
+        measurementId: "G-598QX22Y8E"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      window._firebase = { db, doc, onSnapshot, setDoc, getDoc };
+      window._firebaseReady = true;
+      console.log('🔥 Firebase inicializado');
+    </script>
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -51,7 +75,7 @@
             border: 1px solid #2a2a4a; font-size: 18px; font-weight: 600;
             color: #00d4ff; font-family: 'Courier New', monospace;
         }
-        .btn-admin, .btn-alerta, .btn-cloud {
+        .btn-admin, .btn-alerta {
             border: none; padding: 8px 20px; border-radius: 50px;
             font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 13px;
         }
@@ -64,24 +88,6 @@
         .btn-alerta:hover { background: #ffab40; transform: scale(1.05); }
         .btn-alerta.ativo { background: #00c853; color: #fff; }
         .btn-alerta.ativo:hover { background: #69f0ae; }
-
-        .btn-cloud {
-            background: #0f0f1a; color: #888;
-            border: 1px solid #2a2a4a;
-            display: flex; align-items: center; gap: 6px;
-        }
-        .btn-cloud:hover { border-color: #00bcd4; color: #00bcd4; }
-        .btn-cloud.conectado { background: rgba(0, 200, 83, 0.15); color: #00c853; border-color: #00c853; }
-        .btn-cloud.desativado { background: rgba(255, 23, 68, 0.1); color: #888; border-color: #555; opacity: 0.7; }
-        .btn-cloud.desativado:hover { border-color: #ff1744; color: #ff5252; opacity: 1; }
-        .btn-cloud.erro { background: rgba(255, 23, 68, 0.15); color: #ff5252; border-color: #ff1744; }
-        .btn-cloud.sincronizando { background: rgba(0, 212, 255, 0.15); color: #00d4ff; border-color: #00d4ff; }
-        .btn-cloud.sincronizando::before {
-            content: ''; display: inline-block;
-            width: 10px; height: 10px;
-            border: 2px solid #00d4ff; border-top-color: transparent;
-            border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 4px;
-        }
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .banner-feriado {
@@ -796,73 +802,6 @@
             background: rgba(0, 212, 255, 0.1);
         }
 
-        .cloud-status-box {
-            background: #0f0f1a; padding: 16px; border-radius: 12px;
-            border: 1px solid #2a2a4a; margin-bottom: 15px;
-            display: flex; align-items: center; gap: 12px;
-        }
-        .cloud-status-box .status-dot {
-            width: 14px; height: 14px; border-radius: 50%;
-            background: #555; flex-shrink: 0;
-        }
-        .cloud-status-box .status-dot.online { background: #00c853; box-shadow: 0 0 12px #00c853; }
-        .cloud-status-box .status-dot.offline { background: #ff1744; box-shadow: 0 0 12px #ff1744; }
-        .cloud-status-box .status-dot.pausado { background: #ffab40; box-shadow: 0 0 12px #ffab40; }
-        .cloud-status-box .status-dot.sync { background: #00d4ff; box-shadow: 0 0 12px #00d4ff; animation: pulse 1s infinite; }
-        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-        .cloud-status-box .status-info { flex: 1; }
-        .cloud-status-box .status-titulo { font-weight: 700; color: #fff; font-size: 14px; margin-bottom: 2px; }
-        .cloud-status-box .status-detalhe { font-size: 12px; color: #888; }
-
-        .cloud-btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
-        .cloud-btn-group button {
-            flex: 1; min-width: 140px; padding: 12px 20px; border-radius: 10px;
-            border: none; font-weight: 700; cursor: pointer;
-            transition: 0.3s; font-size: 14px;
-        }
-        .cloud-btn-salvar { background: #00bcd4; color: #000; }
-        .cloud-btn-salvar:hover { background: #4dd0e1; }
-        .cloud-btn-testar { background: #7b2ffc; color: #fff; }
-        .cloud-btn-testar:hover { background: #9b5ffc; }
-        .cloud-btn-toggle { background: #00c853; color: #fff; }
-        .cloud-btn-toggle:hover { background: #69f0ae; }
-        .cloud-btn-toggle.desligar { background: #ff1744; }
-        .cloud-btn-toggle.desligar:hover { background: #ff5252; }
-        .cloud-btn-desconectar { background: #ff1744; color: #fff; }
-        .cloud-btn-desconectar:hover { background: #ff5252; }
-        .cloud-btn-group button:disabled { opacity: 0.4; cursor: not-allowed; }
-
-        .cloud-info {
-            background: rgba(0, 188, 212, 0.08); border: 1px solid #00bcd4;
-            color: #4dd0e1; padding: 12px 16px; border-radius: 10px;
-            font-size: 12px; margin-bottom: 15px; line-height: 1.5;
-        }
-        .cloud-info strong { color: #00d4ff; }
-        .cloud-info code {
-            background: #0a0a14; padding: 2px 6px; border-radius: 4px;
-            font-family: monospace; color: #00d4ff;
-        }
-
-        .cloud-log {
-            background: #0a0a14; border: 1px solid #2a2a4a;
-            border-radius: 10px; padding: 12px;
-            max-height: 150px; overflow-y: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 11px; color: #888; margin-top: 15px;
-        }
-        .cloud-log .log-item { margin-bottom: 4px; }
-        .cloud-log .log-item.ok { color: #69f0ae; }
-        .cloud-log .log-item.erro { color: #ff5252; }
-        .cloud-log .log-item.info { color: #00d4ff; }
-        .cloud-log .log-item.aviso { color: #ffab40; }
-
-        .cloud-fixed-badge {
-            background: rgba(0, 200, 83, 0.15); border: 1px solid #00c853;
-            color: #69f0ae; padding: 8px 14px; border-radius: 10px;
-            font-size: 12px; margin-bottom: 15px; line-height: 1.5;
-        }
-        .cloud-fixed-badge strong { color: #00c853; }
-
         .editor-horario-item {
             background: #0f0f1a; padding: 12px; border-radius: 10px;
             margin-bottom: 8px; border: 1px solid #2a2a4a;
@@ -1018,8 +957,6 @@
             <div class="header-right">
                 <div class="info-hoje" id="infoHoje">📅 Carregando...</div>
                 <div class="relogio" id="relogio">--:--:--</div>
-                <button class="btn-cloud" id="btnCloudToggle" onclick="toggleCloudSync()" title="Ligar/Desligar sincronização em nuvem">☁️ Nuvem: OFF</button>
-                <button class="btn-cloud" id="btnCloud" onclick="abrirModalCloud()" title="Configurar sincronização em nuvem">⚙️ Config</button>
                 <button class="btn-alerta" id="btnAlerta" onclick="toggleAlertas()">🔔 Alertas: OFF</button>
                 <button class="btn-admin" onclick="abrirModal()">⚙️ Administrar</button>
             </div>
@@ -1072,55 +1009,6 @@
             <div class="alerta-tempo" id="alertaTempo">🕐 --:--:--</div>
             <button class="alerta-btn" onclick="fecharAlerta()">✅ ENTENDI</button>
             <div class="alerta-fila" id="alertaFila"></div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modalCloud">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>☁️ Sincronização em Nuvem (JSONBin.io)</h2>
-                <button class="modal-fechar" onclick="fecharModalCloud()">✕</button>
-            </div>
-
-            <div class="cloud-fixed-badge">
-                ✅ <strong>Configuração embutida no código!</strong> Este painel já vem conectado automaticamente.
-            </div>
-
-            <div class="cloud-status-box">
-                <div class="status-dot" id="cloudStatusDot"></div>
-                <div class="status-info">
-                    <div class="status-titulo" id="cloudStatusTitulo">Verificando...</div>
-                    <div class="status-detalhe" id="cloudStatusDetalhe">Aguardando conexão</div>
-                </div>
-            </div>
-
-            <div class="cloud-info">
-                ℹ️ <strong>Como funciona:</strong> Todas as alterações (feriados, exceções, informativos, setores) são sincronizadas.<br><br>
-                🔑 <strong>Bin ID:</strong> <code id="binIdDisplay">-</code>
-            </div>
-
-            <h3>🔘 Controle de Sincronização</h3>
-            <div class="cloud-btn-group">
-                <button class="cloud-btn-toggle" id="btnCloudToggleModal" onclick="toggleCloudSync()">
-                    ☁️ Ativar/Desativar Sincronização
-                </button>
-            </div>
-
-            <h3>⚙️ Configuração (Avançado)</h3>
-            <input type="text" id="inputBinId" placeholder="Bin ID" readonly style="opacity:0.6;">
-            <input type="password" id="inputApiKey" placeholder="API Key" readonly style="opacity:0.6;">
-
-            <div class="cloud-btn-group">
-                <button class="cloud-btn-salvar" onclick="forcarPush()">⬆️ Enviar para Nuvem</button>
-                <button class="cloud-btn-testar" onclick="forcarPull()">⬇️ Baixar da Nuvem</button>
-            </div>
-            <div class="cloud-btn-group">
-                <button class="cloud-btn-testar" onclick="testarConexaoCloud()" id="btnTestarCloud">🔌 Testar Conexão</button>
-            </div>
-
-            <div class="cloud-log" id="cloudLog">
-                <div class="log-item info">Iniciando...</div>
-            </div>
         </div>
     </div>
 
@@ -1270,7 +1158,7 @@
             <div class="modal-tab-content" id="abaInformativos">
                 <div class="aviso-excecao">
                     ℹ️ <strong>Informativos</strong> aparecem na faixa rolante (ticker) no topo do painel,
-                    ou como avisos fixos destacados. Sincronizam com a nuvem.
+                    ou como avisos fixos destacados.
                 </div>
 
                 <h3>📢 Informativos Cadastrados</h3>
@@ -1297,7 +1185,7 @@
                 <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">4. Período de exibição (opcional):</label>
                 <div class="form-row">
                     <input type="date" id="inputInfoDataInicio" title="Início">
-                    <input type="date" id="inputInfoDataFim" title="Fim">
+                    <input type="date" id="infoDataFim" title="Fim">
                 </div>
                 <p style="color:#666;font-size:11px;margin-bottom:8px;">Deixe em branco para exibir sempre</p>
 
@@ -1305,374 +1193,19 @@
             </div>
 
             <button class="btn-salvar" onclick="salvarConfiguracoes()">💾 Salvar Configurações</button>
-            <p class="texto-ajuda">As configurações são salvas localmente e sincronizadas na nuvem (se ativa).</p>
+            <p class="texto-ajuda">As configurações são salvas no Firebase e sincronizadas em tempo real.</p>
         </div>
     </div>
 
     <script>
-        const CLOUD_BIN_ID_PADRAO = '6aca4d16ffd5d160535f3269';
-        const CLOUD_API_KEY_PADRAO = '$2a$10$JXIf4A1gaGZWC7ZQduoKDOLxXAykz1sdHCxb3lmgzg50jcAIUyDQ.';
-        const CLOUD_AUTO_PADRAO = true;
-        const CLOUD_ATIVO_PADRAO = true;
-
         const ANO_ATUAL = new Date().getFullYear();
         const DURACAO_ALERTA_SEGUNDOS = 5;
 
-        const CLOUD_STORAGE_KEY = 'painelSetoresCloudConfig_v8';
-        let cloudConfig = carregarCloudConfig();
-        let cloudUltimaSync = null;
-        let cloudSyncEmAndamento = false;
-        let cloudLogs = [];
-
-        // ===== MODO DE ATENDIMENTO =====
         const MODOS_ATENDIMENTO = {
             'whatsapp': { label: 'Somente WhatsApp', emoji: '💬', curto: 'WhatsApp', cor: 'whatsapp' },
             'telefonia': { label: 'Somente Telefonia', emoji: '📞', curto: 'Telefonia', cor: 'telefonia' },
             'ambos': { label: 'Telefonia + WhatsApp', emoji: '📞💬', curto: 'Telefonia + WhatsApp', cor: 'ambos' }
         };
-
-        function carregarCloudConfig() {
-            const padrao = {
-                binId: CLOUD_BIN_ID_PADRAO,
-                apiKey: CLOUD_API_KEY_PADRAO,
-                auto: CLOUD_AUTO_PADRAO,
-                ativo: CLOUD_ATIVO_PADRAO
-            };
-            try {
-                const salvo = localStorage.getItem(CLOUD_STORAGE_KEY);
-                if (salvo) {
-                    const cfg = JSON.parse(salvo);
-                    if (cfg.binId && cfg.apiKey) return { ...padrao, ...cfg };
-                }
-            } catch (e) {}
-            return padrao;
-        }
-
-        function salvarCloudConfig() {
-            try { localStorage.setItem(CLOUD_STORAGE_KEY, JSON.stringify(cloudConfig)); }
-            catch (e) {}
-        }
-
-        function cloudLog(mensagem, tipo = 'info') {
-            const hora = new Date().toLocaleTimeString('pt-BR');
-            cloudLogs.unshift({ hora, mensagem, tipo });
-            if (cloudLogs.length > 30) cloudLogs.pop();
-            renderizarCloudLog();
-        }
-
-        function renderizarCloudLog() {
-            const log = document.getElementById('cloudLog');
-            if (!log) return;
-            log.innerHTML = cloudLogs.map(l => 
-                `<div class="log-item ${l.tipo}">[${l.hora}] ${l.mensagem}</div>`
-            ).join('') || '<div class="log-item info">Nenhuma atividade</div>';
-        }
-
-        function atualizarBtnCloud() {
-            const btnToggle = document.getElementById('btnCloudToggle');
-            const btnConfig = document.getElementById('btnCloud');
-            const btnToggleModal = document.getElementById('btnCloudToggleModal');
-
-            if (btnToggle) {
-                btnToggle.className = 'btn-cloud';
-                if (cloudSyncEmAndamento) {
-                    btnToggle.classList.add('sincronizando');
-                    btnToggle.textContent = '☁️ Sincronizando...';
-                } else if (cloudConfig.ativo) {
-                    btnToggle.classList.add('conectado');
-                    btnToggle.textContent = '☁️ Nuvem: ON';
-                } else {
-                    btnToggle.classList.add('desativado');
-                    btnToggle.textContent = '☁️ Nuvem: OFF';
-                }
-            }
-
-            if (btnConfig) {
-                btnConfig.className = 'btn-cloud';
-                if (cloudConfig.ativo && cloudConfig.binId && cloudConfig.apiKey) {
-                    btnConfig.classList.add('conectado');
-                } else if (!cloudConfig.ativo) {
-                    btnConfig.classList.add('desativado');
-                }
-            }
-
-            if (btnToggleModal) {
-                btnToggleModal.className = 'cloud-btn-toggle' + (cloudConfig.ativo ? ' desligar' : '');
-                btnToggleModal.textContent = cloudConfig.ativo 
-                    ? '🔴 Desativar Sincronização' 
-                    : '🟢 Ativar Sincronização';
-            }
-        }
-
-        function atualizarCloudStatusUI() {
-            const dot = document.getElementById('cloudStatusDot');
-            const titulo = document.getElementById('cloudStatusTitulo');
-            const detalhe = document.getElementById('cloudStatusDetalhe');
-            if (!dot) return;
-            dot.className = 'status-dot';
-            
-            if (cloudSyncEmAndamento) {
-                dot.classList.add('sync');
-                titulo.textContent = 'Sincronizando...';
-                detalhe.textContent = 'Aguarde';
-            } else if (cloudConfig.ativo && cloudConfig.binId && cloudConfig.apiKey) {
-                dot.classList.add('online');
-                titulo.textContent = '🟢 Conectado e sincronizando';
-                const ultSync = cloudUltimaSync ? cloudUltimaSync.toLocaleTimeString('pt-BR') : 'aguardando';
-                detalhe.textContent = `Bin: ${cloudConfig.binId.substring(0, 12)}... | Última sync: ${ultSync}`;
-            } else if (!cloudConfig.ativo) {
-                dot.classList.add('pausado');
-                titulo.textContent = '⏸️ Sincronização pausada';
-                detalhe.textContent = 'Painel funcionando localmente';
-            } else {
-                dot.classList.add('offline');
-                titulo.textContent = '🔴 Desconectado';
-                detalhe.textContent = 'Verifique as credenciais';
-            }
-        }
-
-        function toggleCloudSync() {
-            if (!cloudConfig.binId || !cloudConfig.apiKey) {
-                alert('⚠️ Configure o Bin ID e a API Key primeiro!');
-                abrirModalCloud();
-                return;
-            }
-
-            cloudConfig.ativo = !cloudConfig.ativo;
-            salvarCloudConfig();
-            atualizarBtnCloud();
-            atualizarCloudStatusUI();
-
-            if (cloudConfig.ativo) {
-                cloudLog('🟢 Sincronização ATIVADA', 'ok');
-                setTimeout(() => sincronizarCloud(), 200);
-                alert('✅ Sincronização ATIVADA!\n\nO painel vai enviar e receber atualizações automaticamente.');
-            } else {
-                cloudLog('⏸️ Sincronização PAUSADA', 'aviso');
-                alert('⏸️ Sincronização PAUSADA.\n\nO painel continua funcionando localmente, mas não envia nem recebe atualizações da nuvem.');
-            }
-        }
-
-        async function cloudPull() {
-            if (!cloudConfig.binId || !cloudConfig.apiKey) throw new Error('Sem credenciais');
-            cloudLog('⬇️ Baixando...', 'info');
-            const res = await fetch(`https://api.jsonbin.io/v3/b/${cloudConfig.binId}/latest`, {
-                method: 'GET',
-                headers: { 'X-Master-Key': cloudConfig.apiKey, 'X-Bin-Meta': 'false' }
-            });
-            if (!res.ok) {
-                const err = await res.text();
-                throw new Error(`HTTP ${res.status}: ${err.substring(0, 80)}`);
-            }
-            cloudLog('✅ Download OK', 'ok');
-            return await res.json();
-        }
-
-        async function cloudPush(dados) {
-            if (!cloudConfig.binId || !cloudConfig.apiKey) throw new Error('Sem credenciais');
-            cloudLog('⬆️ Enviando...', 'info');
-            const res = await fetch(`https://api.jsonbin.io/v3/b/${cloudConfig.binId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': cloudConfig.apiKey
-                },
-                body: JSON.stringify(dados)
-            });
-            if (!res.ok) {
-                const err = await res.text();
-                throw new Error(`HTTP ${res.status}: ${err.substring(0, 80)}`);
-            }
-            cloudLog('✅ Upload OK', 'ok');
-            return await res.json();
-        }
-
-        async function sincronizarCloud() {
-            if (cloudSyncEmAndamento) return;
-            if (!cloudConfig.binId || !cloudConfig.apiKey) return;
-            if (!cloudConfig.ativo) {
-                cloudLog('⏸️ Sincronização desativada', 'aviso');
-                return;
-            }
-
-            cloudSyncEmAndamento = true;
-            atualizarBtnCloud();
-            atualizarCloudStatusUI();
-
-            try {
-                const remoto = await cloudPull();
-                if (remoto && remoto.config && remoto.config.ano) {
-                    aplicarConfigRemota(remoto.config);
-                    cloudUltimaSync = new Date();
-                    cloudLog('🔄 Configs aplicadas', 'ok');
-                } else if (remoto && (remoto.init || Object.keys(remoto).length === 0)) {
-                    cloudLog('📤 Bin vazio. Enviando local...', 'aviso');
-                    await enviarConfigParaNuvem();
-                    cloudUltimaSync = new Date();
-                } else {
-                    cloudLog('📤 Enviando local...', 'aviso');
-                    await enviarConfigParaNuvem();
-                    cloudUltimaSync = new Date();
-                }
-            } catch (e) {
-                cloudLog(`❌ ${e.message}`, 'erro');
-            } finally {
-                cloudSyncEmAndamento = false;
-                atualizarBtnCloud();
-                atualizarCloudStatusUI();
-            }
-        }
-
-        function aplicarConfigRemota(cfg) {
-            if (!cfg) return;
-            if (cfg.feriados) feriados = cfg.feriados;
-            if (typeof cfg.feriadoManualAtivo === 'boolean') feriadoManualAtivo = cfg.feriadoManualAtivo;
-            if (cfg.feriadoManualNome !== undefined) feriadoManualNome = cfg.feriadoManualNome;
-            if (cfg.excecoes) excecoes = cfg.excecoes;
-            if (cfg.setores) {
-                setores = cfg.setores;
-                setores.forEach(setor => {
-                    if (setor.horarios) {
-                        setor.horarios.forEach(h => {
-                            if (!h.modo) h.modo = 'ambos';
-                        });
-                    }
-                    if (setor.endereco === undefined) setor.endereco = '';
-                });
-            }
-            if (typeof cfg.alertasAtivos === 'boolean') alertasAtivos = cfg.alertasAtivos;
-            if (cfg.informativos) informativos = cfg.informativos;
-            
-            renderizarTodos();
-            renderizarInformativos();
-            atualizarInfoHoje();
-            const btnAlerta = document.getElementById('btnAlerta');
-            if (alertasAtivos) {
-                btnAlerta.textContent = '🔔 Alertas: ON';
-                btnAlerta.classList.add('ativo');
-            } else {
-                btnAlerta.textContent = '🔔 Alertas: OFF';
-                btnAlerta.classList.remove('ativo');
-            }
-            if (document.getElementById('modalAdmin').classList.contains('aberto')) {
-                atualizarListaFeriados();
-                atualizarListaExcecoes();
-                atualizarListaInformativos();
-                atualizarToggleFeriado();
-                atualizarFeriadoAtualInfo();
-                renderizarSeletorEdicao();
-            }
-        }
-
-        async function enviarConfigParaNuvem() {
-            const dados = {
-                config: montarConfigAtual(),
-                atualizadoEm: new Date().toISOString()
-            };
-            await cloudPush(dados);
-        }
-
-        function montarConfigAtual() {
-            return {
-                ano: ANO_ATUAL,
-                feriados: feriados,
-                feriadoManualAtivo: feriadoManualAtivo,
-                feriadoManualNome: feriadoManualNome,
-                setores: setores,
-                excecoes: excecoes,
-                alertasAtivos: alertasAtivos,
-                informativos: informativos
-            };
-        }
-
-        async function salvarNaNuvem() {
-            if (!cloudConfig.binId || !cloudConfig.apiKey) return;
-            if (!cloudConfig.ativo) return;
-            try {
-                await enviarConfigParaNuvem();
-                cloudUltimaSync = new Date();
-                atualizarCloudStatusUI();
-            } catch (e) {
-                cloudLog(`❌ ${e.message}`, 'erro');
-            }
-        }
-
-        function abrirModalCloud() {
-            document.getElementById('modalCloud').classList.add('aberto');
-            document.getElementById('inputBinId').value = cloudConfig.binId || '';
-            document.getElementById('inputApiKey').value = cloudConfig.apiKey || '';
-            document.getElementById('binIdDisplay').textContent = cloudConfig.binId || '-';
-            atualizarCloudStatusUI();
-            atualizarBtnCloud();
-            renderizarCloudLog();
-            document.body.style.overflow = 'hidden';
-        }
-
-        function fecharModalCloud() {
-            document.getElementById('modalCloud').classList.remove('aberto');
-            document.body.style.overflow = '';
-        }
-
-        async function testarConexaoCloud() {
-            const btn = document.getElementById('btnTestarCloud');
-            btn.disabled = true;
-            btn.textContent = '⏳ Testando...';
-            cloudSyncEmAndamento = true;
-            atualizarBtnCloud();
-            atualizarCloudStatusUI();
-            try {
-                await cloudPull();
-                cloudLog('✅ Conexão OK!', 'ok');
-                cloudUltimaSync = new Date();
-                alert('✅ Conexão bem-sucedida!');
-            } catch (e) {
-                cloudLog(`❌ ${e.message}`, 'erro');
-                alert(`❌ Erro:\n\n${e.message}`);
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '🔌 Testar Conexão';
-                cloudSyncEmAndamento = false;
-                atualizarBtnCloud();
-                atualizarCloudStatusUI();
-            }
-        }
-
-        async function forcarPull() {
-            if (!cloudConfig.ativo) {
-                if (!confirm('⚠️ Sincronização está desativada. Ativar agora?')) return;
-                cloudConfig.ativo = true;
-                salvarCloudConfig();
-                atualizarBtnCloud();
-                atualizarCloudStatusUI();
-            }
-            await sincronizarCloud();
-            alert('✅ Configurações atualizadas da nuvem!');
-        }
-
-        async function forcarPush() {
-            if (!cloudConfig.ativo) {
-                if (!confirm('⚠️ Sincronização está desativada. Ativar agora?')) return;
-                cloudConfig.ativo = true;
-                salvarCloudConfig();
-                atualizarBtnCloud();
-                atualizarCloudStatusUI();
-            }
-            cloudSyncEmAndamento = true;
-            atualizarBtnCloud();
-            try {
-                await enviarConfigParaNuvem();
-                cloudUltimaSync = new Date();
-                cloudLog('✅ Enviado', 'ok');
-                alert('✅ Configuração enviada para a nuvem!');
-            } catch (e) {
-                cloudLog(`❌ ${e.message}`, 'erro');
-                alert(`❌ Erro:\n${e.message}`);
-            } finally {
-                cloudSyncEmAndamento = false;
-                atualizarBtnCloud();
-                atualizarCloudStatusUI();
-            }
-        }
 
         function calcularPascoa(ano) {
             const a = ano % 19, b = Math.floor(ano / 100), c = ano % 100;
@@ -1719,35 +1252,49 @@
             return feriados;
         }
 
-        function carregarConfiguracoes() {
+        async function carregarConfiguracoes() {
             try {
-                const salvo = localStorage.getItem('painelSetoresConfig_v9');
-                if (salvo) return JSON.parse(salvo);
-            } catch (e) {}
+                const ref = window._firebase.doc(window._firebase.db, 'painel', 'config');
+                const snap = await window._firebase.getDoc(ref);
+                if (snap.exists()) {
+                    const cfg = snap.data();
+                    if (cfg.ano === ANO_ATUAL) return cfg;
+                }
+            } catch (e) {
+                console.error('Erro ao carregar do Firestore:', e);
+            }
             return null;
         }
 
-        function salvarConfiguracoesNoStorage() {
-            try { localStorage.setItem('painelSetoresConfig_v9', JSON.stringify(montarConfigAtual())); }
-            catch (e) {}
+        function montarConfigAtual() {
+            return {
+                ano: ANO_ATUAL,
+                feriados: feriados,
+                feriadoManualAtivo: feriadoManualAtivo,
+                feriadoManualNome: feriadoManualNome,
+                setores: setores,
+                excecoes: excecoes,
+                alertasAtivos: alertasAtivos,
+                informativos: informativos
+            };
         }
 
-        let configSalva = carregarConfiguracoes();
-        let feriados, feriadoManualAtivo = false, feriadoManualNome = '';
-        let alertasAtivos = false, excecoes = [], informativos = [];
-
-        if (configSalva && configSalva.ano === ANO_ATUAL) {
-            feriados = configSalva.feriados;
-            feriadoManualAtivo = configSalva.feriadoManualAtivo || false;
-            feriadoManualNome = configSalva.feriadoManualNome || '';
-            alertasAtivos = configSalva.alertasAtivos || false;
-            excecoes = configSalva.excecoes || [];
-            informativos = configSalva.informativos || [];
-        } else {
-            feriados = gerarFeriadosPorAno(ANO_ATUAL);
+        async function salvarConfiguracoesNoStorage() {
+            try {
+                const ref = window._firebase.doc(window._firebase.db, 'painel', 'config');
+                await window._firebase.setDoc(ref, montarConfigAtual());
+            } catch (e) {
+                console.error('Erro ao salvar no Firestore:', e);
+            }
         }
 
-        // ===== SETORES PADRÃO =====
+        let feriados = gerarFeriadosPorAno(ANO_ATUAL);
+        let feriadoManualAtivo = false;
+        let feriadoManualNome = '';
+        let alertasAtivos = false;
+        let excecoes = [];
+        let informativos = [];
+
         const SETORES_PADRAO = [
             {
                 id: 'cross', nome: '🔄 CROSS',
@@ -1793,7 +1340,6 @@
                 alertaMinutos: 30, funcionaEmFeriado: true, temAlmoco: false,
                 semModo: false, endereco: ''
             },
-            
             {
                 id: 'loja-linhares', nome: '🏪 Loja Linhares',
                 subtitulo: 'Atendimento Presencial',
@@ -1839,16 +1385,7 @@
             }
         ];
 
-        let setores = configSalva && configSalva.setores ? configSalva.setores : JSON.parse(JSON.stringify(SETORES_PADRAO));
-
-        setores.forEach(setor => {
-            if (setor.horarios) {
-                setor.horarios.forEach(h => {
-                    if (!h.modo) h.modo = 'ambos';
-                });
-            }
-            if (setor.endereco === undefined) setor.endereco = '';
-        });
+        let setores = JSON.parse(JSON.stringify(SETORES_PADRAO));
 
         function dataParaStr(dateObj) {
             const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -2190,7 +1727,6 @@
                 filaAlertas = [];
             }
             salvarConfiguracoesNoStorage();
-            salvarNaNuvem();
         }
 
         function resetDiarioAlertas() {
@@ -2231,7 +1767,6 @@
             return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
         }
 
-        // ===== CALCULA PRÓXIMO DIA ÚTIL DO SETOR =====
         function calcularProximoDiaUtil(setor) {
             const hoje = new Date();
             const diaHoje = hoje.getDay();
@@ -2345,7 +1880,6 @@
             const { abre, fecha } = horarioHoje;
             const minAlerta = setor.alertaMinutos || 30;
 
-            // ===== ALMOÇO APENAS EM DIAS ÚTEIS (SEG-SEX) =====
             const ehDiaUtil = dia >= 1 && dia <= 5;
             if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && ehDiaUtil) {
                 if (hora >= setor.almocoInicio && hora < setor.almocoFim) {
@@ -2366,7 +1900,6 @@
                 return { status: 'fechado', mensagem: `⏳ Fechado - abre ${formatarHora(abre)}`, descricao: `Volta às ${formatarHora(abre)}`, cor: 'fechado', modo };
             }
 
-            // ===== EXPEDIENTE ENCERRADO: CALCULA O PRÓXIMO DIA ÚTIL =====
             const proximoDia = calcularProximoDiaUtil(setor);
             return { 
                 status: 'fechado', 
@@ -2421,7 +1954,6 @@
                     badgeExtra += `<span class="badge-excecao">🔷 Exceção: ${excecaoHoje.tipo}</span>`;
                 }
             }
-            // ===== BADGE DE ALMOÇO: apenas em dias úteis (seg-sex) =====
             const diaSemanaHoje = new Date().getDay();
             const ehDiaUtilHoje = diaSemanaHoje >= 1 && diaSemanaHoje <= 5;
             if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && ehDiaUtilHoje && (!excecaoHoje || excecaoHoje.tipo !== 'fechado')) {
@@ -2701,7 +2233,6 @@
             renderizarInformativos();
             atualizarInfoHoje();
             salvarConfiguracoesNoStorage();
-            salvarNaNuvem();
             alert(`✅ Exceção adicionada!`);
         }
 
@@ -2712,7 +2243,6 @@
                 renderizarTodos();
                 renderizarInformativos();
                 salvarConfiguracoesNoStorage();
-                salvarNaNuvem();
             }
         }
 
@@ -2774,17 +2304,16 @@
                 texto: texto,
                 tipo: tipoInformativoSelecionado,
                 dataInicio: document.getElementById('inputInfoDataInicio').value || null,
-                dataFim: document.getElementById('inputInfoDataFim').value || null,
+                dataFim: document.getElementById('infoDataFim').value || null,
                 criadoEm: new Date().toISOString()
             };
             informativos.push(nova);
             document.getElementById('inputTextoInformativo').value = '';
             document.getElementById('inputInfoDataInicio').value = '';
-            document.getElementById('inputInfoDataFim').value = '';
+            document.getElementById('infoDataFim').value = '';
             atualizarListaInformativos();
             renderizarInformativos();
             salvarConfiguracoesNoStorage();
-            salvarNaNuvem();
             alert('✅ Informativo adicionado!');
         }
 
@@ -2794,7 +2323,6 @@
                 atualizarListaInformativos();
                 renderizarInformativos();
                 salvarConfiguracoesNoStorage();
-                salvarNaNuvem();
             }
         }
 
@@ -2836,7 +2364,6 @@
             renderizarInformativos();
             atualizarInfoHoje();
             salvarConfiguracoesNoStorage();
-            salvarNaNuvem();
         }
 
         function removerFeriado(index) {
@@ -2848,7 +2375,6 @@
                 renderizarInformativos();
                 atualizarInfoHoje();
                 salvarConfiguracoesNoStorage();
-                salvarNaNuvem();
             }
         }
 
@@ -2862,7 +2388,6 @@
                 renderizarInformativos();
                 atualizarInfoHoje();
                 salvarConfiguracoesNoStorage();
-                salvarNaNuvem();
             }
         }
 
@@ -2882,7 +2407,6 @@
             renderizarInformativos();
             atualizarInfoHoje();
             salvarConfiguracoesNoStorage();
-            salvarNaNuvem();
             alert(`✅ Feriado ${dataStr} adicionado!`);
         }
 
@@ -2895,19 +2419,17 @@
                 renderizarInformativos();
                 atualizarInfoHoje();
                 salvarConfiguracoesNoStorage();
-                salvarNaNuvem();
                 alert(`✅ Feriados de ${ANO_ATUAL} importados!`);
             }
         }
 
         function salvarConfiguracoes() {
             salvarConfiguracoesNoStorage();
-            salvarNaNuvem();
             fecharModal();
             renderizarTodos();
             renderizarInformativos();
             atualizarInfoHoje();
-            alert('💾 Configurações salvas!');
+            alert('💾 Configurações salvas e sincronizadas!');
         }
 
         let setorEditandoId = null;
@@ -3121,8 +2643,7 @@
             renderizarTodos();
             renderizarInformativos();
             salvarConfiguracoesNoStorage();
-            salvarNaNuvem();
-            alert(`✅ Configurações de "${setor.nome}" atualizadas com sucesso!`);
+            alert(`✅ Configurações de "${setor.nome}" atualizadas e sincronizadas!`);
         }
 
         function resetarSetorPadrao() {
@@ -3148,14 +2669,137 @@
             renderizarTodos();
             renderizarInformativos();
             salvarConfiguracoesNoStorage();
-            salvarNaNuvem();
             alert('🔄 Setor restaurado ao padrão!');
         }
+
+        // ===== INICIALIZAÇÃO COM FIREBASE EM TEMPO REAL =====
+        async function iniciarPainel() {
+            if (!window._firebaseReady) {
+                setTimeout(iniciarPainel, 100);
+                return;
+            }
+
+            console.log('🚀 Iniciando painel...');
+
+            let cfg = await carregarConfiguracoes();
+
+            if (cfg) {
+                feriados = cfg.feriados || [];
+                feriadoManualAtivo = cfg.feriadoManualAtivo || false;
+                feriadoManualNome = cfg.feriadoManualNome || '';
+                excecoes = cfg.excecoes || [];
+                informativos = cfg.informativos || [];
+                setores = cfg.setores || JSON.parse(JSON.stringify(SETORES_PADRAO));
+                alertasAtivos = cfg.alertasAtivos || false;
+            } else {
+                const padrao = {
+                    ano: ANO_ATUAL,
+                    feriados: gerarFeriadosPorAno(ANO_ATUAL),
+                    feriadoManualAtivo: false,
+                    feriadoManualNome: '',
+                    setores: JSON.parse(JSON.stringify(SETORES_PADRAO)),
+                    excecoes: [],
+                    informativos: [],
+                    alertasAtivos: false
+                };
+                await window._firebase.setDoc(
+                    window._firebase.doc(window._firebase.db, 'painel', 'config'),
+                    padrao
+                );
+                feriados = padrao.feriados;
+                setores = padrao.setores;
+                console.log('📝 Documento inicial criado no Firestore');
+            }
+
+            setores.forEach(setor => {
+                if (setor.horarios) {
+                    setor.horarios.forEach(h => { if (!h.modo) h.modo = 'ambos'; });
+                }
+                if (setor.endereco === undefined) setor.endereco = '';
+            });
+
+            renderizarTodos();
+            renderizarInformativos();
+            atualizarRelogio();
+            atualizarInfoHoje();
+            atualizarToggleFeriado();
+            atualizarFeriadoAtualInfo();
+
+            if (alertasAtivos) {
+                const btn = document.getElementById('btnAlerta');
+                btn.textContent = '🔔 Alertas: ON';
+                btn.classList.add('ativo');
+            }
+
+            const ref = window._firebase.doc(window._firebase.db, 'painel', 'config');
+
+            window._firebase.onSnapshot(ref, (snap) => {
+                if (!snap.exists()) return;
+                const cfg = snap.data();
+                if (cfg.ano !== ANO_ATUAL) return;
+
+                feriados = cfg.feriados || [];
+                feriadoManualAtivo = cfg.feriadoManualAtivo || false;
+                feriadoManualNome = cfg.feriadoManualNome || '';
+                excecoes = cfg.excecoes || [];
+                informativos = cfg.informativos || [];
+                setores = cfg.setores || JSON.parse(JSON.stringify(SETORES_PADRAO));
+                alertasAtivos = cfg.alertasAtivos || false;
+
+                setores.forEach(setor => {
+                    if (setor.horarios) {
+                        setor.horarios.forEach(h => { if (!h.modo) h.modo = 'ambos'; });
+                    }
+                    if (setor.endereco === undefined) setor.endereco = '';
+                });
+
+                renderizarTodos();
+                renderizarInformativos();
+                atualizarInfoHoje();
+                atualizarToggleFeriado();
+                atualizarFeriadoAtualInfo();
+
+                if (document.getElementById('modalAdmin').classList.contains('aberto')) {
+                    atualizarListaFeriados();
+                    atualizarListaExcecoes();
+                    atualizarListaInformativos();
+                }
+
+                console.log('🔄 Sincronizado em tempo real:', new Date().toLocaleTimeString());
+            });
+
+            setInterval(atualizarRelogio, 1000);
+            setInterval(renderizarTodos, 30000);
+            setInterval(renderizarInformativos, 60000);
+            setInterval(atualizarInfoHoje, 60000);
+            setInterval(verificarAlertas, 15000);
+            resetDiarioAlertas();
+
+            if (alertasAtivos) setTimeout(verificarAlertas, 2000);
+
+            document.addEventListener('click', function desbloquearAudio() {
+                initAudioContext();
+                document.removeEventListener('click', desbloquearAudio);
+            }, { once: true });
+
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    renderizarTodos();
+                    renderizarInformativos();
+                    atualizarRelogio();
+                    atualizarInfoHoje();
+                    if (alertasAtivos) verificarAlertas();
+                }
+            });
+
+            console.log(`📊 Painel iniciado - ${ANO_ATUAL}`);
+        }
+
+        iniciarPainel();
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 if (document.getElementById('alertaOverlay').classList.contains('ativo')) fecharAlerta();
-                else if (document.getElementById('modalCloud').classList.contains('aberto')) fecharModalCloud();
                 else fecharModal();
             }
         });
@@ -3163,71 +2807,9 @@
         document.getElementById('modalAdmin').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) fecharModal();
         });
-        document.getElementById('modalCloud').addEventListener('click', (e) => {
-            if (e.target === e.currentTarget) fecharModalCloud();
-        });
-
-        renderizarTodos();
-        renderizarInformativos();
-        atualizarRelogio();
-        atualizarInfoHoje();
-
-        if (alertasAtivos) {
-            const btn = document.getElementById('btnAlerta');
-            btn.textContent = '🔔 Alertas: ON';
-            btn.classList.add('ativo');
-        }
-
-        atualizarBtnCloud();
-        atualizarCloudStatusUI();
-
-        setInterval(atualizarRelogio, 1000);
-        setInterval(renderizarTodos, 30000);
-        setInterval(renderizarInformativos, 60000);
-        setInterval(atualizarInfoHoje, 60000);
-        setInterval(verificarAlertas, 15000);
-
-        setInterval(() => {
-            if (cloudConfig.ativo && cloudConfig.auto && !cloudSyncEmAndamento) sincronizarCloud();
-        }, 30000);
-
-        resetDiarioAlertas();
-        if (alertasAtivos) setTimeout(verificarAlertas, 2000);
-
-        setTimeout(() => {
-            if (cloudConfig.ativo) {
-                cloudLog('🚀 Sincronização inicial...', 'info');
-                sincronizarCloud();
-            } else {
-                cloudLog('⏸️ Sincronização desativada', 'aviso');
-            }
-        }, 800);
-
-        document.addEventListener('click', function desbloquearAudio() {
-            initAudioContext();
-            document.removeEventListener('click', desbloquearAudio);
-        }, { once: true });
-
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                renderizarTodos();
-                renderizarInformativos();
-                atualizarRelogio();
-                atualizarInfoHoje();
-                if (alertasAtivos) verificarAlertas();
-                if (cloudConfig.ativo) sincronizarCloud();
-            }
-        });
-
-        console.log(`📊 Painel iniciado - ${ANO_ATUAL}`);
-        console.log(`☁️ Nuvem: ${cloudConfig.ativo ? 'ATIVA' : 'PAUSADA'}`);
-        console.log(`🔊 Alerta: ${DURACAO_ALERTA_SEGUNDOS}s`);
-        console.log(`🍽️ Almoço: apenas seg-sex`);
 
         window.abrirModal = abrirModal;
         window.fecharModal = fecharModal;
-        window.abrirModalCloud = abrirModalCloud;
-        window.fecharModalCloud = fecharModalCloud;
         window.toggleFeriadoGeral = toggleFeriadoGeral;
         window.removerFeriado = removerFeriado;
         window.removerFeriadoAtual = removerFeriadoAtual;
@@ -3242,10 +2824,6 @@
         window.selecionarTipoExcecao = selecionarTipoExcecao;
         window.adicionarExcecao = adicionarExcecao;
         window.removerExcecao = removerExcecao;
-        window.testarConexaoCloud = testarConexaoCloud;
-        window.forcarPull = forcarPull;
-        window.forcarPush = forcarPush;
-        window.toggleCloudSync = toggleCloudSync;
         window.selecionarEmoji = selecionarEmoji;
         window.selecionarTipoInformativo = selecionarTipoInformativo;
         window.adicionarInformativo = adicionarInformativo;
