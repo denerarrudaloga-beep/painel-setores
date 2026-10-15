@@ -354,21 +354,49 @@
         }
         .card {
             background: #12121f; border-radius: 14px; padding: 18px 20px;
-            border-left: 5px solid #555; transition: all 0.3s ease;
+            border-left: 8px solid #555;
+            transition: all 0.3s ease;
             border: 1px solid #1a1a2e;
         }
         .card:hover {
             transform: translateY(-3px); border-color: #2a2a4a;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
         }
-        .card.aberto { border-left-color: #00c853; }
-        .card.alerta { border-left-color: #ff9100; }
-        .card.fechado { border-left-color: #ff1744; }
-        .card.indisponivel { border-left-color: #555; opacity: 0.5; }
-        .card.feriado { border-left-color: #9c27b0; }
-        .card.almoco { border-left-color: #ffab40; }
-        .card.excecao { border-left-color: #00bcd4; }
-        .card.reuniao { border-left-color: #ff6b9d; }
+        
+        /* ===== BORDA VERDE GROSSA QUANDO ATUANDO ===== */
+        .card.aberto { 
+            border-left: 12px solid #00c853 !important;
+            border-color: #00c853 !important;
+            box-shadow: 0 0 25px rgba(0, 200, 83, 0.35), inset 0 0 20px rgba(0, 200, 83, 0.05);
+        }
+        .card.aberto:hover {
+            box-shadow: 0 0 35px rgba(0, 200, 83, 0.5), inset 0 0 25px rgba(0, 200, 83, 0.08);
+        }
+        .card.alerta { border-left: 8px solid #ff9100; }
+        .card.fechado { border-left: 8px solid #ff1744; }
+        .card.indisponivel { border-left: 8px solid #555; opacity: 0.5; }
+        .card.feriado { border-left: 8px solid #9c27b0; }
+        
+        /* ===== BORDA E COR DE ALMOÇO FORTE ===== */
+        .card.almoco { 
+            border-left: 12px solid #ffab40 !important;
+            border-color: #ffab40 !important;
+            background: linear-gradient(145deg, #1f1a12, #12121f) !important;
+            box-shadow: 0 0 25px rgba(255, 171, 64, 0.35), inset 0 0 20px rgba(255, 171, 64, 0.05);
+        }
+        .card.almoco:hover {
+            box-shadow: 0 0 35px rgba(255, 171, 64, 0.5), inset 0 0 25px rgba(255, 171, 64, 0.08);
+        }
+        .card.excecao { border-left: 8px solid #00bcd4; }
+        .card.reuniao { 
+            border-left: 12px solid #ff6b9d !important;
+            border-color: #ff6b9d !important;
+            background: linear-gradient(145deg, #1f1218, #12121f) !important;
+            box-shadow: 0 0 25px rgba(255, 107, 157, 0.35), inset 0 0 20px rgba(255, 107, 157, 0.05);
+        }
+        .card.reuniao:hover {
+            box-shadow: 0 0 35px rgba(255, 107, 157, 0.5), inset 0 0 25px rgba(255, 107, 157, 0.08);
+        }
         .card.oculto { display: none; }
 
         .card-header {
@@ -377,82 +405,43 @@
         }
         .card-titulo { font-size: 16px; font-weight: 700; color: #fff; }
         .card-subtitulo { font-size: 12px; color: #666; margin-top: 2px; }
-        .card-status {
-            font-size: 11px; font-weight: 600; padding: 3px 12px;
-            border-radius: 50px; background: #0f0f1a;
-            border: 1px solid #2a2a4a; white-space: nowrap;
-        }
-        .card-status.aberto { color: #00c853; border-color: #00c853; }
-        .card-status.alerta { color: #ff9100; border-color: #ff9100; animation: pisca 1.5s infinite; }
-        .card-status.fechado { color: #ff1744; border-color: #ff1744; }
-        .card-status.indisponivel { color: #555; border-color: #555; }
-        .card-status.feriado { color: #ce93d8; border-color: #9c27b0; }
-        .card-status.almoco { color: #ffab40; border-color: #ffab40; }
-        .card-status.excecao { color: #00bcd4; border-color: #00bcd4; }
-        .card-status.reuniao { color: #ff6b9d; border-color: #ff6b9d; }
-        @keyframes pisca { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-
+        
         .card-horario {
-            font-size: 13px; color: #888; margin: 8px 0;
+            font-size: 15px;
+            color: #aaa; 
+            margin: 10px 0;
             display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
         }
+        .card-horario span:last-child {
+            font-size: 14px !important;
+        }
+        
         .badge-feriado {
-            background: #9c27b0; color: #fff; font-size: 10px;
+            background: #9c27b0; color: #fff; font-size: 11px;
             padding: 2px 10px; border-radius: 50px; font-weight: 600;
         }
         .badge-almoco {
-            background: #ffab40; color: #000; font-size: 10px;
+            background: #ffab40; color: #000; font-size: 11px;
             padding: 2px 10px; border-radius: 50px; font-weight: 600;
         }
         .badge-excecao {
-            background: #00bcd4; color: #000; font-size: 10px;
+            background: #00bcd4; color: #000; font-size: 11px;
             padding: 2px 10px; border-radius: 50px; font-weight: 600;
         }
         .badge-reuniao {
-            background: #ff6b9d; color: #fff; font-size: 10px;
+            background: #ff6b9d; color: #fff; font-size: 11px;
             padding: 2px 10px; border-radius: 50px; font-weight: 600;
         }
 
-        .badge-modo {
-            font-size: 11px;
-            padding: 3px 12px;
-            border-radius: 50px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            letter-spacing: 0.3px;
-        }
-        .badge-modo.whatsapp {
-            background: rgba(37, 211, 102, 0.15);
-            color: #25d366;
-            border: 1px solid #25d366;
-        }
-        .badge-modo.telefonia {
-            background: rgba(33, 150, 243, 0.15);
-            color: #42a5f5;
-            border: 1px solid #2196f3;
-        }
-        .badge-modo.ambos {
-            background: rgba(156, 39, 176, 0.15);
-            color: #ce93d8;
-            border: 1px solid #9c27b0;
-        }
-        .badge-modo.indisponivel {
-            background: rgba(85, 85, 85, 0.15);
-            color: #888;
-            border: 1px solid #555;
-        }
-
         .card-atendimento {
-            margin-top: 10px;
-            padding: 10px 14px;
-            border-radius: 10px;
+            margin-top: 8px;
+            padding: 6px 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            font-size: 13px;
+            justify-content: center;
+            gap: 8px;
+            font-size: 11px;
             font-weight: 600;
             border: 1px solid;
         }
@@ -476,60 +465,32 @@
             border-color: rgba(85, 85, 85, 0.4);
             color: #888;
         }
-        .card-atendimento .atend-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            opacity: 0.7;
-            font-weight: 700;
-        }
         .card-atendimento .atend-valor {
-            font-size: 14px;
-            font-weight: 800;
+            font-size: 11px;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .card-endereco {
-            margin-top: 8px;
-            padding: 8px 12px;
+            margin-top: 6px;
+            padding: 6px 10px;
             border-radius: 8px;
             background: rgba(0, 212, 255, 0.06);
             border: 1px solid rgba(0, 212, 255, 0.2);
-            font-size: 12px;
+            font-size: 13px;
             color: #8ab4d4;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .card-endereco .end-icone {
             font-size: 16px;
             flex-shrink: 0;
         }
         .card-endereco .end-texto {
-            line-height: 1.4;
-        }
-
-        .card-mensagem {
-            font-size: 14px; padding: 10px 14px; border-radius: 10px;
-            margin-top: 8px; font-weight: 500;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .card-mensagem.aberto { background: rgba(0, 200, 83, 0.12); color: #69f0ae; }
-        .card-mensagem.alerta { background: rgba(255, 145, 0, 0.12); color: #ffab40; }
-        .card-mensagem.fechado { background: rgba(255, 23, 68, 0.12); color: #ff5252; }
-        .card-mensagem.indisponivel { background: rgba(85, 85, 85, 0.12); color: #888; }
-        .card-mensagem.feriado { background: rgba(156, 39, 176, 0.12); color: #ce93d8; }
-        .card-mensagem.almoco { background: rgba(255, 171, 64, 0.12); color: #ffab40; }
-        .card-mensagem.excecao { background: rgba(0, 188, 212, 0.12); color: #4dd0e1; }
-        .card-mensagem.reuniao { background: rgba(255, 107, 157, 0.15); color: #ff6b9d; }
-        .card-mensagem .icone { font-size: 20px; }
-
-        .canais { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
-        .canais span {
-            font-size: 11px; background: #0f0f1a; padding: 2px 10px;
-            border-radius: 50px; border: 1px solid #1a1a2e; color: #666;
+            line-height: 1.3;
         }
 
         .alerta-overlay {
@@ -1924,6 +1885,7 @@
             return null;
         }
 
+        // ===== RENDERIZAÇÃO OTIMIZADA DO CARD COM INDICAÇÃO FORTE DE ALMOÇO E ABERTO =====
         function renderizarCard(setor) {
             const statusInfo = obterStatusSetor(setor);
             const horarioHoje = getHorarioHoje(setor);
@@ -1960,20 +1922,19 @@
                 badgeExtra += `<span class="badge-almoco">🍽️ Almoço: ${formatarHora(setor.almocoInicio)}-${formatarHora(setor.almocoFim)}</span>`;
             }
 
+            // Caixa compacta de atendimento
             let atendimentoHtml = '';
             if (!setor.semModo) {
                 if (modoAtual) {
                     const info = MODOS_ATENDIMENTO[modoAtual];
                     atendimentoHtml = `
                         <div class="card-atendimento ${info.cor}">
-                            <span class="atend-label">Atendimento agora</span>
                             <span class="atend-valor">${info.emoji} ${info.label}</span>
                         </div>
                     `;
                 } else {
                     atendimentoHtml = `
                         <div class="card-atendimento indisponivel">
-                            <span class="atend-label">Atendimento</span>
                             <span class="atend-valor">🚫 Sem atendimento</span>
                         </div>
                     `;
@@ -1997,27 +1958,57 @@
                             <div class="card-titulo">${setor.nome}</div>
                             <div class="card-subtitulo">${setor.subtitulo}</div>
                         </div>
-                        <span class="card-status ${statusInfo.status}">${statusInfo.mensagem.split(' ').slice(0,3).join(' ')}</span>
                     </div>
                     <div class="card-horario">
                         <span>${horarioTexto}</span>
                         <span style="color:#555;margin:0 4px;">•</span>
-                        <span style="font-size:12px;color:#666;">${infoDia}</span>
+                        <span style="font-size:14px;color:#666;">${infoDia}</span>
                         ${badgeExtra}
                     </div>
                     ${atendimentoHtml}
                     ${enderecoHtml}
-                    <div class="card-mensagem ${statusInfo.cor}">
-                        <span class="icone">${statusInfo.mensagem.split(' ')[0]}</span>
-                        <span>${statusInfo.mensagem} — ${statusInfo.descricao}</span>
-                    </div>
-                    <div class="canais">${setor.canais.map(c => `<span>${c}</span>`).join('')}</div>
                 </div>
             `;
         }
 
+        // ===== OTIMIZAÇÃO: SÓ ATUALIZA O CARD SE O STATUS MUDOU =====
+        let cacheCards = {};
+
         function renderizarTodos() {
-            document.getElementById('gridSetores').innerHTML = setores.map(s => renderizarCard(s)).join('');
+            const grid = document.getElementById('gridSetores');
+            
+            setores.forEach(setor => {
+                const statusInfo = obterStatusSetor(setor);
+                const chaveStatus = `${statusInfo.status}_${statusInfo.mensagem}_${statusInfo.descricao}_${statusInfo.modo || 'sem'}_${hojeEhFeriado()?.nome || 'sem'}`;
+
+                if (cacheCards[setor.id] !== chaveStatus) {
+                    cacheCards[setor.id] = chaveStatus;
+                    
+                    let cardEl = document.getElementById(`card_${setor.id}`);
+                    if (!cardEl) {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = renderizarCard(setor).trim();
+                        cardEl = tempDiv.firstChild;
+                        cardEl.id = `card_${setor.id}`;
+                        grid.appendChild(cardEl);
+                    } else {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = renderizarCard(setor).trim();
+                        const novoCard = tempDiv.firstChild;
+                        cardEl.innerHTML = novoCard.innerHTML;
+                        cardEl.className = novoCard.className;
+                    }
+                }
+            });
+
+            Array.from(grid.children).forEach(child => {
+                const id = child.id.replace('card_', '');
+                if (!setores.find(s => s.id === id)) {
+                    child.remove();
+                    delete cacheCards[id];
+                }
+            });
+
             atualizarContador();
         }
 
