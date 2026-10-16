@@ -187,7 +187,6 @@
         .bolinha.whatsapp { background: #25d366; }
         .bolinha.telefonia { background: #2196f3; }
         .bolinha.ambos { background: #9c27b0; }
-        .bolinha.presencial { background: #00bcd4; }
 
         .search-bar {
             display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
@@ -267,10 +266,8 @@
         }
         .canal-chip.ativo.whatsapp { background: rgba(37,211,102,0.15); border-color: #25d366; color: #25d366; }
         .canal-chip.ativo.telefonia { background: rgba(33,150,243,0.15); border-color: #2196f3; color: #42a5f5; }
-        .canal-chip.ativo.presencial { background: rgba(0,188,212,0.15); border-color: #00bcd4; color: #4dd0e1; }
         .canal-chip.inativo.whatsapp { background: rgba(37,211,102,0.03); border-color: rgba(37,211,102,0.2); color: rgba(37,211,102,0.4); text-decoration: line-through; }
         .canal-chip.inativo.telefonia { background: rgba(33,150,243,0.03); border-color: rgba(33,150,243,0.2); color: rgba(33,150,243,0.4); text-decoration: line-through; }
-        .canal-chip.inativo.presencial { background: rgba(0,188,212,0.03); border-color: rgba(0,188,212,0.2); color: rgba(0,188,212,0.4); text-decoration: line-through; }
         .canal-chip .canal-hora { font-size: 10px; opacity: 0.85; margin-left: 2px; }
 
         .card-endereco {
@@ -474,7 +471,6 @@
         .editor-horario-item.tel { border-left-color: #2196f3; }
         .editor-horario-item.wpp { border-left-color: #25d366; }
         .editor-horario-item.amb { border-left-color: #9c27b0; }
-        .editor-horario-item.pre { border-left-color: #00bcd4; }
 
         .editor-dias { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
         .editor-dias .dia-btn {
@@ -499,7 +495,6 @@
         .editor-modo .modo-btn.selecionado.whatsapp { border-color: #25d366; color: #25d366; background: rgba(37, 211, 102, 0.1); }
         .editor-modo .modo-btn.selecionado.telefonia { border-color: #2196f3; color: #42a5f5; background: rgba(33, 150, 243, 0.1); }
         .editor-modo .modo-btn.selecionado.ambos { border-color: #9c27b0; color: #ce93d8; background: rgba(156, 39, 176, 0.1); }
-        .editor-modo .modo-btn.selecionado.presencial { border-color: #00bcd4; color: #4dd0e1; background: rgba(0, 188, 212, 0.1); }
         .editor-modo .modo-btn .modo-emoji { display: block; font-size: 16px; margin-bottom: 2px; }
 
         .btn-add-linha {
@@ -596,7 +591,6 @@
             <span class="legenda-item"><span class="bolinha whatsapp"></span> 💬 Somente WhatsApp</span>
             <span class="legenda-item"><span class="bolinha telefonia"></span> 📞 Somente Telefonia</span>
             <span class="legenda-item"><span class="bolinha ambos"></span> 📞💬 Telefonia + WhatsApp</span>
-            <span class="legenda-item"><span class="bolinha presencial"></span> 🏢 Presencial</span>
         </div>
 
         <div class="search-bar">
@@ -941,7 +935,7 @@
                 excecoes: excecoes,
                 alertasAtivos: alertasAtivos,
                 informativos: informativos,
-                versao: 4
+                versao: 5
             };
         }
 
@@ -1092,7 +1086,7 @@
             };
         }
 
-        // ============ SEM REDUNDÂNCIA: linha mostra só o range total ============
+        // Linha do card: range total do dia (sem redundância com os chips)
         function descricaoFaixasDoDia(setor, feriado) {
             const faixas = getFaixasDoDia(setor, feriado);
             if (faixas.length === 0) return null;
@@ -1366,15 +1360,8 @@
             let canaisHtml = '';
 
             if (setor.semModo) {
-                const info = statusInfo.canaisInfo;
-                const estaAberto = info && info.modo === 'presencial';
-                canaisHtml = `
-                    <div class="card-canais">
-                        <span class="canal-chip ${estaAberto ? 'ativo' : 'inativo'} presencial">
-                            🏢 Atendimento Presencial
-                        </span>
-                    </div>
-                `;
+                // Lojas: sem chip de canal — só horário + almoço + endereço
+                canaisHtml = '';
             } else if (faixasHoje.length > 0 || statusInfo.canaisInfo) {
                 let temWppHoje = false;
                 let temTelHoje = false;
@@ -2040,7 +2027,6 @@
                 let classeModo = '';
                 if (h.modo === 'telefonia') classeModo = 'tel';
                 else if (h.modo === 'whatsapp') classeModo = 'wpp';
-                else if (h.modo === 'presencial') classeModo = 'pre';
                 else classeModo = 'amb';
 
                 return `
@@ -2209,11 +2195,11 @@
         // ============ INICIALIZAÇÃO ============
         async function iniciarPainel() {
             if (!window._firebaseReady) { setTimeout(iniciarPainel, 100); return; }
-            console.log('🚀 Iniciando painel v4 (sem redundância)...');
+            console.log('🚀 Iniciando painel v5...');
 
             let cfg = await carregarConfiguracoes();
 
-            if (cfg && cfg.versao === 4) {
+            if (cfg && cfg.versao === 5) {
                 feriados = cfg.feriados || [];
                 feriadoManualAtivo = cfg.feriadoManualAtivo || false;
                 feriadoManualNome = cfg.feriadoManualNome || '';
@@ -2222,7 +2208,7 @@
                 setores = cfg.setores || JSON.parse(JSON.stringify(SETORES_PADRAO));
                 alertasAtivos = cfg.alertasAtivos || false;
             } else {
-                console.log('📝 Migrando para versão 4...');
+                console.log('📝 Migrando para versão 5...');
                 let setoresBase = cfg && cfg.setores ? cfg.setores : JSON.parse(JSON.stringify(SETORES_PADRAO));
 
                 setoresBase = setoresBase.map(s => {
@@ -2255,7 +2241,7 @@
                     excecoes: cfg ? (cfg.excecoes || []) : [],
                     informativos: cfg ? (cfg.informativos || []) : [],
                     alertasAtivos: cfg ? (cfg.alertasAtivos || false) : false,
-                    versao: 4
+                    versao: 5
                 };
                 await window._firebase.setDoc(
                     window._firebase.doc(window._firebase.db, 'painel', 'config'),
@@ -2344,7 +2330,7 @@
                     if (alertasAtivos) verificarAlertas();
                 }
             });
-            console.log(`📊 Painel v4 iniciado - ${ANO_ATUAL}`);
+            console.log(`📊 Painel v5 iniciado - ${ANO_ATUAL}`);
         }
 
         iniciarPainel();
