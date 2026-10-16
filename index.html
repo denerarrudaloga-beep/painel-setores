@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📊 Status dos Setores</title>
 
-    <!-- 🔥 Firebase SDK -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
       import { getFirestore, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -88,7 +87,6 @@
         .btn-alerta:hover { background: #ffab40; transform: scale(1.05); }
         .btn-alerta.ativo { background: #00c853; color: #fff; }
         .btn-alerta.ativo:hover { background: #69f0ae; }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
         .banner-feriado {
             display: none;
@@ -103,209 +101,84 @@
             animation: feriadoBackground 4s ease infinite, slideDown 0.4s ease;
         }
         .banner-feriado.ativo { display: block; }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes feriadoBackground {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes feriadoBackground { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
         .banner-feriado .titulo {
-            font-size: 24px;
-            font-weight: 900;
-            color: #fff;
+            font-size: 24px; font-weight: 900; color: #fff;
             display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
-            text-shadow: 0 0 20px rgba(206, 147, 216, 0.9), 0 0 40px rgba(156, 39, 176, 0.6), 0 2px 4px rgba(0,0,0,0.8);
-            letter-spacing: 1px;
-            animation: feriadoPulse 2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(206, 147, 216, 0.9), 0 0 40px rgba(156, 39, 176, 0.6);
+            letter-spacing: 1px; animation: feriadoPulse 2s ease-in-out infinite;
             text-transform: uppercase;
         }
-        @keyframes feriadoPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-        .banner-feriado .conteudo {
-            font-size: 15px;
-            color: #fff;
-            line-height: 1.9;
-            font-weight: 600;
-        }
-        .banner-feriado .conteudo .linha {
-            display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-            margin: 8px 0;
-            padding: 6px 0;
-        }
+        @keyframes feriadoPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        .banner-feriado .conteudo { font-size: 15px; color: #fff; line-height: 1.9; font-weight: 600; }
+        .banner-feriado .conteudo .linha { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; padding: 6px 0; }
         .banner-feriado .chip-funcionando {
-            background: rgba(0, 200, 83, 0.25);
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 800;
-            border: 2px solid #00c853;
-            text-shadow: 0 0 8px rgba(0, 200, 83, 0.8);
-            box-shadow: 0 0 15px rgba(0, 200, 83, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            background: rgba(0, 200, 83, 0.25); color: #fff; padding: 6px 16px;
+            border-radius: 50px; font-size: 14px; font-weight: 800;
+            border: 2px solid #00c853; text-shadow: 0 0 8px rgba(0, 200, 83, 0.8);
+            box-shadow: 0 0 15px rgba(0, 200, 83, 0.5); text-transform: uppercase;
         }
         .banner-feriado .chip-fechado {
-            background: rgba(255, 23, 68, 0.25);
-            color: #fff;
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 800;
-            border: 2px solid #ff1744;
-            text-shadow: 0 0 8px rgba(255, 23, 68, 0.8);
-            box-shadow: 0 0 15px rgba(255, 23, 68, 0.5);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            background: rgba(255, 23, 68, 0.25); color: #fff; padding: 6px 16px;
+            border-radius: 50px; font-size: 14px; font-weight: 800;
+            border: 2px solid #ff1744; text-shadow: 0 0 8px rgba(255, 23, 68, 0.8);
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.5); text-transform: uppercase;
         }
 
         .ticker-wrap {
-            display: none;
-            width: 100%;
-            overflow: hidden;
+            display: none; width: 100%; overflow: hidden;
             background: linear-gradient(90deg, #0f0f1a, #1a1a2e, #0f0f1a);
-            border: 2px solid #2a2a4a;
-            border-left: 8px solid #00d4ff;
-            border-radius: 14px;
-            padding: 16px 0;
-            margin-bottom: 20px;
-            position: relative;
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
+            border: 2px solid #2a2a4a; border-left: 8px solid #00d4ff;
+            border-radius: 14px; padding: 16px 0; margin-bottom: 20px;
+            position: relative; box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
         }
         .ticker-wrap.ativo { display: block; }
         .ticker-wrap::before, .ticker-wrap::after {
-            content: '';
-            position: absolute; top: 0; bottom: 0; width: 80px;
+            content: ''; position: absolute; top: 0; bottom: 0; width: 80px;
             z-index: 2; pointer-events: none;
         }
-        .ticker-wrap::before {
-            left: 0;
-            background: linear-gradient(90deg, #12121f, transparent);
-        }
-        .ticker-wrap::after {
-            right: 0;
-            background: linear-gradient(270deg, #12121f, transparent);
-        }
+        .ticker-wrap::before { left: 0; background: linear-gradient(90deg, #12121f, transparent); }
+        .ticker-wrap::after { right: 0; background: linear-gradient(270deg, #12121f, transparent); }
         .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            animation: ticker 40s linear infinite;
-            padding-left: 100%;
+            display: inline-block; white-space: nowrap;
+            animation: ticker 40s linear infinite; padding-left: 100%;
         }
         .ticker:hover { animation-play-state: paused; }
-        @keyframes ticker {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
         .ticker-item {
-            display: inline-block;
-            padding: 0 50px;
-            font-size: 22px;
-            font-weight: 900;
-            color: #fff;
+            display: inline-block; padding: 0 50px;
+            font-size: 22px; font-weight: 900; color: #fff;
             border-right: 2px solid rgba(0, 212, 255, 0.4);
-            text-shadow: 0 0 15px rgba(0, 212, 255, 0.9), 0 0 30px rgba(0, 212, 255, 0.5), 0 2px 4px rgba(0,0,0,0.8);
-            letter-spacing: 0.8px;
-            text-transform: uppercase;
-            animation: tickerGlow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.9);
+            letter-spacing: 0.8px; text-transform: uppercase;
         }
         .ticker-item:last-child { border-right: none; }
-        .ticker-item .emoji {
-            font-size: 26px;
-            margin-right: 10px;
-            display: inline-block;
-            animation: tickerBounce 0.8s ease-in-out infinite;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9));
-        }
-        @keyframes tickerGlow {
-            0% { text-shadow: 0 0 15px rgba(0, 212, 255, 0.9), 0 0 30px rgba(0, 212, 255, 0.5), 0 2px 4px rgba(0,0,0,0.8); }
-            100% { text-shadow: 0 0 25px rgba(0, 212, 255, 1), 0 0 50px rgba(0, 212, 255, 0.8), 0 2px 4px rgba(0,0,0,0.8); }
-        }
-        @keyframes tickerBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
+        .ticker-item .emoji { font-size: 26px; margin-right: 10px; }
 
-        .avisos-fixos {
-            display: none;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
+        .avisos-fixos { display: none; flex-direction: column; gap: 12px; margin-bottom: 20px; }
         .avisos-fixos.ativo { display: flex; }
         .aviso-fixo {
             background: linear-gradient(90deg, rgba(255, 145, 0, 0.25), rgba(255, 145, 0, 0.08), rgba(255, 145, 0, 0.25));
-            background-size: 200% 100%;
-            border: 2px solid #ff9100;
-            border-left: 8px solid #ff9100;
-            border-radius: 12px;
-            padding: 18px 24px;
-            font-size: 20px;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 10px rgba(255, 145, 0, 0.8), 0 2px 4px rgba(0,0,0,0.5);
+            border: 2px solid #ff9100; border-left: 8px solid #ff9100;
+            border-radius: 12px; padding: 18px 24px;
+            font-size: 20px; font-weight: 800; color: #fff;
             display: flex; align-items: center; gap: 16px;
-            animation: avisoPulse 2s ease-in-out infinite, avisoGlow 1.5s ease-in-out infinite alternate;
-            box-shadow: 0 0 20px rgba(255, 145, 0, 0.4), inset 0 0 20px rgba(255, 145, 0, 0.1);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 145, 0, 0.4);
+            position: relative; overflow: hidden;
         }
-        .aviso-fixo::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            animation: avisoShine 3s linear infinite;
-        }
-        @keyframes avisoPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.01); }
-        }
-        @keyframes avisoGlow {
-            0% { box-shadow: 0 0 20px rgba(255, 145, 0, 0.4), inset 0 0 20px rgba(255, 145, 0, 0.1); }
-            100% { box-shadow: 0 0 35px rgba(255, 145, 0, 0.8), inset 0 0 25px rgba(255, 145, 0, 0.2); }
-        }
-        @keyframes avisoShine {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        .aviso-fixo .icone {
-            font-size: 36px;
-            animation: avisoBounce 1s ease-in-out infinite;
-            flex-shrink: 0;
-            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
-        }
-        @keyframes avisoBounce {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            25% { transform: scale(1.2) rotate(-10deg); }
-            75% { transform: scale(1.2) rotate(10deg); }
-        }
-
+        .aviso-fixo .icone { font-size: 36px; flex-shrink: 0; }
         .aviso-fixo.tipo-urgente {
             background: linear-gradient(90deg, rgba(255, 23, 68, 0.3), rgba(255, 23, 68, 0.1), rgba(255, 23, 68, 0.3));
-            border-color: #ff1744;
-            border-left-color: #ff1744;
-            animation: avisoPulse 1s ease-in-out infinite, avisoUrgenteGlow 0.8s ease-in-out infinite alternate;
-        }
-        @keyframes avisoUrgenteGlow {
-            0% { box-shadow: 0 0 20px rgba(255, 23, 68, 0.5), inset 0 0 20px rgba(255, 23, 68, 0.15); }
-            100% { box-shadow: 0 0 40px rgba(255, 23, 68, 1), inset 0 0 30px rgba(255, 23, 68, 0.3); }
+            border-color: #ff1744; border-left-color: #ff1744;
         }
         .aviso-fixo.tipo-sucesso {
             background: linear-gradient(90deg, rgba(0, 200, 83, 0.25), rgba(0, 200, 83, 0.08), rgba(0, 200, 83, 0.25));
-            border-color: #00c853;
-            border-left-color: #00c853;
+            border-color: #00c853; border-left-color: #00c853;
         }
         .aviso-fixo.tipo-info {
             background: linear-gradient(90deg, rgba(0, 212, 255, 0.25), rgba(0, 212, 255, 0.08), rgba(0, 212, 255, 0.25));
-            border-color: #00d4ff;
-            border-left-color: #00d4ff;
+            border-color: #00d4ff; border-left-color: #00d4ff;
         }
 
         .legenda {
@@ -313,14 +186,8 @@
             padding: 12px 18px; background: #0f0f1a; border-radius: 12px;
             border: 1px solid #2a2a4a;
         }
-        .legenda-item {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 13px; color: #aaa;
-        }
-        .legenda-item .bolinha {
-            width: 12px; height: 12px; border-radius: 50%;
-            display: inline-block; flex-shrink: 0;
-        }
+        .legenda-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #aaa; }
+        .legenda-item .bolinha { width: 12px; height: 12px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
         .bolinha.verde { background: #00c853; }
         .bolinha.laranja { background: #ff9100; }
         .bolinha.vermelha { background: #ff1744; }
@@ -347,175 +214,100 @@
         .search-bar input::placeholder { color: #555; }
         .search-bar .qtd-resultados { color: #555; font-size: 13px; white-space: nowrap; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 16px;
-        }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
         .card {
             background: #12121f; border-radius: 14px; padding: 18px 20px;
-            border-left: 8px solid #555;
-            transition: all 0.3s ease;
+            border-left: 8px solid #555; transition: all 0.3s ease;
             border: 1px solid #1a1a2e;
         }
-        .card:hover {
-            transform: translateY(-3px); border-color: #2a2a4a;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-        }
-        
-        /* ===== BORDA VERDE GROSSA QUANDO ATUANDO ===== */
+        .card:hover { transform: translateY(-3px); border-color: #2a2a4a; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); }
         .card.aberto { 
-            border-left: 12px solid #00c853 !important;
-            border-color: #00c853 !important;
+            border-left: 12px solid #00c853 !important; border-color: #00c853 !important;
             box-shadow: 0 0 25px rgba(0, 200, 83, 0.35), inset 0 0 20px rgba(0, 200, 83, 0.05);
-        }
-        .card.aberto:hover {
-            box-shadow: 0 0 35px rgba(0, 200, 83, 0.5), inset 0 0 25px rgba(0, 200, 83, 0.08);
         }
         .card.alerta { border-left: 8px solid #ff9100; }
         .card.fechado { border-left: 8px solid #ff1744; }
         .card.indisponivel { border-left: 8px solid #555; opacity: 0.5; }
         .card.feriado { border-left: 8px solid #9c27b0; }
-        
-        /* ===== BORDA E COR DE ALMOÇO FORTE ===== */
         .card.almoco { 
-            border-left: 12px solid #ffab40 !important;
-            border-color: #ffab40 !important;
+            border-left: 12px solid #ffab40 !important; border-color: #ffab40 !important;
             background: linear-gradient(145deg, #1f1a12, #12121f) !important;
-            box-shadow: 0 0 25px rgba(255, 171, 64, 0.35), inset 0 0 20px rgba(255, 171, 64, 0.05);
-        }
-        .card.almoco:hover {
-            box-shadow: 0 0 35px rgba(255, 171, 64, 0.5), inset 0 0 25px rgba(255, 171, 64, 0.08);
+            box-shadow: 0 0 25px rgba(255, 171, 64, 0.35);
         }
         .card.excecao { border-left: 8px solid #00bcd4; }
         .card.reuniao { 
-            border-left: 12px solid #ff6b9d !important;
-            border-color: #ff6b9d !important;
+            border-left: 12px solid #ff6b9d !important; border-color: #ff6b9d !important;
             background: linear-gradient(145deg, #1f1218, #12121f) !important;
-            box-shadow: 0 0 25px rgba(255, 107, 157, 0.35), inset 0 0 20px rgba(255, 107, 157, 0.05);
-        }
-        .card.reuniao:hover {
-            box-shadow: 0 0 35px rgba(255, 107, 157, 0.5), inset 0 0 25px rgba(255, 107, 157, 0.08);
+            box-shadow: 0 0 25px rgba(255, 107, 157, 0.35);
         }
         .card.oculto { display: none; }
 
-        .card-header {
-            display: flex; justify-content: space-between;
-            align-items: flex-start; margin-bottom: 8px;
-        }
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
         .card-titulo { font-size: 16px; font-weight: 700; color: #fff; }
         .card-subtitulo { font-size: 12px; color: #666; margin-top: 2px; }
-        
         .card-horario {
-            font-size: 15px;
-            color: #aaa; 
-            margin: 10px 0;
+            font-size: 15px; color: #aaa; margin: 10px 0;
             display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
         }
-        .card-horario span:last-child {
-            font-size: 14px !important;
+        .badge-feriado { background: #9c27b0; color: #fff; font-size: 11px; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
+        .badge-almoco { background: #ffab40; color: #000; font-size: 11px; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
+        .badge-excecao { background: #00bcd4; color: #000; font-size: 11px; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
+        .badge-reuniao { background: #ff6b9d; color: #fff; font-size: 11px; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
+        .badge-transicao {
+            background: linear-gradient(90deg, #ff9100, #ffab40);
+            color: #000; font-size: 11px; padding: 2px 10px;
+            border-radius: 50px; font-weight: 800;
+            animation: pulseTransicao 1.5s ease-in-out infinite;
         }
-        
-        .badge-feriado {
-            background: #9c27b0; color: #fff; font-size: 11px;
-            padding: 2px 10px; border-radius: 50px; font-weight: 600;
-        }
-        .badge-almoco {
-            background: #ffab40; color: #000; font-size: 11px;
-            padding: 2px 10px; border-radius: 50px; font-weight: 600;
-        }
-        .badge-excecao {
-            background: #00bcd4; color: #000; font-size: 11px;
-            padding: 2px 10px; border-radius: 50px; font-weight: 600;
-        }
-        .badge-reuniao {
-            background: #ff6b9d; color: #fff; font-size: 11px;
-            padding: 2px 10px; border-radius: 50px; font-weight: 600;
+        @keyframes pulseTransicao {
+            0%,100% { box-shadow: 0 0 5px rgba(255,145,0,0.5); }
+            50% { box-shadow: 0 0 20px rgba(255,145,0,0.9); }
         }
 
-        .card-atendimento {
+        /* ===== NOVO: canais ativos ===== */
+        .card-canais {
             margin-top: 8px;
-            padding: 6px 10px;
-            border-radius: 8px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            border: 1px solid;
-        }
-        .card-atendimento.whatsapp {
-            background: rgba(37, 211, 102, 0.08);
-            border-color: rgba(37, 211, 102, 0.4);
-            color: #25d366;
-        }
-        .card-atendimento.telefonia {
-            background: rgba(33, 150, 243, 0.08);
-            border-color: rgba(33, 150, 243, 0.4);
-            color: #42a5f5;
-        }
-        .card-atendimento.ambos {
-            background: rgba(156, 39, 176, 0.08);
-            border-color: rgba(156, 39, 176, 0.4);
-            color: #ce93d8;
-        }
-        .card-atendimento.indisponivel {
-            background: rgba(85, 85, 85, 0.08);
-            border-color: rgba(85, 85, 85, 0.4);
-            color: #888;
-        }
-        .card-atendimento .atend-valor {
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .card-endereco {
-            margin-top: 6px;
-            padding: 6px 10px;
-            border-radius: 8px;
-            background: rgba(0, 212, 255, 0.06);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            font-size: 13px;
-            color: #8ab4d4;
-            display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             gap: 6px;
         }
-        .card-endereco .end-icone {
-            font-size: 16px;
-            flex-shrink: 0;
+        .canal-chip {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 5px 12px; border-radius: 50px;
+            font-size: 11px; font-weight: 700;
+            border: 1px solid; letter-spacing: 0.3px;
         }
-        .card-endereco .end-texto {
-            line-height: 1.3;
+        .canal-chip.ativo.whatsapp { background: rgba(37,211,102,0.15); border-color: #25d366; color: #25d366; }
+        .canal-chip.ativo.telefonia { background: rgba(33,150,243,0.15); border-color: #2196f3; color: #42a5f5; }
+        .canal-chip.inativo.whatsapp { background: rgba(37,211,102,0.03); border-color: rgba(37,211,102,0.2); color: rgba(37,211,102,0.4); text-decoration: line-through; }
+        .canal-chip.inativo.telefonia { background: rgba(33,150,243,0.03); border-color: rgba(33,150,243,0.2); color: rgba(33,150,243,0.4); text-decoration: line-through; }
+        .canal-chip .canal-hora { font-size: 10px; opacity: 0.85; margin-left: 2px; }
+
+        .card-endereco {
+            margin-top: 6px; padding: 6px 10px; border-radius: 8px;
+            background: rgba(0, 212, 255, 0.06);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            font-size: 13px; color: #8ab4d4;
+            display: flex; align-items: center; gap: 6px;
         }
+        .card-endereco .end-icone { font-size: 16px; flex-shrink: 0; }
 
         .alerta-overlay {
             display: none; position: fixed; inset: 0;
             background: rgba(0, 0, 0, 0.95); z-index: 9999;
             justify-content: center; align-items: center; padding: 20px;
-            animation: fadeInAlerta 0.3s ease;
         }
         .alerta-overlay.ativo { display: flex; }
-        @keyframes fadeInAlerta { from{opacity:0;} to{opacity:1;} }
         .alerta-box {
             background: linear-gradient(145deg, #1a1a2e, #12121f);
             border-radius: 24px; padding: 50px 60px; max-width: 700px; width: 100%;
             text-align: center; border: 3px solid #ff9100;
-            box-shadow: 0 0 80px rgba(255, 145, 0, 0.5), 0 20px 60px rgba(0, 0, 0, 0.9);
-            animation: pulseAlerta 1.5s infinite;
-        }
-        @keyframes pulseAlerta {
-            0%,100% { box-shadow: 0 0 80px rgba(255,145,0,0.5), 0 20px 60px rgba(0,0,0,0.9); transform: scale(1); }
-            50% { box-shadow: 0 0 120px rgba(255,145,0,0.8), 0 20px 60px rgba(0,0,0,0.9); transform: scale(1.02); }
+            box-shadow: 0 0 80px rgba(255, 145, 0, 0.5);
         }
         .alerta-box.tipo-almoco { border-color: #ffab40; }
         .alerta-box.tipo-reuniao { border-color: #ff6b9d; }
-        .alerta-icone { font-size: 90px; margin-bottom: 20px; animation: bounceAlerta 1s infinite; }
-        @keyframes bounceAlerta { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-15px);} }
+        .alerta-box.tipo-transicao { border-color: #ffab40; }
+        .alerta-icone { font-size: 90px; margin-bottom: 20px; }
         .alerta-titulo { font-size: 36px; font-weight: 800; color: #fff; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px; }
         .alerta-setor { font-size: 26px; font-weight: 700; color: #ffab40; margin-bottom: 15px; }
         .alerta-mensagem { font-size: 20px; color: #ccc; margin-bottom: 25px; line-height: 1.5; }
@@ -524,8 +316,7 @@
             background: #ff9100; color: #000; border: none;
             padding: 18px 50px; border-radius: 50px; font-size: 20px;
             font-weight: 800; cursor: pointer; transition: all 0.3s;
-            text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 8px 30px rgba(255, 145, 0, 0.5);
+            text-transform: uppercase;
         }
         .alerta-btn:hover { background: #ffab40; transform: scale(1.08); }
         .alerta-fila { margin-top: 20px; font-size: 14px; color: #888; }
@@ -540,24 +331,12 @@
             background: #1a1a2e; border-radius: 20px; padding: 30px;
             max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto;
             border: 1px solid #2a2a4a;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
         }
-        .modal-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 20px;
-        }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-header h2 { font-size: 22px; color: #fff; }
-        .modal-fechar {
-            background: none; border: none; color: #888;
-            font-size: 28px; cursor: pointer; transition: 0.3s;
-        }
+        .modal-fechar { background: none; border: none; color: #888; font-size: 28px; cursor: pointer; transition: 0.3s; }
         .modal-fechar:hover { color: #fff; transform: rotate(90deg); }
-
-        .modal-tabs {
-            display: flex; gap: 8px; margin-bottom: 20px;
-            border-bottom: 1px solid #2a2a4a; padding-bottom: 10px;
-            flex-wrap: wrap;
-        }
+        .modal-tabs { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid #2a2a4a; padding-bottom: 10px; flex-wrap: wrap; }
         .modal-tab {
             background: transparent; color: #888; border: none;
             padding: 10px 18px; border-radius: 10px; font-weight: 600;
@@ -567,7 +346,6 @@
         .modal-tab.ativo { background: #7b2ffc; color: #fff; }
         .modal-tab-content { display: none; }
         .modal-tab-content.ativo { display: block; }
-
         .modal h3 { color: #aaa; font-size: 15px; margin: 15px 0 8px 0; }
         .modal .info-ano {
             background: #0f0f1a; padding: 10px 15px; border-radius: 10px;
@@ -576,7 +354,6 @@
             flex-wrap: wrap; gap: 8px;
         }
         .modal .info-ano strong { color: #00d4ff; }
-
         .modal .feriado-item {
             display: flex; justify-content: space-between; align-items: center;
             background: #0f0f1a; padding: 8px 14px; border-radius: 8px;
@@ -584,34 +361,23 @@
         }
         .modal .feriado-item .data { font-weight: 600; color: #fff; font-size: 14px; }
         .modal .feriado-item .nome { color: #aaa; font-size: 13px; }
-        .modal .feriado-item .btn-remover {
+        .modal .feriado-item .btn-remover,
+        .modal .btn-adicionar-feriado {
             background: #ff1744; color: #fff; border: none;
             padding: 3px 12px; border-radius: 50px; cursor: pointer;
             font-size: 11px; transition: 0.3s;
         }
-        .modal .feriado-item .btn-remover:hover { background: #ff5252; }
-
-        .modal .btn-adicionar-feriado {
-            background: #00c853; color: #fff; border: none;
-            padding: 8px 20px; border-radius: 50px; cursor: pointer;
-            font-weight: 600; transition: 0.3s; margin-top: 8px;
-        }
+        .modal .btn-adicionar-feriado { background: #00c853; padding: 8px 20px; font-weight: 600; margin-top: 8px; font-size: 13px; }
         .modal .btn-adicionar-feriado:hover { background: #69f0ae; }
-
         .modal input, .modal select, .modal textarea {
             background: #0f0f1a; border: 1px solid #2a2a4a; color: #fff;
             padding: 10px 15px; border-radius: 10px; font-size: 14px;
-            width: 100%; margin-bottom: 8px;
-            font-family: inherit;
+            width: 100%; margin-bottom: 8px; font-family: inherit;
         }
-        .modal input:focus, .modal select:focus, .modal textarea:focus {
-            outline: none; border-color: #7b2ffc;
-        }
+        .modal input:focus, .modal select:focus, .modal textarea:focus { outline: none; border-color: #7b2ffc; }
         .modal textarea { resize: vertical; min-height: 60px; }
-
         .modal .form-row { display: flex; gap: 10px; flex-wrap: wrap; }
         .modal .form-row input, .modal .form-row select { flex: 1; min-width: 100px; }
-
         .modal .toggle-container {
             display: flex; align-items: center; gap: 15px;
             background: #0f0f1a; padding: 12px 16px; border-radius: 10px;
@@ -621,20 +387,10 @@
         .modal .toggle-container .toggle-status { font-weight: 600; font-size: 13px; }
         .modal .toggle-container .toggle-status.ativo { color: #00c853; }
         .modal .toggle-container .toggle-status.inativo { color: #ff1744; }
-
-        .switch {
-            position: relative; width: 44px; height: 24px;
-            background: #555; border-radius: 50px; cursor: pointer; transition: 0.3s;
-            flex-shrink: 0;
-        }
+        .switch { position: relative; width: 44px; height: 24px; background: #555; border-radius: 50px; cursor: pointer; transition: 0.3s; flex-shrink: 0; }
         .switch.ativo { background: #7b2ffc; }
-        .switch::after {
-            content: ''; position: absolute; top: 2px; left: 2px;
-            width: 20px; height: 20px; background: #fff;
-            border-radius: 50%; transition: 0.3s;
-        }
+        .switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: 0.3s; }
         .switch.ativo::after { left: 22px; }
-
         .modal .btn-salvar {
             background: #7b2ffc; color: #fff; border: none;
             padding: 12px 30px; border-radius: 50px; font-weight: 700;
@@ -642,26 +398,12 @@
             margin-top: 15px; font-size: 15px;
         }
         .modal .btn-salvar:hover { background: #9b5ffc; }
-
         .modal .btn-importar {
             background: #ff9100; color: #fff; border: none;
             padding: 6px 16px; border-radius: 50px; cursor: pointer;
             font-weight: 600; transition: 0.3s; margin-left: auto; font-size: 12px;
         }
-        .modal .btn-importar:hover { background: #ffab40; }
-
-        .modal #feriadoAtualInfo {
-            background: #0f0f1a; padding: 10px 16px; border-radius: 10px;
-            border: 1px solid #9c27b0; margin: 8px 0; display: none;
-        }
-        .modal #feriadoAtualInfo .btn-remover {
-            background: #ff1744; color: #fff; border: none;
-            padding: 2px 12px; border-radius: 50px; cursor: pointer;
-            font-size: 11px; margin-left: 10px;
-        }
-        .modal .texto-ajuda {
-            color: #666; font-size: 12px; margin-top: 10px; text-align: center;
-        }
+        .modal .texto-ajuda { color: #666; font-size: 12px; margin-top: 10px; text-align: center; }
 
         .excecao-item {
             background: #0f0f1a; padding: 12px 16px; border-radius: 10px;
@@ -669,27 +411,19 @@
             border-left: 4px solid #00bcd4;
         }
         .excecao-item.reuniao { border-left-color: #ff6b9d; }
-        .excecao-item .excecao-header {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-bottom: 6px;
-        }
+        .excecao-item .excecao-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
         .excecao-item .excecao-setor { font-weight: 700; color: #fff; font-size: 14px; }
         .excecao-item .excecao-data { font-size: 12px; color: #00d4ff; font-weight: 600; }
         .excecao-item .excecao-desc { font-size: 12px; color: #aaa; }
-        .excecao-item .excecao-tipo {
-            display: inline-block; font-size: 10px; padding: 2px 8px;
-            border-radius: 50px; margin-left: 6px; font-weight: 600;
-        }
+        .excecao-item .excecao-tipo { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 50px; margin-left: 6px; font-weight: 600; }
         .excecao-item .excecao-tipo.fechado { background: #ff1744; color: #fff; }
         .excecao-item .excecao-tipo.especial { background: #ffab40; color: #000; }
         .excecao-item .excecao-tipo.normal { background: #00c853; color: #fff; }
         .excecao-item .excecao-tipo.reuniao { background: #ff6b9d; color: #fff; }
         .excecao-item .btn-remover {
             background: #ff1744; color: #fff; border: none;
-            padding: 3px 12px; border-radius: 50px; cursor: pointer;
-            font-size: 11px; transition: 0.3s;
+            padding: 3px 12px; border-radius: 50px; cursor: pointer; font-size: 11px;
         }
-        .excecao-item .btn-remover:hover { background: #ff5252; }
 
         .seletor-setor { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
         .seletor-setor .setor-chip {
@@ -698,22 +432,15 @@
             cursor: pointer; transition: 0.3s;
         }
         .seletor-setor .setor-chip:hover { border-color: #7b2ffc; color: #fff; }
-        .seletor-setor .setor-chip.selecionado {
-            background: #7b2ffc; border-color: #7b2ffc; color: #fff;
-        }
+        .seletor-setor .setor-chip.selecionado { background: #7b2ffc; border-color: #7b2ffc; color: #fff; }
 
         .tipo-excecao-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
         .tipo-excecao-btns .tipo-btn {
             flex: 1; background: #0f0f1a; border: 2px solid #2a2a4a;
             color: #aaa; padding: 10px; border-radius: 10px;
-            font-size: 12px; font-weight: 600; cursor: pointer;
-            transition: 0.3s; min-width: 100px;
+            font-size: 12px; font-weight: 600; cursor: pointer; min-width: 100px;
         }
-        .tipo-excecao-btns .tipo-btn:hover { border-color: #7b2ffc; }
-        .tipo-excecao-btns .tipo-btn.selecionado {
-            border-color: #00d4ff; color: #00d4ff;
-            background: rgba(0, 212, 255, 0.1);
-        }
+        .tipo-excecao-btns .tipo-btn.selecionado { border-color: #00d4ff; color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
 
         .aviso-excecao {
             background: rgba(0, 188, 212, 0.1); border: 1px solid #00bcd4;
@@ -732,150 +459,88 @@
         .info-item .info-emoji { font-size: 20px; }
         .info-item .btn-remover {
             background: #ff1744; color: #fff; border: none;
-            padding: 4px 12px; border-radius: 50px; cursor: pointer;
-            font-size: 11px; transition: 0.3s; flex-shrink: 0;
+            padding: 4px 12px; border-radius: 50px; cursor: pointer; font-size: 11px;
         }
-        .info-item .btn-remover:hover { background: #ff5252; }
-
-        .info-emoji-picker {
-            display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;
-        }
+        .info-emoji-picker { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
         .info-emoji-picker .emoji-btn {
             background: #0f0f1a; border: 1px solid #2a2a4a;
             padding: 6px 10px; border-radius: 8px; cursor: pointer;
             font-size: 16px; transition: 0.3s;
         }
-        .info-emoji-picker .emoji-btn:hover { border-color: #00d4ff; }
-        .info-emoji-picker .emoji-btn.selecionado {
-            border-color: #00d4ff; background: rgba(0, 212, 255, 0.15);
-        }
-
+        .info-emoji-picker .emoji-btn.selecionado { border-color: #00d4ff; background: rgba(0, 212, 255, 0.15); }
         .info-tipo-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
         .info-tipo-btns .info-tipo-btn {
             flex: 1; background: #0f0f1a; border: 2px solid #2a2a4a;
             color: #aaa; padding: 8px; border-radius: 10px;
-            font-size: 12px; font-weight: 600; cursor: pointer;
-            transition: 0.3s; min-width: 100px;
+            font-size: 12px; font-weight: 600; cursor: pointer; min-width: 100px;
         }
-        .info-tipo-btns .info-tipo-btn:hover { border-color: #00d4ff; }
-        .info-tipo-btns .info-tipo-btn.selecionado {
-            border-color: #00d4ff; color: #00d4ff;
-            background: rgba(0, 212, 255, 0.1);
-        }
+        .info-tipo-btns .info-tipo-btn.selecionado { border-color: #00d4ff; color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
 
         .editor-horario-item {
             background: #0f0f1a; padding: 12px; border-radius: 10px;
             margin-bottom: 8px; border: 1px solid #2a2a4a;
             border-left: 3px solid #7b2ffc;
         }
-        .editor-dias {
-            display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;
-        }
+        .editor-horario-item.tel { border-left-color: #2196f3; }
+        .editor-horario-item.wpp { border-left-color: #25d366; }
+        .editor-horario-item.amb { border-left-color: #9c27b0; }
+
+        .editor-dias { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
         .editor-dias .dia-btn {
             background: #12121f; border: 1px solid #2a2a4a; color: #888;
             padding: 5px 12px; border-radius: 50px; font-size: 11px;
-            cursor: pointer; transition: 0.3s; font-weight: 600;
+            cursor: pointer; font-weight: 600;
         }
-        .editor-dias .dia-btn:hover { border-color: #7b2ffc; color: #fff; }
-        .editor-dias .dia-btn.selecionado {
-            background: #7b2ffc; border-color: #7b2ffc; color: #fff;
-        }
-        .editor-horario-item .linha-horas {
-            display: flex; gap: 8px; align-items: center;
-        }
-        .editor-horario-item .linha-horas input[type="time"] {
-            flex: 1; margin-bottom: 0;
-        }
+        .editor-dias .dia-btn.selecionado { background: #7b2ffc; border-color: #7b2ffc; color: #fff; }
+        .editor-horario-item .linha-horas { display: flex; gap: 8px; align-items: center; }
+        .editor-horario-item .linha-horas input[type="time"] { flex: 1; margin-bottom: 0; }
         .editor-horario-item .btn-remover-linha {
             background: #ff1744; color: #fff; border: none;
-            padding: 10px 14px; border-radius: 10px; cursor: pointer;
-            font-size: 14px; transition: 0.3s; flex-shrink: 0;
+            padding: 10px 14px; border-radius: 10px; cursor: pointer; font-size: 14px;
         }
-        .editor-horario-item .btn-remover-linha:hover { background: #ff5252; }
 
-        .editor-modo {
-            display: flex; gap: 6px; margin-top: 8px;
-            padding-top: 8px; border-top: 1px dashed #2a2a4a;
-        }
+        .editor-modo { display: flex; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #2a2a4a; }
         .editor-modo .modo-btn {
             flex: 1; background: #12121f; border: 2px solid #2a2a4a;
             color: #888; padding: 8px 6px; border-radius: 8px;
-            font-size: 11px; font-weight: 700; cursor: pointer;
-            transition: 0.3s; text-align: center; line-height: 1.3;
+            font-size: 11px; font-weight: 700; cursor: pointer; text-align: center; line-height: 1.3;
         }
-        .editor-modo .modo-btn:hover { border-color: #555; color: #fff; }
-        .editor-modo .modo-btn.selecionado.whatsapp {
-            border-color: #25d366; color: #25d366;
-            background: rgba(37, 211, 102, 0.1);
-            box-shadow: 0 0 10px rgba(37, 211, 102, 0.3);
-        }
-        .editor-modo .modo-btn.selecionado.telefonia {
-            border-color: #2196f3; color: #42a5f5;
-            background: rgba(33, 150, 243, 0.1);
-            box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
-        }
-        .editor-modo .modo-btn.selecionado.ambos {
-            border-color: #9c27b0; color: #ce93d8;
-            background: rgba(156, 39, 176, 0.1);
-            box-shadow: 0 0 10px rgba(156, 39, 176, 0.3);
-        }
-        .editor-modo .modo-btn .modo-emoji {
-            display: block; font-size: 16px; margin-bottom: 2px;
-        }
+        .editor-modo .modo-btn.selecionado.whatsapp { border-color: #25d366; color: #25d366; background: rgba(37, 211, 102, 0.1); }
+        .editor-modo .modo-btn.selecionado.telefonia { border-color: #2196f3; color: #42a5f5; background: rgba(33, 150, 243, 0.1); }
+        .editor-modo .modo-btn.selecionado.ambos { border-color: #9c27b0; color: #ce93d8; background: rgba(156, 39, 176, 0.1); }
+        .editor-modo .modo-btn .modo-emoji { display: block; font-size: 16px; margin-bottom: 2px; }
 
         .btn-add-linha {
             background: rgba(0, 188, 212, 0.15); color: #4dd0e1;
             border: 2px dashed #00bcd4; padding: 12px;
             border-radius: 10px; cursor: pointer; width: 100%;
-            font-weight: 600; transition: 0.3s; font-size: 13px;
-            margin-bottom: 10px;
+            font-weight: 600; font-size: 13px; margin-bottom: 10px;
         }
         .btn-add-linha:hover { background: rgba(0, 188, 212, 0.25); }
 
         .btn-salvar-setor {
             background: #7b2ffc; color: #fff; border: none;
             padding: 14px 30px; border-radius: 50px; font-weight: 700;
-            cursor: pointer; transition: 0.3s; width: 100%;
-            font-size: 14px; margin-top: 10px;
+            cursor: pointer; width: 100%; font-size: 14px; margin-top: 10px;
         }
-        .btn-salvar-setor:hover { background: #9b5ffc; }
-
         .btn-resetar-setor {
             background: #ff9100; color: #000; border: none;
             padding: 10px 20px; border-radius: 50px; font-weight: 700;
-            cursor: pointer; transition: 0.3s; width: 100%;
-            font-size: 12px; margin-top: 8px;
+            cursor: pointer; width: 100%; font-size: 12px; margin-top: 8px;
         }
-        .btn-resetar-setor:hover { background: #ffab40; }
 
         .preview-horario {
             background: rgba(0, 200, 83, 0.08); border: 1px solid #00c853;
             color: #69f0ae; padding: 10px 14px; border-radius: 10px;
             font-size: 12px; margin-top: 10px;
         }
-        .preview-horario strong { color: #00c853; }
 
         .endereco-editor {
             background: rgba(0, 212, 255, 0.06);
             border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 10px;
-            padding: 12px 14px;
-            margin-top: 10px;
+            border-radius: 10px; padding: 12px 14px; margin-top: 10px;
         }
-        .endereco-editor label {
-            color: #8ab4d4;
-            font-size: 12px;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 6px;
-        }
-        .endereco-editor input {
-            margin-bottom: 0;
-            border-color: rgba(0, 212, 255, 0.3);
-        }
-        .endereco-editor input:focus {
-            border-color: #00d4ff;
-        }
+        .endereco-editor label { color: #8ab4d4; font-size: 12px; font-weight: 600; display: block; margin-bottom: 6px; }
 
         @media (max-width: 600px) {
             .container { padding: 15px; }
@@ -883,23 +548,15 @@
             .relogio { font-size: 15px; padding: 6px 12px; }
             .grid { grid-template-columns: 1fr; }
             .legenda { flex-direction: column; gap: 4px; }
-            .info-hoje { font-size: 12px; flex-wrap: wrap; }
             .modal { padding: 20px; }
-            .search-bar { padding: 6px 12px; }
-            .search-bar input { font-size: 13px; }
             .alerta-box { padding: 30px 25px; }
             .alerta-titulo { font-size: 24px; }
             .alerta-setor { font-size: 18px; }
             .alerta-mensagem { font-size: 15px; }
             .alerta-icone { font-size: 60px; }
             .alerta-btn { font-size: 16px; padding: 14px 30px; }
-            .modal-tabs { flex-wrap: wrap; }
-            .modal-tab { padding: 8px 14px; font-size: 12px; }
             .ticker-item { font-size: 16px; padding: 0 30px; }
-            .ticker-item .emoji { font-size: 20px; }
             .aviso-fixo { font-size: 16px; padding: 14px 18px; }
-            .aviso-fixo .icone { font-size: 28px; }
-            .banner-feriado .titulo { font-size: 18px; }
         }
 
         ::-webkit-scrollbar { width: 6px; }
@@ -928,10 +585,7 @@
             <div class="conteudo" id="bannerFeriadoConteudo"></div>
         </div>
 
-        <div class="ticker-wrap" id="tickerWrap">
-            <div class="ticker" id="ticker"></div>
-        </div>
-
+        <div class="ticker-wrap" id="tickerWrap"><div class="ticker" id="ticker"></div></div>
         <div class="avisos-fixos" id="avisosFixos"></div>
 
         <div class="legenda">
@@ -993,22 +647,18 @@
                     <span id="qtdeFeriadosDisplay">0</span> feriados cadastrados
                     <button class="btn-importar" onclick="importarFeriadosAno()">🔄 Importar</button>
                 </div>
-
                 <h3>📅 Status do Dia</h3>
                 <div class="toggle-container">
                     <label>🌞 Hoje é feriado?</label>
                     <div class="switch" id="switchFeriado" onclick="toggleFeriadoGeral()"></div>
                     <span class="toggle-status" id="statusFeriadoGeral">Inativo</span>
                 </div>
-
                 <div id="feriadoAtualInfo">
                     <span style="color:#ce93d8;">🗓️ Feriado ativo: <strong id="nomeFeriadoAtual">-</strong></span>
                     <button class="btn-remover" onclick="removerFeriadoAtual()">Remover</button>
                 </div>
-
                 <h3>📋 Lista de Feriados (<span id="anoLista">2026</span>)</h3>
                 <div id="listaFeriados"></div>
-
                 <h3>➕ Adicionar Feriado</h3>
                 <div class="form-row">
                     <input type="date" id="inputDataFeriado">
@@ -1018,80 +668,53 @@
             </div>
 
             <div class="modal-tab-content" id="abaExcecoes">
-                <div class="aviso-excecao">
-                    ℹ️ <strong>Exceções por Data</strong> sobrescrevem o horário padrão do setor em uma data específica.
-                </div>
-
+                <div class="aviso-excecao">ℹ️ <strong>Exceções por Data</strong> sobrescrevem o horário padrão do setor em uma data específica.</div>
                 <h3>🔷 Exceções Cadastradas</h3>
                 <div id="listaExcecoes"></div>
-
                 <h3>➕ Adicionar Exceção</h3>
                 <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">1. Selecione o setor:</label>
                 <div class="seletor-setor" id="seletorSetorExcecao"></div>
-
                 <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">2. Data da exceção:</label>
                 <input type="date" id="inputDataExcecao">
-
                 <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">3. Tipo de exceção:</label>
                 <div class="tipo-excecao-btns">
-                    <button class="tipo-btn selecionado" data-tipo="fechado" onclick="selecionarTipoExcecao('fechado', this)">
-                        🚫 Fechado
-                    </button>
-                    <button class="tipo-btn" data-tipo="especial" onclick="selecionarTipoExcecao('especial', this)">
-                        ⏰ Horário Especial
-                    </button>
-                    <button class="tipo-btn" data-tipo="reuniao" onclick="selecionarTipoExcecao('reuniao', this)">
-                        📅 Reunião
-                    </button>
-                    <button class="tipo-btn" data-tipo="normal" onclick="selecionarTipoExcecao('normal', this)">
-                        ✅ Funciona Normal
-                    </button>
+                    <button class="tipo-btn selecionado" data-tipo="fechado" onclick="selecionarTipoExcecao('fechado', this)">🚫 Fechado</button>
+                    <button class="tipo-btn" data-tipo="especial" onclick="selecionarTipoExcecao('especial', this)">⏰ Horário Especial</button>
+                    <button class="tipo-btn" data-tipo="reuniao" onclick="selecionarTipoExcecao('reuniao', this)">📅 Reunião</button>
+                    <button class="tipo-btn" data-tipo="normal" onclick="selecionarTipoExcecao('normal', this)">✅ Funciona Normal</button>
                 </div>
-
                 <div id="camposHorarioEspecial" style="display:none;">
                     <div class="form-row">
                         <input type="time" id="inputAbreExcecao" value="09:00" step="60">
                         <input type="time" id="inputFechaExcecao" value="18:00" step="60">
                     </div>
                 </div>
-
                 <div id="camposReuniao" style="display:none;">
                     <div class="form-row">
-                        <input type="time" id="inputReuniaoInicio" value="14:00" step="60" title="Início da reunião">
-                        <input type="time" id="inputReuniaoFim" value="15:00" step="60" title="Fim da reunião">
+                        <input type="time" id="inputReuniaoInicio" value="14:00" step="60">
+                        <input type="time" id="inputReuniaoFim" value="15:00" step="60">
                     </div>
-                    <p style="color:#666;font-size:11px;margin:4px 0 8px 0;">
-                        ⏰ Informe o horário de início e fim da reunião
-                    </p>
                 </div>
-
                 <input type="text" id="inputObsExcecao" placeholder="Observação (opcional)">
                 <button class="btn-adicionar-feriado" onclick="adicionarExcecao()" style="background:#00bcd4;">➕ Adicionar Exceção</button>
             </div>
 
             <div class="modal-tab-content" id="abaSetores">
                 <div class="aviso-excecao">
-                    ℹ️ <strong>Edite os horários padrão</strong>, o <strong>modo de atendimento</strong> e o <strong>endereço</strong> de cada setor. As exceções por data sobrescrevem estes valores em dias específicos.
+                    ℹ️ Cada <strong>faixa de horário</strong> tem seu próprio <strong>modo de atendimento</strong>. Para o setor funcionar com Telefonia até 19h e WhatsApp até 22h, crie <strong>duas faixas</strong>: uma só com Telefonia (8-19h) e outra só com WhatsApp (8-22h).
                 </div>
-
                 <h3>🏢 Selecione o setor para editar:</h3>
                 <div class="seletor-setor" id="seletorSetorEditar"></div>
-
                 <div id="painelEditarSetor" style="display:none;">
-                    <div class="preview-horario" id="previewHorario">
-                        <strong>📋 Resumo atual:</strong> selecione um setor
-                    </div>
-
+                    <div class="preview-horario" id="previewHorario"><strong>📋 Resumo atual:</strong> selecione um setor</div>
                     <h3>⏰ Faixas de horário e modo de atendimento</h3>
                     <div id="horariosEditor"></div>
                     <button class="btn-add-linha" onclick="adicionarLinhaHorario()">➕ Adicionar faixa de horário</button>
-
                     <h3>📍 Endereço</h3>
                     <div class="endereco-editor">
                         <label>📍 Endereço da loja (deixe em branco para setores sem endereço):</label>
-                        <input type="text" id="inputEnderecoSetor" placeholder="Ex: Av. Rui Barbosa, n° 603 - Centro" onchange="atualizarPreviewEndereco()">
+                        <input type="text" id="inputEnderecoSetor" placeholder="Ex: Av. Rui Barbosa, n° 603 - Centro">
                     </div>
-
                     <h3>⚙️ Configurações extras</h3>
                     <div class="toggle-container">
                         <label>🍽️ Tem horário de almoço? (apenas seg-sex)</label>
@@ -1104,52 +727,35 @@
                             <input type="time" id="inputAlmocoFim" step="60">
                         </div>
                     </div>
-
                     <div class="toggle-container">
                         <label>🗓️ Funciona em feriados?</label>
                         <div class="switch" id="switchFuncionaFeriado" onclick="toggleFuncionaFeriadoEdicao()"></div>
                         <span class="toggle-status" id="statusFuncionaFeriado">Inativo</span>
                     </div>
-
                     <button class="btn-salvar-setor" onclick="salvarEdicaoSetor()">💾 Salvar alterações deste setor</button>
                     <button class="btn-resetar-setor" onclick="resetarSetorPadrao()">🔄 Restaurar padrão de fábrica</button>
                 </div>
             </div>
 
             <div class="modal-tab-content" id="abaInformativos">
-                <div class="aviso-excecao">
-                    ℹ️ <strong>Informativos</strong> aparecem na faixa rolante (ticker) no topo do painel,
-                    ou como avisos fixos destacados.
-                </div>
-
+                <div class="aviso-excecao">ℹ️ <strong>Informativos</strong> aparecem na faixa rolante (ticker) ou como avisos fixos.</div>
                 <h3>📢 Informativos Cadastrados</h3>
                 <div id="listaInformativos"></div>
-
                 <h3>➕ Adicionar Informativo</h3>
-
                 <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">1. Escolha um emoji:</label>
                 <div class="info-emoji-picker" id="infoEmojiPicker"></div>
-
                 <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">2. Texto do informativo:</label>
-                <textarea id="inputTextoInformativo" placeholder="Ex: Setores no feriado 12/10 estarão atuando das 9h às 22h"></textarea>
-
+                <textarea id="inputTextoInformativo" placeholder="Ex: Vendas atende WhatsApp até as 22h"></textarea>
                 <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">3. Tipo de exibição:</label>
                 <div class="info-tipo-btns">
-                    <button class="info-tipo-btn selecionado" data-tipo="ticker" onclick="selecionarTipoInformativo('ticker', this)">
-                        🎬 Ticker (rolante)
-                    </button>
-                    <button class="info-tipo-btn" data-tipo="fixo" onclick="selecionarTipoInformativo('fixo', this)">
-                        📌 Aviso fixo
-                    </button>
+                    <button class="info-tipo-btn selecionado" data-tipo="ticker" onclick="selecionarTipoInformativo('ticker', this)">🎬 Ticker (rolante)</button>
+                    <button class="info-tipo-btn" data-tipo="fixo" onclick="selecionarTipoInformativo('fixo', this)">📌 Aviso fixo</button>
                 </div>
-
                 <label style="color:#888;font-size:12px;display:block;margin-bottom:6px;">4. Período de exibição (opcional):</label>
                 <div class="form-row">
                     <input type="date" id="inputInfoDataInicio" title="Início">
                     <input type="date" id="infoDataFim" title="Fim">
                 </div>
-                <p style="color:#666;font-size:11px;margin-bottom:8px;">Deixe em branco para exibir sempre</p>
-
                 <button class="btn-adicionar-feriado" onclick="adicionarInformativo()" style="background:#00d4ff;color:#000;">➕ Adicionar Informativo</button>
             </div>
 
@@ -1195,7 +801,6 @@
                 { data: '25/12', nome: 'Natal' },
             ];
             fixos.forEach(f => feriados.push({ data: f.data, nome: f.nome, tipo: 'nacional' }));
-
             const pascoa = calcularPascoa(ano);
             const carnaval = new Date(pascoa); carnaval.setDate(pascoa.getDate() - 47);
             feriados.push({ data: `${String(carnaval.getDate()).padStart(2,'0')}/${String(carnaval.getMonth()+1).padStart(2,'0')}`, nome: 'Carnaval (Terça)', tipo: 'facultativo' });
@@ -1209,10 +814,118 @@
             feriados.push({ data: `${String(sexta.getDate()).padStart(2,'0')}/${String(sexta.getMonth()+1).padStart(2,'0')}`, nome: 'Sexta-feira Santa', tipo: 'nacional' });
             feriados.push({ data: '09/07', nome: 'Revolução Constitucionalista (SP)', tipo: 'estadual' });
             feriados.push({ data: '25/01', nome: 'Aniversário de São Paulo (SP)', tipo: 'municipal' });
-
             return feriados;
         }
 
+        // ============ SETORES PADRÃO COM FAIXAS SEPARADAS POR CANAL ============
+        const SETORES_PADRAO = [
+            {
+                id: 'cross', nome: '🔄 CROSS',
+                subtitulo: 'Mudança de Endereço | Alteração de Plano | Reativação',
+                canais: ['📞 Telefonia', '💬 WhatsApp'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 19, modo: 'telefonia' },
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 19, modo: 'whatsapp' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
+                semModo: false, endereco: ''
+            },
+            {
+                id: 'negociacao', nome: '💰 Negociação',
+                subtitulo: 'Acordos e Renegociação de Dívidas',
+                canais: ['📞 Telefonia', '💬 WhatsApp'],
+                horarios: [
+                    { dias: [1,2,3,4], abre: 8, fecha: 17.5, modo: 'telefonia' },
+                    { dias: [1,2,3,4], abre: 8, fecha: 17.5, modo: 'whatsapp' },
+                    { dias: [5], abre: 8, fecha: 16.5, modo: 'telefonia' },
+                    { dias: [5], abre: 8, fecha: 16.5, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
+                semModo: false, endereco: ''
+            },
+            {
+                id: 'cx-cancelamento', nome: '📋 CX Cancelamento LOGA/JAN',
+                subtitulo: 'Cancelamento & Retenção',
+                canais: ['📞 Telefonia', '💬 WhatsApp'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 9, fecha: 17, modo: 'telefonia' },
+                    { dias: [1,2,3,4,5], abre: 9, fecha: 17, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
+                semModo: false, endereco: ''
+            },
+            {
+                id: 'vendas', nome: '🛒 Vendas',
+                subtitulo: 'Novas Contratações e Planos',
+                canais: ['📞 Telefonia', '💬 WhatsApp Business'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 19, modo: 'telefonia' },
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 22, modo: 'whatsapp' },
+                    { dias: [6], abre: 10, fecha: 22, modo: 'whatsapp' },
+                    { dias: [0], abre: 12, fecha: 21, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: true, temAlmoco: false,
+                semModo: false, endereco: ''
+            },
+            {
+                id: 'loja-linhares', nome: '🏪 Loja Linhares',
+                subtitulo: 'Atendimento Presencial',
+                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'telefonia' },
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'whatsapp' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: false, endereco: 'Av. Rui Barbosa, n° 603 - Centro'
+            },
+            {
+                id: 'loja-teixeira', nome: '🏪 Loja Teixeira',
+                subtitulo: 'Atendimento Presencial',
+                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'telefonia' },
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'whatsapp' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: false, endereco: 'R. Teixeira de Freitas, 199 - Centro'
+            },
+            {
+                id: 'loja-sao-matheus', nome: '🏪 Loja São Matheus',
+                subtitulo: 'Atendimento Presencial',
+                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'telefonia' },
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'whatsapp' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: false, endereco: 'Av. José Tozzi, 2056 - Centro'
+            },
+            {
+                id: 'loja-itapua', nome: '🏪 Loja Itapuã',
+                subtitulo: 'Atendimento Presencial',
+                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                horarios: [
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 17.5, modo: 'telefonia' },
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 17.5, modo: 'whatsapp' }
+                ],
+                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
+                semModo: false, endereco: 'R. Juiz Alexandre Martins de Castro Filho, 6 - Itapuã, Vila Velha'
+            }
+        ];
+
+        let feriados = gerarFeriadosPorAno(ANO_ATUAL);
+        let feriadoManualAtivo = false;
+        let feriadoManualNome = '';
+        let alertasAtivos = false;
+        let excecoes = [];
+        let informativos = [];
+        let setores = JSON.parse(JSON.stringify(SETORES_PADRAO));
+
+        // ============ FIREBASE ============
         async function carregarConfiguracoes() {
             try {
                 const ref = window._firebase.doc(window._firebase.db, 'painel', 'config');
@@ -1221,9 +934,7 @@
                     const cfg = snap.data();
                     if (cfg.ano === ANO_ATUAL) return cfg;
                 }
-            } catch (e) {
-                console.error('Erro ao carregar do Firestore:', e);
-            }
+            } catch (e) { console.error('Erro ao carregar do Firestore:', e); }
             return null;
         }
 
@@ -1236,7 +947,8 @@
                 setores: setores,
                 excecoes: excecoes,
                 alertasAtivos: alertasAtivos,
-                informativos: informativos
+                informativos: informativos,
+                versao: 2 // marca como versão nova com canais separados
             };
         }
 
@@ -1244,114 +956,37 @@
             try {
                 const ref = window._firebase.doc(window._firebase.db, 'painel', 'config');
                 await window._firebase.setDoc(ref, montarConfigAtual());
-            } catch (e) {
-                console.error('Erro ao salvar no Firestore:', e);
-            }
+            } catch (e) { console.error('Erro ao salvar no Firestore:', e); }
         }
 
-        let feriados = gerarFeriadosPorAno(ANO_ATUAL);
-        let feriadoManualAtivo = false;
-        let feriadoManualNome = '';
-        let alertasAtivos = false;
-        let excecoes = [];
-        let informativos = [];
-
-        const SETORES_PADRAO = [
-            {
-                id: 'cross', nome: '🔄 CROSS',
-                subtitulo: 'Mudança de Endereço | Alteração de Plano | Reativação',
-                canais: ['📞 Telefonia', '💬 WhatsApp'],
-                horarios: [
-                    { dias: [1,2,3,4,5], abre: 8, fecha: 19, modo: 'ambos' },
-                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
-                ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
-                semModo: false, endereco: ''
-            },
-            {
-                id: 'negociacao', nome: '💰 Negociação',
-                subtitulo: 'Acordos e Renegociação de Dívidas',
-                canais: ['📞 Telefonia', '💬 WhatsApp'],
-                horarios: [
-                    { dias: [1,2,3,4], abre: 8, fecha: 17.5, modo: 'ambos' },
-                    { dias: [5], abre: 8, fecha: 16.5, modo: 'telefonia' }
-                ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
-                semModo: false, endereco: ''
-            },
-            {
-                id: 'cx-cancelamento', nome: '📋 CX Cancelamento LOGA/JAN',
-                subtitulo: 'Cancelamento & Retenção',
-                canais: ['📞 Telefonia', '💬 WhatsApp'],
-                horarios: [
-                    { dias: [1,2,3,4,5], abre: 9, fecha: 17, modo: 'ambos' }
-                ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
-                semModo: false, endereco: ''
-            },
-            {
-                id: 'vendas', nome: '🛒 Vendas',
-                subtitulo: 'Novas Contratações e Planos',
-                canais: ['📞 Telefonia', '💬 WhatsApp Business'],
-                horarios: [
-                    { dias: [1,2,3,4,5], abre: 8, fecha: 22, modo: 'ambos' },
-                    { dias: [6], abre: 10, fecha: 22, modo: 'ambos' },
-                    { dias: [0], abre: 12, fecha: 21, modo: 'whatsapp' }
-                ],
-                alertaMinutos: 30, funcionaEmFeriado: true, temAlmoco: false,
-                semModo: false, endereco: ''
-            },
-            {
-                id: 'loja-linhares', nome: '🏪 Loja Linhares',
-                subtitulo: 'Atendimento Presencial',
-                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
-                horarios: [
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'ambos' },
-                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
-                ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
-                semModo: true, endereco: 'Av. Rui Barbosa, n° 603 - Centro'
-            },
-            {
-                id: 'loja-teixeira', nome: '🏪 Loja Teixeira',
-                subtitulo: 'Atendimento Presencial',
-                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
-                horarios: [
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'ambos' },
-                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
-                ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
-                semModo: true, endereco: 'R. Teixeira de Freitas, 199 - Centro'
-            },
-            {
-                id: 'loja-sao-matheus', nome: '🏪 Loja São Matheus',
-                subtitulo: 'Atendimento Presencial',
-                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
-                horarios: [
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'ambos' },
-                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
-                ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
-                semModo: true, endereco: 'Av. José Tozzi, 2056 - Centro'
-            },
-            {
-                id: 'loja-itapua', nome: '🏪 Loja Itapuã',
-                subtitulo: 'Atendimento Presencial',
-                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
-                horarios: [
-                    { dias: [1,2,3,4,5], abre: 8, fecha: 17.5, modo: 'ambos' }
-                ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
-                semModo: true, endereco: 'R. Juiz Alexandre Martins de Castro Filho, 6 - Itapuã, Vila Velha'
-            }
-        ];
-
-        let setores = JSON.parse(JSON.stringify(SETORES_PADRAO));
-
+        // ============ HELPERS ============
         function dataParaStr(dateObj) {
             const dia = String(dateObj.getDate()).padStart(2, '0');
             const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
             return `${dia}/${mes}`;
+        }
+
+        function formatarHora(valor) {
+            const h = Math.floor(valor);
+            const m = Math.round((valor - h) * 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}h`;
+        }
+
+        function formatarHoraCurta(valor) {
+            const h = Math.floor(valor);
+            const m = Math.round((valor - h) * 60);
+            return `${h.toString().padStart(2, '0')}h${m ? String(m).padStart(2,'0') : ''}`;
+        }
+
+        function horaParaDecimal(str) {
+            const [h, m] = str.split(':').map(Number);
+            return h + (m / 60);
+        }
+
+        function decimalParaHoraStr(dec) {
+            const h = Math.floor(dec);
+            const m = Math.round((dec - h) * 60);
+            return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
         }
 
         function buscarExcecaoHoje(setorId) {
@@ -1361,36 +996,306 @@
 
         function infoEstaAtivo(info) {
             if (!info) return false;
-            const hoje = new Date();
-            hoje.setHours(0, 0, 0, 0);
-            if (info.dataInicio) {
-                const ini = new Date(info.dataInicio + 'T00:00:00');
-                if (hoje < ini) return false;
-            }
-            if (info.dataFim) {
-                const fim = new Date(info.dataFim + 'T23:59:59');
-                if (hoje > fim) return false;
-            }
+            const hoje = new Date(); hoje.setHours(0, 0, 0, 0);
+            if (info.dataInicio) { const ini = new Date(info.dataInicio + 'T00:00:00'); if (hoje < ini) return false; }
+            if (info.dataFim) { const fim = new Date(info.dataFim + 'T23:59:59'); if (hoje > fim) return false; }
             return true;
         }
 
         function detectarTipoAviso(texto) {
             const t = texto.toLowerCase();
-            if (t.includes('urgente') || t.includes('atenção') || t.includes('atencao') || 
-                t.includes('importante') || t.includes('emergência') || t.includes('emergencia') ||
-                t.includes('fechado') || t.includes('cancelado')) {
-                return 'tipo-urgente';
-            }
-            if (t.includes('ok') || t.includes('sucesso') || t.includes('liberado') || 
-                t.includes('funcionando') || t.includes('ativo')) {
-                return 'tipo-sucesso';
-            }
-            if (t.includes('info') || t.includes('novidade') || t.includes('aviso')) {
-                return 'tipo-info';
-            }
+            if (t.includes('urgente') || t.includes('atenção') || t.includes('importante') || t.includes('emergência')) return 'tipo-urgente';
+            if (t.includes('ok') || t.includes('sucesso') || t.includes('liberado') || t.includes('funcionando')) return 'tipo-sucesso';
+            if (t.includes('info') || t.includes('novidade') || t.includes('aviso')) return 'tipo-info';
             return '';
         }
 
+        function hojeEhFeriado() {
+            const agora = new Date();
+            const dataStr = dataParaStr(agora);
+            if (feriadoManualAtivo) return { data: dataStr, nome: feriadoManualNome || 'Feriado (manual)', manual: true };
+            const enc = feriados.find(f => f.data === dataStr);
+            if (enc) return { data: dataStr, nome: enc.nome, manual: false };
+            return null;
+        }
+
+        function nomeFeriado(fi) { return fi ? (fi.nome || 'Feriado') : ''; }
+
+        function calcularProximoDiaUtil(setor) {
+            const hoje = new Date();
+            const diaHoje = hoje.getDay();
+            const nomesDias = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+            for (let i = 1; i <= 7; i++) {
+                const proximoDia = (diaHoje + i) % 7;
+                const temHorario = setor.horarios.some(h => h.dias.includes(proximoDia));
+                if (temHorario) {
+                    if (i === 1) return 'amanhã';
+                    return `na ${nomesDias[proximoDia]}`;
+                }
+            }
+            return null;
+        }
+
+        // ============ NOVA LÓGICA: MÚLTIPLAS FAIXAS SIMULTÂNEAS ============
+        /**
+         * Retorna todas as faixas que casam com o dia de hoje
+         */
+        function getFaixasDoDia(setor, feriado) {
+            const dia = new Date().getDay();
+            const excecao = buscarExcecaoHoje(setor.id);
+
+            // Exceção especial sobrescreve tudo
+            if (excecao && excecao.tipo === 'especial') {
+                return [{
+                    dias: [0,1,2,3,4,5,6],
+                    abre: excecao.abre,
+                    fecha: excecao.fecha,
+                    modo: excecao.modo || 'ambos'
+                }];
+            }
+
+            let faixas = setor.horarios.filter(h => h.dias.includes(dia));
+
+            // Se feriado e o setor funciona em feriado mas não tem faixa no dia atual,
+            // usa as faixas de um dia útil como referência
+            if (faixas.length === 0 && feriado && setor.funcionaEmFeriado) {
+                faixas = setor.horarios.filter(h => h.dias.includes(1) || h.dias.includes(2) || h.dias.includes(3) || h.dias.includes(4) || h.dias.includes(5));
+            }
+            return faixas;
+        }
+
+        /**
+         * Analisa quais canais estão ativos AGORA e o modo combinado.
+         * Retorna: { modo, ativos: {whatsapp: bool, telefonia: bool}, faixasAtivas, proximaAbertura, proximoFechamento, faixaQueFechaAntes }
+         */
+        function calcularCanaisAgora(setor, feriado) {
+            const hora = new Date().getHours() + (new Date().getMinutes() / 60);
+            const faixas = getFaixasDoDia(setor, feriado);
+
+            const ativos = { whatsapp: false, telefonia: false };
+            const faixasAtivas = [];
+            let proximaAbertura = null;
+            let proximoFechamento = null;
+            let faixaQueFechaAntes = null;
+
+            for (const f of faixas) {
+                const canalWpp = f.modo === 'whatsapp' || f.modo === 'ambos';
+                const canalTel = f.modo === 'telefonia' || f.modo === 'ambos';
+
+                if (hora >= f.abre && hora <= f.fecha) {
+                    faixasAtivas.push(f);
+                    if (canalWpp) ativos.whatsapp = true;
+                    if (canalTel) ativos.telefonia = true;
+                    // Detectar a faixa que fecha primeiro (para alerta de transição)
+                    if (!proximoFechamento || f.fecha < proximoFechamento) {
+                        proximoFechamento = f.fecha;
+                        faixaQueFechaAntes = f;
+                    }
+                } else if (hora < f.abre) {
+                    if (!proximaAbertura || f.abre < proximaAbertura) proximaAbertura = f.abre;
+                }
+            }
+
+            // Modo combinado final
+            let modo = null;
+            if (ativos.whatsapp && ativos.telefonia) modo = 'ambos';
+            else if (ativos.whatsapp) modo = 'whatsapp';
+            else if (ativos.telefonia) modo = 'telefonia';
+
+            return {
+                modo,
+                ativos,
+                faixasAtivas,
+                proximaAbertura,
+                proximoFechamento,
+                faixaQueFechaAntes
+            };
+        }
+
+        /**
+         * Retorna descrição resumida do dia: "📞 até 19h · 💬 até 22h"
+         */
+        function descricaoFaixasDoDia(setor, feriado) {
+            const faixas = getFaixasDoDia(setor, feriado);
+            if (faixas.length === 0) return null;
+
+            // Agrupa por modo
+            const porModo = { telefonia: [], whatsapp: [], ambos: [] };
+            for (const f of faixas) {
+                const m = f.modo || 'ambos';
+                if (porModo[m]) porModo[m].push(f);
+            }
+
+            const partes = [];
+            if (porModo.ambos.length > 0) {
+                // pega a faixa mais ampla de "ambos"
+                const f = porModo.ambos.reduce((a, b) => (a.fecha >= b.fecha ? a : b));
+                partes.push(`📞💬 até ${formatarHoraCurta(f.fecha)}`);
+            }
+            if (porModo.telefonia.length > 0) {
+                const f = porModo.telefonia.reduce((a, b) => (a.fecha >= b.fecha ? a : b));
+                partes.push(`📞 até ${formatarHoraCurta(f.fecha)}`);
+            }
+            if (porModo.whatsapp.length > 0) {
+                const f = porModo.whatsapp.reduce((a, b) => (a.fecha >= b.fecha ? a : b));
+                partes.push(`💬 até ${formatarHoraCurta(f.fecha)}`);
+            }
+            return partes.join(' · ');
+        }
+
+        // ============ STATUS DO SETOR ============
+        function obterStatusSetor(setor) {
+            const agora = new Date();
+            const dia = agora.getDay();
+            const hora = agora.getHours() + (agora.getMinutes() / 60);
+            const feriado = hojeEhFeriado();
+            const excecao = buscarExcecaoHoje(setor.id);
+            const faixas = getFaixasDoDia(setor, feriado);
+
+            // -------- EXCEÇÕES --------
+            if (excecao) {
+                if (excecao.tipo === 'fechado') {
+                    return { status: 'excecao', mensagem: '🚫 Exceção: Sem expediente',
+                        descricao: excecao.obs || 'Data com exceção programada',
+                        cor: 'excecao', excecao, modo: null, canaisInfo: null };
+                }
+                if (excecao.tipo === 'reuniao') {
+                    const inicioReuniao = excecao.inicio || 14;
+                    const fimReuniao = excecao.fim || 15;
+                    if (hora >= inicioReuniao && hora < fimReuniao) {
+                        const minRestantes = Math.round((fimReuniao - hora) * 60);
+                        return { status: 'reuniao', mensagem: '📅 Setor em reunião',
+                            descricao: `Retorna em ${minRestantes} min (${formatarHora(fimReuniao)})`,
+                            cor: 'reuniao', excecao, modo: null, canaisInfo: null };
+                    }
+                    if (hora < inicioReuniao) {
+                        return { status: 'excecao',
+                            mensagem: `📅 Reunião às ${formatarHora(inicioReuniao)}`,
+                            descricao: `Reunião: ${formatarHora(inicioReuniao)} - ${formatarHora(fimReuniao)}`,
+                            cor: 'excecao', excecao, modo: null, canaisInfo: null };
+                    }
+                }
+                if (excecao.tipo === 'especial') {
+                    const { abre: abreEsp, fecha: fechaEsp } = excecao;
+                    const minAlerta = setor.alertaMinutos || 30;
+                    if (hora < abreEsp) {
+                        const min = Math.round((abreEsp - hora) * 60);
+                        if (min <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${min} min!`,
+                            descricao: `Horário especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`,
+                            cor: 'alerta', excecao, modo: excecao.modo || 'ambos', canaisInfo: null };
+                        return { status: 'excecao', mensagem: `🔷 Exceção: abre ${formatarHora(abreEsp)}`,
+                            descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`,
+                            cor: 'excecao', excecao, modo: excecao.modo || 'ambos', canaisInfo: null };
+                    }
+                    if (hora >= abreEsp && hora <= fechaEsp) {
+                        const minFechar = Math.round((fechaEsp - hora) * 60);
+                        if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`,
+                            descricao: `Especial até ${formatarHora(fechaEsp)}`,
+                            cor: 'alerta', excecao, modo: excecao.modo || 'ambos', canaisInfo: null };
+                        return { status: 'aberto', mensagem: '✅ Atuando (exceção)',
+                            descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`,
+                            cor: 'aberto', excecao, modo: excecao.modo || 'ambos', canaisInfo: null };
+                    }
+                    return { status: 'fechado', mensagem: '❌ Exceção encerrada',
+                        descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`,
+                        cor: 'fechado', excecao, modo: null, canaisInfo: null };
+                }
+            }
+
+            // -------- FERIADO --------
+            if (feriado && !setor.funcionaEmFeriado && (!excecao || excecao.tipo !== 'normal')) {
+                return { status: 'feriado', mensagem: `🗓️ Feriado: ${nomeFeriado(feriado)}`,
+                    descricao: 'Sem expediente hoje', cor: 'feriado', modo: null, canaisInfo: null };
+            }
+
+            // -------- SEM ATENDIMENTO NO DIA --------
+            if (faixas.length === 0) {
+                const proximoDia = calcularProximoDiaUtil(setor);
+                const desc = proximoDia ? `Sem atendimento — volta ${proximoDia}` : 'Sem atendimento neste dia';
+                return { status: 'indisponivel', mensagem: '❌ Indisponível hoje',
+                    descricao: desc, cor: 'indisponivel', modo: null, canaisInfo: null };
+            }
+
+            // -------- ALMOÇO --------
+            const ehDiaUtil = dia >= 1 && dia <= 5;
+            if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && ehDiaUtil) {
+                if (hora >= setor.almocoInicio && hora < setor.almocoFim) {
+                    const minVoltar = Math.round((setor.almocoFim - hora) * 60);
+                    return { status: 'almoco', mensagem: '🍽️ Horário de almoço',
+                        descricao: `Volta em ${minVoltar} min (${formatarHora(setor.almocoFim)})`,
+                        cor: 'almoco', modo: null, canaisInfo: null };
+                }
+            }
+
+            // -------- CÁLCULO DOS CANAIS ATIVOS AGORA --------
+            const canaisInfo = calcularCanaisAgora(setor, feriado);
+            const minAlerta = setor.alertaMinutos || 30;
+
+            // Aguardando abertura
+            if (canaisInfo.proximaAbertura != null && hora < canaisInfo.proximaAbertura) {
+                const minAbrir = Math.round((canaisInfo.proximaAbertura - hora) * 60);
+                if (minAbrir <= minAlerta) {
+                    return { status: 'alerta', mensagem: `⏰ Abre em ${minAbrir} min!`,
+                        descricao: 'Prepare-se para o início',
+                        cor: 'alerta', modo: canaisInfo.modo, canaisInfo };
+                }
+                return { status: 'fechado', mensagem: `⏳ Fechado - abre ${formatarHora(canaisInfo.proximaAbertura)}`,
+                    descricao: `Volta às ${formatarHora(canaisInfo.proximaAbertura)}`,
+                    cor: 'fechado', modo: null, canaisInfo };
+            }
+
+            // Tem algo aberto
+            if (canaisInfo.modo) {
+                const minFechar = Math.round((canaisInfo.proximoFechamento - hora) * 60);
+
+                // Verifica se ALGUM canal vai fechar em breve, mas outro continua
+                const faixasQueFechamBrevemente = [];
+                for (const f of canaisInfo.faixasAtivas) {
+                    const min = Math.round((f.fecha - hora) * 60);
+                    if (min <= minAlerta) faixasQueFechamBrevemente.push(f);
+                }
+                const vaiPerderCanal = faixasQueFechamBrevemente.some(f => {
+                    // O canal dessa faixa está presente em outra faixa ativa com fechamento posterior?
+                    const outros = canaisInfo.faixasAtivas.filter(x => x !== f);
+                    const mesmoCanalEmOutra = outros.some(x => {
+                        const wppX = x.modo === 'whatsapp' || x.modo === 'ambos';
+                        const telX = x.modo === 'telefonia' || x.modo === 'ambos';
+                        const wppF = f.modo === 'whatsapp' || f.modo === 'ambos';
+                        const telF = f.modo === 'telefonia' || f.modo === 'ambos';
+                        return (wppF && wppX) || (telF && telX);
+                    });
+                    return !mesmoCanalEmOutra && f.fecha > hora;
+                });
+
+                if (minFechar <= minAlerta) {
+                    if (vaiPerderCanal) {
+                        // Uma faixa vai fechar mas outra continua → transição
+                        const faixa = faixasQueFechamBrevemente[0];
+                        const canaisFechando = [];
+                        if (faixa.modo === 'telefonia' || faixa.modo === 'ambos') canaisFechando.push('📞 Telefonia');
+                        if (faixa.modo === 'whatsapp' || faixa.modo === 'ambos') canaisFechando.push('💬 WhatsApp');
+                        return { status: 'alerta',
+                            mensagem: `⏰ ${canaisFechando.join(' e ')} encerra em ${minFechar} min!`,
+                            descricao: `Até ${formatarHora(faixa.fecha)} — depois segue o restante`,
+                            cor: 'alerta', modo: canaisInfo.modo, canaisInfo, transicao: true };
+                    }
+                    return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`,
+                        descricao: `Últimos atendimentos até ${formatarHora(canaisInfo.proximoFechamento)}`,
+                        cor: 'alerta', modo: canaisInfo.modo, canaisInfo };
+                }
+                return { status: 'aberto', mensagem: '✅ Atuando normalmente',
+                    descricao: `Até ${formatarHora(canaisInfo.proximoFechamento)}`,
+                    cor: 'aberto', modo: canaisInfo.modo, canaisInfo };
+            }
+
+            // Nenhum canal aberto e não é antes da abertura → encerrado
+            const proximoDia = calcularProximoDiaUtil(setor);
+            return { status: 'fechado', mensagem: '❌ Expediente encerrado',
+                descricao: proximoDia ? `Volta ${proximoDia}` : 'Volta em breve',
+                cor: 'fechado', modo: null, canaisInfo };
+        }
+
+        // ============ RENDERIZAÇÃO ============
         function renderizarInformativos() {
             const ativos = informativos.filter(infoEstaAtivo);
             const tickerItens = ativos.filter(i => i.tipo === 'ticker');
@@ -1399,7 +1304,7 @@
             const tickerWrap = document.getElementById('tickerWrap');
             const ticker = document.getElementById('ticker');
             if (tickerItens.length > 0) {
-                const html = tickerItens.map(i => 
+                const html = tickerItens.map(i =>
                     `<span class="ticker-item"><span class="emoji">${i.emoji || '📢'}</span>${i.texto}</span>`
                 ).join('');
                 ticker.innerHTML = html + html;
@@ -1427,37 +1332,22 @@
         function renderizarBannerFeriado() {
             const banner = document.getElementById('bannerFeriado');
             const feriado = hojeEhFeriado();
-            
-            if (!feriado) {
-                banner.classList.remove('ativo');
-                return;
-            }
+            if (!feriado) { banner.classList.remove('ativo'); return; }
 
-            const funcionando = [];
-            const fechados = [];
-            const especiais = [];
-
+            const funcionando = [], fechados = [], especiais = [];
             setores.forEach(setor => {
                 const excecao = buscarExcecaoHoje(setor.id);
-                
                 if (excecao) {
-                    if (excecao.tipo === 'fechado') {
-                        fechados.push(setor.nome);
-                    } else if (excecao.tipo === 'especial') {
-                        const modoTxt = (excecao.modo && MODOS_ATENDIMENTO[excecao.modo] && !setor.semModo) ? ` [${MODOS_ATENDIMENTO[excecao.modo].emoji}]` : '';
+                    if (excecao.tipo === 'fechado') fechados.push(setor.nome);
+                    else if (excecao.tipo === 'especial') {
+                        const modoTxt = (excecao.modo && MODOS_ATENDIMENTO[excecao.modo]) ? ` [${MODOS_ATENDIMENTO[excecao.modo].emoji}]` : '';
                         especiais.push(`${setor.nome} (${formatarHora(excecao.abre)}-${formatarHora(excecao.fecha)})${modoTxt}`);
-                    } else if (excecao.tipo === 'normal') {
-                        funcionando.push(setor.nome);
-                    }
-                } else if (setor.funcionaEmFeriado) {
-                    funcionando.push(setor.nome);
-                } else {
-                    fechados.push(setor.nome);
-                }
+                    } else if (excecao.tipo === 'normal') funcionando.push(setor.nome);
+                } else if (setor.funcionaEmFeriado) funcionando.push(setor.nome);
+                else fechados.push(setor.nome);
             });
 
             let conteudo = '';
-            
             if (funcionando.length > 0) {
                 conteudo += `<div class="linha"><strong style="color:#69f0ae;">✅ Funcionando:</strong> `;
                 conteudo += funcionando.map(f => `<span class="chip-funcionando">${f}</span>`).join(' ');
@@ -1479,423 +1369,18 @@
             banner.classList.add('ativo');
         }
 
-        let filaAlertas = [], alertaAtual = null, alertasJaDisparados = {};
-        let audioContext = null, somInterval = null, somTimeout = null;
-        const DURACAO_SOM_ALERTA = DURACAO_ALERTA_SEGUNDOS * 1000;
-
-        function initAudioContext() {
-            if (!audioContext) {
-                try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
-            }
-            if (audioContext && audioContext.state === 'suspended') audioContext.resume();
-        }
-
-        function tocarBipe(freq = 880, dur = 0.3, vol = 0.3) {
-            if (!audioContext) return;
-            try {
-                const osc = audioContext.createOscillator();
-                const gain = audioContext.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                gain.gain.setValueAtTime(vol, audioContext.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + dur);
-                osc.connect(gain);
-                gain.connect(audioContext.destination);
-                osc.start(audioContext.currentTime);
-                osc.stop(audioContext.currentTime + dur);
-            } catch (e) {}
-        }
-
-        function iniciarSomAlerta() {
-            pararSomAlerta();
-            if (!audioContext) return;
-
-            const inicio = Date.now();
-
-            const tocarSequencia = () => {
-                if (Date.now() - inicio >= DURACAO_SOM_ALERTA) {
-                    pararSomAlerta();
-                    return;
-                }
-                tocarBipe(880, 0.15, 0.5);
-                setTimeout(() => tocarBipe(1100, 0.15, 0.5), 200);
-                setTimeout(() => tocarBipe(880, 0.15, 0.5), 400);
-            };
-
-            tocarSequencia();
-            somInterval = setInterval(tocarSequencia, 1500);
-
-            somTimeout = setTimeout(() => {
-                pararSomAlerta();
-            }, DURACAO_SOM_ALERTA);
-        }
-
-        function pararSomAlerta() {
-            if (somInterval) { clearInterval(somInterval); somInterval = null; }
-            if (somTimeout) { clearTimeout(somTimeout); somTimeout = null; }
-        }
-
-        function verificarAlertas() {
-            if (!alertasAtivos) return;
-            const agora = new Date();
-            const hora = agora.getHours() + (agora.getMinutes() / 60);
-
-            setores.forEach(setor => {
-                const statusInfo = obterStatusSetor(setor);
-                if (statusInfo.status !== 'alerta' && statusInfo.status !== 'almoco' && statusInfo.status !== 'reuniao') return;
-                const horarioHoje = getHorarioHoje(setor);
-                if (!horarioHoje) return;
-
-                let tipoAlerta, valor, mensagem;
-                if (statusInfo.status === 'almoco') {
-                    tipoAlerta = 'almoco';
-                    valor = Math.round(setor.almocoFim * 60);
-                    mensagem = `Iniciou o horário de almoço. Retorno às ${formatarHora(setor.almocoFim)}.`;
-                } else if (statusInfo.status === 'reuniao') {
-                    tipoAlerta = 'reuniao';
-                    valor = Math.round((statusInfo.excecao && statusInfo.excecao.fim ? statusInfo.excecao.fim : 0) * 60);
-                    mensagem = statusInfo.descricao;
-                } else {
-                    if (hora < horarioHoje.abre) {
-                        tipoAlerta = 'abertura';
-                        valor = Math.round(horarioHoje.abre * 60);
-                        mensagem = `Abre em breve às ${formatarHora(horarioHoje.abre)}!`;
-                    } else {
-                        tipoAlerta = 'fechamento';
-                        valor = Math.round(horarioHoje.fecha * 60);
-                        mensagem = `Fecha em breve às ${formatarHora(horarioHoje.fecha)}!`;
-                    }
-                }
-
-                const chave = `${setor.id}_${tipoAlerta}_${valor}_${new Date().toDateString()}`;
-                if (alertasJaDisparados[chave]) return;
-                alertasJaDisparados[chave] = true;
-                filaAlertas.push({ setor, status: statusInfo.status, tipo: tipoAlerta, mensagem });
-            });
-
-            if (!alertaAtual && filaAlertas.length > 0) exibirProximoAlerta();
-        }
-
-        function exibirProximoAlerta() {
-            if (filaAlertas.length === 0) { alertaAtual = null; return; }
-            alertaAtual = filaAlertas.shift();
-            const overlay = document.getElementById('alertaOverlay');
-            const box = document.getElementById('alertaBox');
-            const icone = document.getElementById('alertaIcone');
-            const titulo = document.getElementById('alertaTitulo');
-            const setorEl = document.getElementById('alertaSetor');
-            const mensagemEl = document.getElementById('alertaMensagem');
-            const tempoEl = document.getElementById('alertaTempo');
-            const filaEl = document.getElementById('alertaFila');
-            const btnEntendi = document.querySelector('.alerta-btn');
-
-            box.className = 'alerta-box';
-            if (alertaAtual.tipo === 'almoco') {
-                box.classList.add('tipo-almoco');
-                icone.textContent = '🍽️';
-                titulo.textContent = 'HORÁRIO DE ALMOÇO';
-            } else if (alertaAtual.tipo === 'reuniao') {
-                box.classList.add('tipo-reuniao');
-                icone.textContent = '📅';
-                titulo.textContent = 'SETOR EM REUNIÃO';
-            } else if (alertaAtual.tipo === 'abertura') {
-                icone.textContent = '⏰';
-                titulo.textContent = 'ABERTURA EM BREVE';
-            } else {
-                icone.textContent = '⚠️';
-                titulo.textContent = 'FECHAMENTO EM BREVE';
-            }
-
-            setorEl.textContent = alertaAtual.setor.nome;
-            mensagemEl.textContent = alertaAtual.mensagem;
-            filaEl.textContent = filaAlertas.length > 0 ? `+ ${filaAlertas.length} alerta(s) na fila` : '';
-
-            overlay.classList.add('ativo');
-            initAudioContext();
-            iniciarSomAlerta();
-            tentarTelaCheia();
-
-            let segundosRestantes = DURACAO_ALERTA_SEGUNDOS;
-            tempoEl.textContent = `🕐 Fechando em ${segundosRestantes}s...`;
-            btnEntendi.textContent = `✅ ENTENDI (${segundosRestantes}s)`;
-
-            if (window._alertaTempoInterval) clearInterval(window._alertaTempoInterval);
-            window._alertaTempoInterval = setInterval(() => {
-                if (!alertaAtual) return;
-                segundosRestantes--;
-                if (segundosRestantes <= 0) {
-                    clearInterval(window._alertaTempoInterval);
-                    window._alertaTempoInterval = null;
-                    fecharAlerta();
-                    return;
-                }
-                tempoEl.textContent = `🕐 Fechando em ${segundosRestantes}s...`;
-                btnEntendi.textContent = `✅ ENTENDI (${segundosRestantes}s)`;
-            }, 1000);
-
-            if (window._alertaAutoFecharTimeout) clearTimeout(window._alertaAutoFecharTimeout);
-            window._alertaAutoFecharTimeout = setTimeout(() => {
-                if (alertaAtual) fecharAlerta();
-            }, DURACAO_SOM_ALERTA);
-        }
-
-        function tentarTelaCheia() {
-            try {
-                const el = document.documentElement;
-                if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-            } catch (e) {}
-        }
-
-        function sairTelaCheia() {
-            try {
-                if (document.fullscreenElement) {
-                    if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-                }
-            } catch (e) {}
-        }
-
-        function fecharAlerta() {
-            pararSomAlerta();
-            if (window._alertaTempoInterval) {
-                clearInterval(window._alertaTempoInterval);
-                window._alertaTempoInterval = null;
-            }
-            if (window._alertaAutoFecharTimeout) {
-                clearTimeout(window._alertaAutoFecharTimeout);
-                window._alertaAutoFecharTimeout = null;
-            }
-            document.getElementById('alertaOverlay').classList.remove('ativo');
-            sairTelaCheia();
-            alertaAtual = null;
-            setTimeout(() => { if (filaAlertas.length > 0) exibirProximoAlerta(); }, 400);
-        }
-
-        function toggleAlertas() {
-            alertasAtivos = !alertasAtivos;
-            const btn = document.getElementById('btnAlerta');
-            if (alertasAtivos) {
-                btn.textContent = '🔔 Alertas: ON';
-                btn.classList.add('ativo');
-                initAudioContext();
-                verificarAlertas();
-            } else {
-                btn.textContent = '🔔 Alertas: OFF';
-                btn.classList.remove('ativo');
-                pararSomAlerta();
-                if (alertaAtual) fecharAlerta();
-                filaAlertas = [];
-            }
-            salvarConfiguracoesNoStorage();
-        }
-
-        function resetDiarioAlertas() {
-            const agora = new Date();
-            const prox = new Date(agora);
-            prox.setHours(24, 0, 0, 0);
-            setTimeout(() => {
-                alertasJaDisparados = {};
-                resetDiarioAlertas();
-            }, prox - agora);
-        }
-
-        function hojeEhFeriado() {
-            const agora = new Date();
-            const dataStr = dataParaStr(agora);
-            if (feriadoManualAtivo) return { data: dataStr, nome: feriadoManualNome || 'Feriado (manual)', manual: true };
-            const enc = feriados.find(f => f.data === dataStr);
-            if (enc) return { data: dataStr, nome: enc.nome, manual: false };
-            return null;
-        }
-
-        function nomeFeriado(fi) { return fi ? (fi.nome || 'Feriado') : ''; }
-
-        function formatarHora(valor) {
-            const h = Math.floor(valor);
-            const m = Math.round((valor - h) * 60);
-            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}h`;
-        }
-
-        function horaParaDecimal(str) {
-            const [h, m] = str.split(':').map(Number);
-            return h + (m / 60);
-        }
-
-        function decimalParaHoraStr(dec) {
-            const h = Math.floor(dec);
-            const m = Math.round((dec - h) * 60);
-            return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-        }
-
-        function calcularProximoDiaUtil(setor) {
-            const hoje = new Date();
-            const diaHoje = hoje.getDay();
-            const nomesDias = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
-            
-            for (let i = 1; i <= 7; i++) {
-                const proximoDia = (diaHoje + i) % 7;
-                const temHorario = setor.horarios.some(h => h.dias.includes(proximoDia));
-                
-                if (temHorario) {
-                    if (i === 1) return 'amanhã';
-                    return `na ${nomesDias[proximoDia]}`;
-                }
-            }
-            return null;
-        }
-
-        function getModoAtendimentoHoje(setor) {
-            if (setor.semModo) return null;
-
-            const excecao = buscarExcecaoHoje(setor.id);
-            
-            if (excecao && excecao.tipo === 'especial' && excecao.modo) {
-                return excecao.modo;
-            }
-            
-            const horarioHoje = getHorarioHoje(setor);
-            if (!horarioHoje) return null;
-            
-            return horarioHoje.modo || 'ambos';
-        }
-
-        function obterStatusSetor(setor) {
-            const agora = new Date();
-            const dia = agora.getDay();
-            const hora = agora.getHours() + (agora.getMinutes() / 60);
-            const feriado = hojeEhFeriado();
-            const excecao = buscarExcecaoHoje(setor.id);
-            const modo = getModoAtendimentoHoje(setor);
-
-            if (excecao) {
-                if (excecao.tipo === 'fechado') {
-                    return { status: 'excecao', mensagem: '🚫 Exceção: Sem expediente', descricao: excecao.obs || 'Data com exceção programada', cor: 'excecao', excecao, modo: null };
-                }
-                if (excecao.tipo === 'reuniao') {
-                    const inicioReuniao = excecao.inicio || 14;
-                    const fimReuniao = excecao.fim || 15;
-                    if (hora >= inicioReuniao && hora < fimReuniao) {
-                        const minRestantes = Math.round((fimReuniao - hora) * 60);
-                        return { 
-                            status: 'reuniao', 
-                            mensagem: '📅 Setor em reunião', 
-                            descricao: `Retorna em ${minRestantes} min (${formatarHora(fimReuniao)})`, 
-                            cor: 'reuniao', 
-                            excecao, 
-                            modo: null 
-                        };
-                    }
-                    if (hora < inicioReuniao) {
-                        return { 
-                            status: 'excecao', 
-                            mensagem: `📅 Reunião às ${formatarHora(inicioReuniao)}`, 
-                            descricao: `Reunião: ${formatarHora(inicioReuniao)} - ${formatarHora(fimReuniao)}`, 
-                            cor: 'excecao', 
-                            excecao,
-                            modo: modo
-                        };
-                    }
-                }
-                if (excecao.tipo === 'especial') {
-                    const { abre: abreEsp, fecha: fechaEsp } = excecao;
-                    const minAlerta = setor.alertaMinutos || 30;
-                    const modoEsp = excecao.modo || modo;
-                    if (hora < abreEsp) {
-                        const min = Math.round((abreEsp - hora) * 60);
-                        if (min <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${min} min!`, descricao: `Horário especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'alerta', excecao, modo: modoEsp };
-                        return { status: 'excecao', mensagem: `🔷 Exceção: abre ${formatarHora(abreEsp)}`, descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'excecao', excecao, modo: modoEsp };
-                    }
-                    if (hora >= abreEsp && hora <= fechaEsp) {
-                        const minFechar = Math.round((fechaEsp - hora) * 60);
-                        if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`, descricao: `Especial até ${formatarHora(fechaEsp)}`, cor: 'alerta', excecao, modo: modoEsp };
-                        return { status: 'aberto', mensagem: '✅ Atuando (exceção)', descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'aberto', excecao, modo: modoEsp };
-                    }
-                    return { status: 'fechado', mensagem: '❌ Exceção encerrada', descricao: `Especial: ${formatarHora(abreEsp)} - ${formatarHora(fechaEsp)}`, cor: 'fechado', excecao, modo: null };
-                }
-            }
-
-            if (feriado && !setor.funcionaEmFeriado && (!excecao || excecao.tipo !== 'normal')) {
-                return { status: 'feriado', mensagem: `🗓️ Feriado: ${nomeFeriado(feriado)}`, descricao: 'Sem expediente hoje', cor: 'feriado', modo: null };
-            }
-
-            let horarioHoje = null;
-            for (const h of setor.horarios) {
-                if (h.dias.includes(dia)) { horarioHoje = h; break; }
-            }
-            if (!horarioHoje) {
-                if (feriado && setor.funcionaEmFeriado) {
-                    for (const h of setor.horarios) {
-                        if (h.dias.includes(1) || h.dias.includes(2) || h.dias.includes(3) || h.dias.includes(4) || h.dias.includes(5)) {
-                            horarioHoje = h; break;
-                        }
-                    }
-                }
-                if (!horarioHoje) {
-                    const proximoDia = calcularProximoDiaUtil(setor);
-                    const desc = proximoDia ? `Sem atendimento — volta ${proximoDia}` : 'Sem atendimento neste dia';
-                    return { status: 'indisponivel', mensagem: '❌ Indisponível hoje', descricao: desc, cor: 'indisponivel', modo: null };
-                }
-            }
-
-            const { abre, fecha } = horarioHoje;
-            const minAlerta = setor.alertaMinutos || 30;
-
-            const ehDiaUtil = dia >= 1 && dia <= 5;
-            if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && ehDiaUtil) {
-                if (hora >= setor.almocoInicio && hora < setor.almocoFim) {
-                    const minVoltar = Math.round((setor.almocoFim - hora) * 60);
-                    return { status: 'almoco', mensagem: '🍽️ Horário de almoço', descricao: `Volta em ${minVoltar} min (${formatarHora(setor.almocoFim)})`, cor: 'almoco', modo: null };
-                }
-            }
-
-            if (hora >= abre && hora <= fecha) {
-                const minFechar = Math.round((fecha - hora) * 60);
-                if (minFechar <= minAlerta) return { status: 'alerta', mensagem: `⚠️ Fecha em ${minFechar} min!`, descricao: `Últimos atendimentos até ${formatarHora(fecha)}`, cor: 'alerta', modo };
-                return { status: 'aberto', mensagem: '✅ Atuando normalmente', descricao: `Até ${formatarHora(fecha)}`, cor: 'aberto', modo };
-            }
-
-            if (hora < abre) {
-                const minAbrir = Math.round((abre - hora) * 60);
-                if (minAbrir <= minAlerta) return { status: 'alerta', mensagem: `⏰ Abre em ${minAbrir} min!`, descricao: 'Prepare-se para o início', cor: 'alerta', modo };
-                return { status: 'fechado', mensagem: `⏳ Fechado - abre ${formatarHora(abre)}`, descricao: `Volta às ${formatarHora(abre)}`, cor: 'fechado', modo };
-            }
-
-            const proximoDia = calcularProximoDiaUtil(setor);
-            return { 
-                status: 'fechado', 
-                mensagem: '❌ Expediente encerrado', 
-                descricao: proximoDia ? `Volta ${proximoDia}` : 'Volta em breve', 
-                cor: 'fechado', 
-                modo: null 
-            };
-        }
-
-        function getHorarioHoje(setor) {
-            const dia = new Date().getDay();
-            const feriado = hojeEhFeriado();
-            const excecao = buscarExcecaoHoje(setor.id);
-            if (excecao && excecao.tipo === 'especial') return { dias: [0,1,2,3,4,5,6], abre: excecao.abre, fecha: excecao.fecha, modo: excecao.modo || 'ambos' };
-            if (feriado && setor.funcionaEmFeriado) {
-                for (const h of setor.horarios) {
-                    if (h.dias.includes(1) || h.dias.includes(2) || h.dias.includes(3) || h.dias.includes(4) || h.dias.includes(5)) return h;
-                }
-            }
-            for (const h of setor.horarios) if (h.dias.includes(dia)) return h;
-            return null;
-        }
-
-        // ===== RENDERIZAÇÃO OTIMIZADA DO CARD COM INDICAÇÃO FORTE DE ALMOÇO E ABERTO =====
         function renderizarCard(setor) {
             const statusInfo = obterStatusSetor(setor);
-            const horarioHoje = getHorarioHoje(setor);
             const feriado = hojeEhFeriado();
             const excecaoHoje = buscarExcecaoHoje(setor.id);
-            const modoAtual = statusInfo.modo;
 
+            // Linha de horário: descreve faixas do dia
             let horarioTexto = '📅 Indisponível hoje';
-            if (horarioHoje) horarioTexto = `🕐 ${formatarHora(horarioHoje.abre)} - ${formatarHora(horarioHoje.fecha)}`;
-            if (statusInfo.status === 'feriado') horarioTexto = `🗓️ ${statusInfo.mensagem}`;
+            const faixasHoje = getFaixasDoDia(setor, feriado);
+            if (faixasHoje.length > 0) {
+                const desc = descricaoFaixasDoDia(setor, feriado);
+                if (desc) horarioTexto = `🕐 ${desc}`;
+            }
             if (excecaoHoje && excecaoHoje.tipo === 'fechado') horarioTexto = '🚫 Sem expediente (exceção)';
             if (excecaoHoje && excecaoHoje.tipo === 'reuniao') {
                 horarioTexto = `📅 Reunião: ${formatarHora(excecaoHoje.inicio || 14)} - ${formatarHora(excecaoHoje.fim || 15)}`;
@@ -1910,45 +1395,54 @@
             if (feriado && feriado.manual) badgeExtra = '<span class="badge-feriado">⚠️ Manual</span>';
             else if (feriado && statusInfo.status !== 'feriado' && !excecaoHoje) badgeExtra = '<span class="badge-feriado">Funciona em feriado</span>';
             if (excecaoHoje) {
-                if (excecaoHoje.tipo === 'reuniao') {
-                    badgeExtra += `<span class="badge-reuniao">📅 Reunião</span>`;
-                } else {
-                    badgeExtra += `<span class="badge-excecao">🔷 Exceção: ${excecaoHoje.tipo}</span>`;
-                }
+                if (excecaoHoje.tipo === 'reuniao') badgeExtra += `<span class="badge-reuniao">📅 Reunião</span>`;
+                else badgeExtra += `<span class="badge-excecao">🔷 Exceção: ${excecaoHoje.tipo}</span>`;
             }
             const diaSemanaHoje = new Date().getDay();
             const ehDiaUtilHoje = diaSemanaHoje >= 1 && diaSemanaHoje <= 5;
             if (setor.temAlmoco && setor.almocoInicio && setor.almocoFim && ehDiaUtilHoje && (!excecaoHoje || excecaoHoje.tipo !== 'fechado')) {
                 badgeExtra += `<span class="badge-almoco">🍽️ Almoço: ${formatarHora(setor.almocoInicio)}-${formatarHora(setor.almocoFim)}</span>`;
             }
+            if (statusInfo.transicao) {
+                badgeExtra += `<span class="badge-transicao">🔔 Transição de canal</span>`;
+            }
 
-            // Caixa compacta de atendimento
-            let atendimentoHtml = '';
-            if (!setor.semModo) {
-                if (modoAtual) {
-                    const info = MODOS_ATENDIMENTO[modoAtual];
-                    atendimentoHtml = `
-                        <div class="card-atendimento ${info.cor}">
-                            <span class="atend-valor">${info.emoji} ${info.label}</span>
-                        </div>
-                    `;
-                } else {
-                    atendimentoHtml = `
-                        <div class="card-atendimento indisponivel">
-                            <span class="atend-valor">🚫 Sem atendimento</span>
-                        </div>
-                    `;
+            // ===== Canais ativos =====
+            let canaisHtml = '';
+            if (faixasHoje.length > 0 || statusInfo.canaisInfo) {
+                // Descobre todos os canais possíveis hoje
+                let temWppHoje = false;
+                let temTelHoje = false;
+                for (const f of faixasHoje) {
+                    if (f.modo === 'whatsapp' || f.modo === 'ambos') temWppHoje = true;
+                    if (f.modo === 'telefonia' || f.modo === 'ambos') temTelHoje = true;
                 }
+                const info = statusInfo.canaisInfo;
+                const wppAtivo = info ? info.ativos.whatsapp : false;
+                const telAtivo = info ? info.ativos.telefonia : false;
+
+                // Horário final do WhatsApp hoje e da Telefonia hoje
+                let fechaWpp = null, fechaTel = null;
+                for (const f of faixasHoje) {
+                    if ((f.modo === 'whatsapp' || f.modo === 'ambos') && (fechaWpp === null || f.fecha > fechaWpp)) fechaWpp = f.fecha;
+                    if ((f.modo === 'telefonia' || f.modo === 'ambos') && (fechaTel === null || f.fecha > fechaTel)) fechaTel = f.fecha;
+                }
+
+                const chips = [];
+                if (temWppHoje) {
+                    const cls = wppAtivo ? 'ativo' : 'inativo';
+                    chips.push(`<span class="canal-chip ${cls} whatsapp">💬 WhatsApp <span class="canal-hora">${fechaWpp != null ? 'até ' + formatarHoraCurta(fechaWpp) : ''}</span></span>`);
+                }
+                if (temTelHoje) {
+                    const cls = telAtivo ? 'ativo' : 'inativo';
+                    chips.push(`<span class="canal-chip ${cls} telefonia">📞 Telefonia <span class="canal-hora">${fechaTel != null ? 'até ' + formatarHoraCurta(fechaTel) : ''}</span></span>`);
+                }
+                if (chips.length > 0) canaisHtml = `<div class="card-canais">${chips.join('')}</div>`;
             }
 
             let enderecoHtml = '';
             if (setor.endereco && setor.endereco.trim() !== '') {
-                enderecoHtml = `
-                    <div class="card-endereco">
-                        <span class="end-icone">📍</span>
-                        <span class="end-texto">${setor.endereco}</span>
-                    </div>
-                `;
+                enderecoHtml = `<div class="card-endereco"><span class="end-icone">📍</span><span class="end-texto">${setor.endereco}</span></div>`;
             }
 
             return `
@@ -1965,25 +1459,22 @@
                         <span style="font-size:14px;color:#666;">${infoDia}</span>
                         ${badgeExtra}
                     </div>
-                    ${atendimentoHtml}
+                    ${canaisHtml}
                     ${enderecoHtml}
                 </div>
             `;
         }
 
-        // ===== OTIMIZAÇÃO: SÓ ATUALIZA O CARD SE O STATUS MUDOU =====
         let cacheCards = {};
 
         function renderizarTodos() {
             const grid = document.getElementById('gridSetores');
-            
             setores.forEach(setor => {
                 const statusInfo = obterStatusSetor(setor);
                 const chaveStatus = `${statusInfo.status}_${statusInfo.mensagem}_${statusInfo.descricao}_${statusInfo.modo || 'sem'}_${hojeEhFeriado()?.nome || 'sem'}`;
 
                 if (cacheCards[setor.id] !== chaveStatus) {
                     cacheCards[setor.id] = chaveStatus;
-                    
                     let cardEl = document.getElementById(`card_${setor.id}`);
                     if (!cardEl) {
                         const tempDiv = document.createElement('div');
@@ -2008,7 +1499,6 @@
                     delete cacheCards[id];
                 }
             });
-
             atualizarContador();
         }
 
@@ -2054,14 +1544,195 @@
             document.getElementById('infoHoje').innerHTML = texto;
         }
 
+        // ============ ALERTAS ============
+        let filaAlertas = [], alertaAtual = null, alertasJaDisparados = {};
+        let audioContext = null, somInterval = null, somTimeout = null;
+        const DURACAO_SOM_ALERTA = DURACAO_ALERTA_SEGUNDOS * 1000;
+
+        function initAudioContext() {
+            if (!audioContext) {
+                try { audioContext = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+            }
+            if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+        }
+
+        function tocarBipe(freq = 880, dur = 0.3, vol = 0.3) {
+            if (!audioContext) return;
+            try {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = 'sine'; osc.frequency.value = freq;
+                gain.gain.setValueAtTime(vol, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + dur);
+                osc.connect(gain); gain.connect(audioContext.destination);
+                osc.start(audioContext.currentTime);
+                osc.stop(audioContext.currentTime + dur);
+            } catch (e) {}
+        }
+
+        function iniciarSomAlerta() {
+            pararSomAlerta();
+            if (!audioContext) return;
+            const inicio = Date.now();
+            const tocarSequencia = () => {
+                if (Date.now() - inicio >= DURACAO_SOM_ALERTA) { pararSomAlerta(); return; }
+                tocarBipe(880, 0.15, 0.5);
+                setTimeout(() => tocarBipe(1100, 0.15, 0.5), 200);
+                setTimeout(() => tocarBipe(880, 0.15, 0.5), 400);
+            };
+            tocarSequencia();
+            somInterval = setInterval(tocarSequencia, 1500);
+            somTimeout = setTimeout(pararSomAlerta, DURACAO_SOM_ALERTA);
+        }
+
+        function pararSomAlerta() {
+            if (somInterval) { clearInterval(somInterval); somInterval = null; }
+            if (somTimeout) { clearTimeout(somTimeout); somTimeout = null; }
+        }
+
+        function verificarAlertas() {
+            if (!alertasAtivos) return;
+            const agora = new Date();
+            const hora = agora.getHours() + (agora.getMinutes() / 60);
+
+            setores.forEach(setor => {
+                const statusInfo = obterStatusSetor(setor);
+                if (statusInfo.status !== 'alerta' && statusInfo.status !== 'almoco' && statusInfo.status !== 'reuniao') return;
+
+                let tipoAlerta, valor, mensagem;
+                if (statusInfo.status === 'almoco') {
+                    tipoAlerta = 'almoco';
+                    valor = Math.round(setor.almocoFim * 60);
+                    mensagem = `Iniciou o horário de almoço. Retorno às ${formatarHora(setor.almocoFim)}.`;
+                } else if (statusInfo.status === 'reuniao') {
+                    tipoAlerta = 'reuniao';
+                    valor = Math.round((statusInfo.excecao && statusInfo.excecao.fim ? statusInfo.excecao.fim : 0) * 60);
+                    mensagem = statusInfo.descricao;
+                } else {
+                    // Alerta de abertura/fechamento/transição
+                    if (statusInfo.transicao) {
+                        tipoAlerta = 'transicao';
+                        valor = Math.round((statusInfo.canaisInfo.proximoFechamento) * 60);
+                        mensagem = statusInfo.mensagem;
+                    } else if (statusInfo.canaisInfo && statusInfo.canaisInfo.proximaAbertura != null && hora < statusInfo.canaisInfo.proximaAbertura) {
+                        tipoAlerta = 'abertura';
+                        valor = Math.round(statusInfo.canaisInfo.proximaAbertura * 60);
+                        mensagem = `Abre em breve às ${formatarHora(statusInfo.canaisInfo.proximaAbertura)}!`;
+                    } else {
+                        tipoAlerta = 'fechamento';
+                        valor = statusInfo.canaisInfo ? Math.round(statusInfo.canaisInfo.proximoFechamento * 60) : 0;
+                        mensagem = statusInfo.mensagem;
+                    }
+                }
+
+                const chave = `${setor.id}_${tipoAlerta}_${valor}_${new Date().toDateString()}`;
+                if (alertasJaDisparados[chave]) return;
+                alertasJaDisparados[chave] = true;
+                filaAlertas.push({ setor, status: statusInfo.status, tipo: tipoAlerta, mensagem });
+            });
+
+            if (!alertaAtual && filaAlertas.length > 0) exibirProximoAlerta();
+        }
+
+        function exibirProximoAlerta() {
+            if (filaAlertas.length === 0) { alertaAtual = null; return; }
+            alertaAtual = filaAlertas.shift();
+            const overlay = document.getElementById('alertaOverlay');
+            const box = document.getElementById('alertaBox');
+            const icone = document.getElementById('alertaIcone');
+            const titulo = document.getElementById('alertaTitulo');
+            const setorEl = document.getElementById('alertaSetor');
+            const mensagemEl = document.getElementById('alertaMensagem');
+            const tempoEl = document.getElementById('alertaTempo');
+            const filaEl = document.getElementById('alertaFila');
+            const btnEntendi = document.querySelector('.alerta-btn');
+
+            box.className = 'alerta-box';
+            if (alertaAtual.tipo === 'almoco') {
+                box.classList.add('tipo-almoco');
+                icone.textContent = '🍽️'; titulo.textContent = 'HORÁRIO DE ALMOÇO';
+            } else if (alertaAtual.tipo === 'reuniao') {
+                box.classList.add('tipo-reuniao');
+                icone.textContent = '📅'; titulo.textContent = 'SETOR EM REUNIÃO';
+            } else if (alertaAtual.tipo === 'transicao') {
+                box.classList.add('tipo-transicao');
+                icone.textContent = '🔔'; titulo.textContent = 'TRANSIÇÃO DE CANAL';
+            } else if (alertaAtual.tipo === 'abertura') {
+                icone.textContent = '⏰'; titulo.textContent = 'ABERTURA EM BREVE';
+            } else {
+                icone.textContent = '⚠️'; titulo.textContent = 'FECHAMENTO EM BREVE';
+            }
+
+            setorEl.textContent = alertaAtual.setor.nome;
+            mensagemEl.textContent = alertaAtual.mensagem;
+            filaEl.textContent = filaAlertas.length > 0 ? `+ ${filaAlertas.length} alerta(s) na fila` : '';
+
+            overlay.classList.add('ativo');
+            initAudioContext();
+            iniciarSomAlerta();
+
+            let segundosRestantes = DURACAO_ALERTA_SEGUNDOS;
+            tempoEl.textContent = `🕐 Fechando em ${segundosRestantes}s...`;
+            btnEntendi.textContent = `✅ ENTENDI (${segundosRestantes}s)`;
+
+            if (window._alertaTempoInterval) clearInterval(window._alertaTempoInterval);
+            window._alertaTempoInterval = setInterval(() => {
+                if (!alertaAtual) return;
+                segundosRestantes--;
+                if (segundosRestantes <= 0) {
+                    clearInterval(window._alertaTempoInterval);
+                    window._alertaTempoInterval = null;
+                    fecharAlerta();
+                    return;
+                }
+                tempoEl.textContent = `🕐 Fechando em ${segundosRestantes}s...`;
+                btnEntendi.textContent = `✅ ENTENDI (${segundosRestantes}s)`;
+            }, 1000);
+
+            if (window._alertaAutoFecharTimeout) clearTimeout(window._alertaAutoFecharTimeout);
+            window._alertaAutoFecharTimeout = setTimeout(() => { if (alertaAtual) fecharAlerta(); }, DURACAO_SOM_ALERTA);
+        }
+
+        function fecharAlerta() {
+            pararSomAlerta();
+            if (window._alertaTempoInterval) { clearInterval(window._alertaTempoInterval); window._alertaTempoInterval = null; }
+            if (window._alertaAutoFecharTimeout) { clearTimeout(window._alertaAutoFecharTimeout); window._alertaAutoFecharTimeout = null; }
+            document.getElementById('alertaOverlay').classList.remove('ativo');
+            alertaAtual = null;
+            setTimeout(() => { if (filaAlertas.length > 0) exibirProximoAlerta(); }, 400);
+        }
+
+        function toggleAlertas() {
+            alertasAtivos = !alertasAtivos;
+            const btn = document.getElementById('btnAlerta');
+            if (alertasAtivos) {
+                btn.textContent = '🔔 Alertas: ON';
+                btn.classList.add('ativo');
+                initAudioContext();
+                verificarAlertas();
+            } else {
+                btn.textContent = '🔔 Alertas: OFF';
+                btn.classList.remove('ativo');
+                pararSomAlerta();
+                if (alertaAtual) fecharAlerta();
+                filaAlertas = [];
+            }
+            salvarConfiguracoesNoStorage();
+        }
+
+        function resetDiarioAlertas() {
+            const agora = new Date();
+            const prox = new Date(agora); prox.setHours(24, 0, 0, 0);
+            setTimeout(() => { alertasJaDisparados = {}; resetDiarioAlertas(); }, prox - agora);
+        }
+
+        // ============ ADMINISTRAÇÃO ============
         function trocarAba(abaId, btn) {
             document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('ativo'));
             document.querySelectorAll('.modal-tab-content').forEach(c => c.classList.remove('ativo'));
             btn.classList.add('ativo');
             document.getElementById(abaId).classList.add('ativo');
-            if (abaId === 'abaSetores') {
-                renderizarSeletorEdicao();
-            }
+            if (abaId === 'abaSetores') renderizarSeletorEdicao();
         }
 
         function abrirModal() {
@@ -2093,10 +1764,7 @@
 
         function atualizarListaFeriados() {
             const container = document.getElementById('listaFeriados');
-            if (feriados.length === 0) {
-                container.innerHTML = '<p style="color:#666;">Nenhum feriado cadastrado.</p>';
-                return;
-            }
+            if (feriados.length === 0) { container.innerHTML = '<p style="color:#666;">Nenhum feriado cadastrado.</p>'; return; }
             const ordenados = [...feriados].sort((a, b) => {
                 const [d1, m1] = a.data.split('/').map(Number);
                 const [d2, m2] = b.data.split('/').map(Number);
@@ -2106,12 +1774,7 @@
             container.innerHTML = ordenados.map(f => {
                 const idx = feriados.indexOf(f);
                 const tb = f.tipo ? `<span style="font-size:10px; background:#2a2a4a; padding:2px 8px; border-radius:50px; margin-left:5px;">${f.tipo}</span>` : '';
-                return `
-                    <div class="feriado-item">
-                        <div><span class="data">${f.data}</span><span class="nome">${f.nome || 'Feriado'} ${tb}</span></div>
-                        <button class="btn-remover" onclick="removerFeriado(${idx})">Remover</button>
-                    </div>
-                `;
+                return `<div class="feriado-item"><div><span class="data">${f.data}</span><span class="nome">${f.nome || 'Feriado'} ${tb}</span></div><button class="btn-remover" onclick="removerFeriado(${idx})">Remover</button></div>`;
             }).join('');
         }
 
@@ -2120,11 +1783,7 @@
 
         function renderizarSeletorSetores() {
             const container = document.getElementById('seletorSetorExcecao');
-            container.innerHTML = setores.map(s => `
-                <button class="setor-chip ${setorSelecionadoExcecao === s.id ? 'selecionado' : ''}" onclick="selecionarSetorExcecao('${s.id}')">
-                    ${s.nome}
-                </button>
-            `).join('');
+            container.innerHTML = setores.map(s => `<button class="setor-chip ${setorSelecionadoExcecao === s.id ? 'selecionado' : ''}" onclick="selecionarSetorExcecao('${s.id}')">${s.nome}</button>`).join('');
         }
 
         function selecionarSetorExcecao(setorId) {
@@ -2142,10 +1801,7 @@
 
         function atualizarListaExcecoes() {
             const container = document.getElementById('listaExcecoes');
-            if (excecoes.length === 0) {
-                container.innerHTML = '<p style="color:#666;">Nenhuma exceção cadastrada.</p>';
-                return;
-            }
+            if (excecoes.length === 0) { container.innerHTML = '<p style="color:#666;">Nenhuma exceção cadastrada.</p>'; return; }
             const ordenadas = [...excecoes].sort((a, b) => {
                 const [d1, m1] = a.data.split('/').map(Number);
                 const [d2, m2] = b.data.split('/').map(Number);
@@ -2161,27 +1817,14 @@
                 if (e.tipo === 'fechado') desc = '🚫 Sem expediente';
                 else if (e.tipo === 'normal') desc = '✅ Funciona normalmente';
                 else if (e.tipo === 'especial') {
-                    const modoTxt = (e.modo && MODOS_ATENDIMENTO[e.modo] && !(setor && setor.semModo)) ? ` [${MODOS_ATENDIMENTO[e.modo].emoji} ${MODOS_ATENDIMENTO[e.modo].curto}]` : '';
+                    const modoTxt = (e.modo && MODOS_ATENDIMENTO[e.modo]) ? ` [${MODOS_ATENDIMENTO[e.modo].emoji} ${MODOS_ATENDIMENTO[e.modo].curto}]` : '';
                     desc = `⏰ ${formatarHora(e.abre)} - ${formatarHora(e.fecha)}${modoTxt}`;
-                }
-                else if (e.tipo === 'reuniao') {
+                } else if (e.tipo === 'reuniao') {
                     desc = `📅 Reunião: ${formatarHora(e.inicio || 14)} - ${formatarHora(e.fim || 15)}`;
                     classeReuniao = 'reuniao';
                 }
                 if (e.obs) desc += ` — ${e.obs}`;
-                return `
-                    <div class="excecao-item ${classeReuniao}">
-                        <div class="excecao-header">
-                            <div>
-                                <span class="excecao-data">${e.data}</span>
-                                <span class="excecao-setor" style="margin-left:8px;">${nomeSetor}</span>
-                                <span class="excecao-tipo ${e.tipo}">${e.tipo}</span>
-                            </div>
-                            <button class="btn-remover" onclick="removerExcecao(${idx})">Remover</button>
-                        </div>
-                        <div class="excecao-desc">${desc}</div>
-                    </div>
-                `;
+                return `<div class="excecao-item ${classeReuniao}"><div class="excecao-header"><div><span class="excecao-data">${e.data}</span><span class="excecao-setor" style="margin-left:8px;">${nomeSetor}</span><span class="excecao-tipo ${e.tipo}">${e.tipo}</span></div><button class="btn-remover" onclick="removerExcecao(${idx})">Remover</button></div><div class="excecao-desc">${desc}</div></div>`;
             }).join('');
         }
 
@@ -2224,7 +1867,7 @@
             renderizarInformativos();
             atualizarInfoHoje();
             salvarConfiguracoesNoStorage();
-            alert(`✅ Exceção adicionada!`);
+            alert('✅ Exceção adicionada!');
         }
 
         function removerExcecao(index) {
@@ -2243,16 +1886,10 @@
 
         function renderizarEmojiPicker() {
             const picker = document.getElementById('infoEmojiPicker');
-            picker.innerHTML = EMOJIS_DISPONIVEIS.map(e => `
-                <button class="emoji-btn ${emojiSelecionado === e ? 'selecionado' : ''}" onclick="selecionarEmoji('${e}')">${e}</button>
-            `).join('');
+            picker.innerHTML = EMOJIS_DISPONIVEIS.map(e => `<button class="emoji-btn ${emojiSelecionado === e ? 'selecionado' : ''}" onclick="selecionarEmoji('${e}')">${e}</button>`).join('');
         }
 
-        function selecionarEmoji(emoji) {
-            emojiSelecionado = emoji;
-            renderizarEmojiPicker();
-        }
-
+        function selecionarEmoji(emoji) { emojiSelecionado = emoji; renderizarEmojiPicker(); }
         function selecionarTipoInformativo(tipo, btn) {
             tipoInformativoSelecionado = tipo;
             document.querySelectorAll('.info-tipo-btn').forEach(b => b.classList.remove('selecionado'));
@@ -2261,44 +1898,26 @@
 
         function atualizarListaInformativos() {
             const container = document.getElementById('listaInformativos');
-            if (informativos.length === 0) {
-                container.innerHTML = '<p style="color:#666;">Nenhum informativo cadastrado.</p>';
-                return;
-            }
+            if (informativos.length === 0) { container.innerHTML = '<p style="color:#666;">Nenhum informativo cadastrado.</p>'; return; }
             container.innerHTML = informativos.map((info, idx) => {
                 const ativo = infoEstaAtivo(info);
                 let meta = info.tipo === 'ticker' ? '🎬 Ticker' : '📌 Fixo';
-                if (info.dataInicio || info.dataFim) {
-                    meta += ` | ${info.dataInicio || '...'} → ${info.dataFim || '...'}`;
-                }
-                const statusBadge = ativo 
-                    ? '<span style="color:#69f0ae;font-size:10px;">● ATIVO</span>' 
-                    : '<span style="color:#666;font-size:10px;">○ inativo</span>';
-                return `
-                    <div class="info-item" style="${!ativo ? 'opacity:0.5;' : ''}">
-                        <div class="info-emoji">${info.emoji || '📢'}</div>
-                        <div class="info-texto">
-                            ${info.texto}
-                            <div class="info-meta">${meta} ${statusBadge}</div>
-                        </div>
-                        <button class="btn-remover" onclick="removerInformativo(${idx})">Remover</button>
-                    </div>
-                `;
+                if (info.dataInicio || info.dataFim) meta += ` | ${info.dataInicio || '...'} → ${info.dataFim || '...'}`;
+                const statusBadge = ativo ? '<span style="color:#69f0ae;font-size:10px;">● ATIVO</span>' : '<span style="color:#666;font-size:10px;">○ inativo</span>';
+                return `<div class="info-item" style="${!ativo ? 'opacity:0.5;' : ''}"><div class="info-emoji">${info.emoji || '📢'}</div><div class="info-texto">${info.texto}<div class="info-meta">${meta} ${statusBadge}</div></div><button class="btn-remover" onclick="removerInformativo(${idx})">Remover</button></div>`;
             }).join('');
         }
 
         function adicionarInformativo() {
             const texto = document.getElementById('inputTextoInformativo').value.trim();
             if (!texto) { alert('Digite o texto do informativo!'); return; }
-            const nova = {
-                emoji: emojiSelecionado,
-                texto: texto,
+            informativos.push({
+                emoji: emojiSelecionado, texto: texto,
                 tipo: tipoInformativoSelecionado,
                 dataInicio: document.getElementById('inputInfoDataInicio').value || null,
                 dataFim: document.getElementById('infoDataFim').value || null,
                 criadoEm: new Date().toISOString()
-            };
-            informativos.push(nova);
+            });
             document.getElementById('inputTextoInformativo').value = '';
             document.getElementById('inputInfoDataInicio').value = '';
             document.getElementById('infoDataFim').value = '';
@@ -2335,10 +1954,8 @@
             const div = document.getElementById('feriadoAtualInfo');
             const nomeSpan = document.getElementById('nomeFeriadoAtual');
             const f = hojeEhFeriado();
-            if (f && f.manual) {
-                div.style.display = 'block';
-                nomeSpan.textContent = f.nome || 'Feriado (manual)';
-            } else div.style.display = 'none';
+            if (f && f.manual) { div.style.display = 'block'; nomeSpan.textContent = f.nome || 'Feriado (manual)'; }
+            else div.style.display = 'none';
         }
 
         function toggleFeriadoGeral() {
@@ -2349,11 +1966,8 @@
                 else feriadoManualAtivo = false;
             }
             if (!feriadoManualAtivo) feriadoManualNome = '';
-            atualizarToggleFeriado();
-            atualizarFeriadoAtualInfo();
-            renderizarTodos();
-            renderizarInformativos();
-            atualizarInfoHoje();
+            atualizarToggleFeriado(); atualizarFeriadoAtualInfo();
+            renderizarTodos(); renderizarInformativos(); atualizarInfoHoje();
             salvarConfiguracoesNoStorage();
         }
 
@@ -2362,22 +1976,16 @@
                 feriados.splice(index, 1);
                 atualizarListaFeriados();
                 document.getElementById('qtdeFeriadosDisplay').textContent = feriados.length;
-                renderizarTodos();
-                renderizarInformativos();
-                atualizarInfoHoje();
+                renderizarTodos(); renderizarInformativos(); atualizarInfoHoje();
                 salvarConfiguracoesNoStorage();
             }
         }
 
         function removerFeriadoAtual() {
             if (confirm('Desativar o feriado manual?')) {
-                feriadoManualAtivo = false;
-                feriadoManualNome = '';
-                atualizarToggleFeriado();
-                atualizarFeriadoAtualInfo();
-                renderizarTodos();
-                renderizarInformativos();
-                atualizarInfoHoje();
+                feriadoManualAtivo = false; feriadoManualNome = '';
+                atualizarToggleFeriado(); atualizarFeriadoAtualInfo();
+                renderizarTodos(); renderizarInformativos(); atualizarInfoHoje();
                 salvarConfiguracoesNoStorage();
             }
         }
@@ -2394,9 +2002,7 @@
             nomeInput.value = '';
             atualizarListaFeriados();
             document.getElementById('qtdeFeriadosDisplay').textContent = feriados.length;
-            renderizarTodos();
-            renderizarInformativos();
-            atualizarInfoHoje();
+            renderizarTodos(); renderizarInformativos(); atualizarInfoHoje();
             salvarConfiguracoesNoStorage();
             alert(`✅ Feriado ${dataStr} adicionado!`);
         }
@@ -2406,9 +2012,7 @@
                 feriados = gerarFeriadosPorAno(ANO_ATUAL);
                 atualizarListaFeriados();
                 document.getElementById('qtdeFeriadosDisplay').textContent = feriados.length;
-                renderizarTodos();
-                renderizarInformativos();
-                atualizarInfoHoje();
+                renderizarTodos(); renderizarInformativos(); atualizarInfoHoje();
                 salvarConfiguracoesNoStorage();
                 alert(`✅ Feriados de ${ANO_ATUAL} importados!`);
             }
@@ -2423,18 +2027,14 @@
             alert('💾 Configurações salvas e sincronizadas!');
         }
 
+        // ============ EDITOR DE SETORES ============
         let setorEditandoId = null;
         let horariosEditando = [];
 
         function renderizarSeletorEdicao() {
             const container = document.getElementById('seletorSetorEditar');
             if (!container) return;
-            container.innerHTML = setores.map(s => `
-                <button class="setor-chip ${setorEditandoId === s.id ? 'selecionado' : ''}" 
-                        onclick="selecionarSetorParaEditar('${s.id}')">
-                    ${s.nome}
-                </button>
-            `).join('');
+            container.innerHTML = setores.map(s => `<button class="setor-chip ${setorEditandoId === s.id ? 'selecionado' : ''}" onclick="selecionarSetorParaEditar('${s.id}')">${s.nome}</button>`).join('');
         }
 
         function selecionarSetorParaEditar(id) {
@@ -2442,11 +2042,8 @@
             const setor = setores.find(s => s.id === id);
             if (!setor) return;
 
-            horariosEditando = setor.horarios.map(h => ({ 
-                dias: [...h.dias], 
-                abre: h.abre, 
-                fecha: h.fecha,
-                modo: h.modo || 'ambos'
+            horariosEditando = setor.horarios.map(h => ({
+                dias: [...h.dias], abre: h.abre, fecha: h.fecha, modo: h.modo || 'ambos'
             }));
 
             document.getElementById('painelEditarSetor').style.display = 'block';
@@ -2461,10 +2058,8 @@
             document.getElementById('statusTemAlmoco').textContent = temAlmoco ? 'Ativo' : 'Inativo';
             document.getElementById('statusTemAlmoco').className = 'toggle-status ' + (temAlmoco ? 'ativo' : 'inativo');
             document.getElementById('camposAlmocoEdicao').style.display = temAlmoco ? 'block' : 'none';
-            if (setor.almocoInicio != null) document.getElementById('inputAlmocoInicio').value = decimalParaHoraStr(setor.almocoInicio);
-            else document.getElementById('inputAlmocoInicio').value = '12:00';
-            if (setor.almocoFim != null) document.getElementById('inputAlmocoFim').value = decimalParaHoraStr(setor.almocoFim);
-            else document.getElementById('inputAlmocoFim').value = '13:00';
+            document.getElementById('inputAlmocoInicio').value = setor.almocoInicio != null ? decimalParaHoraStr(setor.almocoInicio) : '12:00';
+            document.getElementById('inputAlmocoFim').value = setor.almocoFim != null ? decimalParaHoraStr(setor.almocoFim) : '13:00';
 
             const funcFer = !!setor.funcionaEmFeriado;
             document.getElementById('switchFuncionaFeriado').classList.toggle('ativo', funcFer);
@@ -2475,46 +2070,36 @@
         function renderizarEditorHorarios() {
             const diasNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
             const container = document.getElementById('horariosEditor');
-            const setor = setores.find(s => s.id === setorEditandoId);
-            const mostrarModo = setor && !setor.semModo;
 
-            container.innerHTML = horariosEditando.map((h, idx) => `
-                <div class="editor-horario-item">
-                    <div class="editor-dias">
-                        ${diasNomes.map((d, i) => `
-                            <button class="dia-btn ${h.dias.includes(i) ? 'selecionado' : ''}" 
-                                    onclick="toggleDiaHorario(${idx}, ${i})">${d}</button>
-                        `).join('')}
+            container.innerHTML = horariosEditando.map((h, idx) => {
+                let classeModo = '';
+                if (h.modo === 'telefonia') classeModo = 'tel';
+                else if (h.modo === 'whatsapp') classeModo = 'wpp';
+                else classeModo = 'amb';
+                return `
+                    <div class="editor-horario-item ${classeModo}">
+                        <div class="editor-dias">
+                            ${diasNomes.map((d, i) => `<button class="dia-btn ${h.dias.includes(i) ? 'selecionado' : ''}" onclick="toggleDiaHorario(${idx}, ${i})">${d}</button>`).join('')}
+                        </div>
+                        <div class="linha-horas">
+                            <input type="time" value="${decimalParaHoraStr(h.abre)}" step="60" onchange="alterarHoraEditor(${idx}, 'abre', this.value)">
+                            <input type="time" value="${decimalParaHoraStr(h.fecha)}" step="60" onchange="alterarHoraEditor(${idx}, 'fecha', this.value)">
+                            <button class="btn-remover-linha" onclick="removerLinhaHorario(${idx})" title="Remover faixa">🗑️</button>
+                        </div>
+                        <div class="editor-modo">
+                            <button class="modo-btn whatsapp ${h.modo === 'whatsapp' ? 'selecionado' : ''}" onclick="alterarModoEditor(${idx}, 'whatsapp')">
+                                <span class="modo-emoji">💬</span>Somente WhatsApp
+                            </button>
+                            <button class="modo-btn telefonia ${h.modo === 'telefonia' ? 'selecionado' : ''}" onclick="alterarModoEditor(${idx}, 'telefonia')">
+                                <span class="modo-emoji">📞</span>Somente Telefonia
+                            </button>
+                            <button class="modo-btn ambos ${h.modo === 'ambos' ? 'selecionado' : ''}" onclick="alterarModoEditor(${idx}, 'ambos')">
+                                <span class="modo-emoji">📞💬</span>Telefonia + WhatsApp
+                            </button>
+                        </div>
                     </div>
-                    <div class="linha-horas">
-                        <input type="time" value="${decimalParaHoraStr(h.abre)}" step="60"
-                               onchange="alterarHoraEditor(${idx}, 'abre', this.value)">
-                        <input type="time" value="${decimalParaHoraStr(h.fecha)}" step="60"
-                               onchange="alterarHoraEditor(${idx}, 'fecha', this.value)">
-                        <button class="btn-remover-linha" onclick="removerLinhaHorario(${idx})" title="Remover faixa">🗑️</button>
-                    </div>
-                    ${mostrarModo ? `
-                    <div class="editor-modo">
-                        <button class="modo-btn whatsapp ${h.modo === 'whatsapp' ? 'selecionado' : ''}" 
-                                onclick="alterarModoEditor(${idx}, 'whatsapp')">
-                            <span class="modo-emoji">💬</span>Somente WhatsApp
-                        </button>
-                        <button class="modo-btn telefonia ${h.modo === 'telefonia' ? 'selecionado' : ''}" 
-                                onclick="alterarModoEditor(${idx}, 'telefonia')">
-                            <span class="modo-emoji">📞</span>Somente Telefonia
-                        </button>
-                        <button class="modo-btn ambos ${h.modo === 'ambos' ? 'selecionado' : ''}" 
-                                onclick="alterarModoEditor(${idx}, 'ambos')">
-                            <span class="modo-emoji">📞💬</span>Telefonia + WhatsApp
-                        </button>
-                    </div>
-                    ` : `
-                    <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #2a2a4a;font-size:11px;color:#666;">
-                        🏢 Setor sem modo de atendimento (presencial)
-                    </div>
-                    `}
-                </div>
-            `).join('') || '<p style="color:#666;font-size:13px;">Nenhuma faixa cadastrada. Clique em "Adicionar faixa".</p>';
+                `;
+            }).join('') || '<p style="color:#666;font-size:13px;">Nenhuma faixa cadastrada. Clique em "Adicionar faixa".</p>';
             atualizarPreviewHorario();
         }
 
@@ -2570,47 +2155,31 @@
         function atualizarPreviewHorario() {
             const preview = document.getElementById('previewHorario');
             if (!preview) return;
-            const setor = setores.find(s => s.id === setorEditandoId);
-            const mostrarModo = setor && !setor.semModo;
             const diasNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
             if (horariosEditando.length === 0) {
                 preview.innerHTML = '<strong>📋 Resumo:</strong> Nenhuma faixa configurada';
                 return;
             }
             const linhas = horariosEditando.map(h => {
-                const dias = h.dias.length > 0 
-                    ? h.dias.map(d => diasNomes[d]).join(', ')
-                    : '⚠️ sem dias';
-                let modoTxt = '';
-                if (mostrarModo) {
-                    const modoInfo = MODOS_ATENDIMENTO[h.modo || 'ambos'];
-                    modoTxt = ` ${modoInfo.emoji} ${modoInfo.curto}`;
-                }
-                return `${dias}: ${decimalParaHoraStr(h.abre)} - ${decimalParaHoraStr(h.fecha)}${modoTxt}`;
+                const dias = h.dias.length > 0 ? h.dias.map(d => diasNomes[d]).join(', ') : '⚠️ sem dias';
+                const modoInfo = MODOS_ATENDIMENTO[h.modo || 'ambos'];
+                return `${dias}: ${decimalParaHoraStr(h.abre)} - ${decimalParaHoraStr(h.fecha)} — ${modoInfo.emoji} ${modoInfo.curto}`;
             });
             preview.innerHTML = `<strong>📋 Resumo:</strong><br>${linhas.map(l => '• ' + l).join('<br>')}`;
         }
-
-        function atualizarPreviewEndereco() {}
 
         function salvarEdicaoSetor() {
             const setor = setores.find(s => s.id === setorEditandoId);
             if (!setor) { alert('Selecione um setor primeiro!'); return; }
 
             for (const h of horariosEditando) {
-                if (h.dias.length === 0) { alert('⚠️ Cada faixa de horário precisa ter ao menos 1 dia selecionado!'); return; }
-                if (h.fecha <= h.abre) { alert('⚠️ O horário de fechamento deve ser maior que o de abertura!'); return; }
-                if (!setor.semModo && !h.modo) { alert('⚠️ Selecione um modo de atendimento em cada faixa!'); return; }
+                if (h.dias.length === 0) { alert('⚠️ Cada faixa precisa ter ao menos 1 dia!'); return; }
+                if (h.fecha <= h.abre) { alert('⚠️ O fechamento deve ser maior que a abertura!'); return; }
+                if (!h.modo) { alert('⚠️ Selecione um modo de atendimento em cada faixa!'); return; }
             }
-            if (horariosEditando.length === 0) { alert('⚠️ Adicione ao menos uma faixa de horário!'); return; }
+            if (horariosEditando.length === 0) { alert('⚠️ Adicione ao menos uma faixa!'); return; }
 
-            setor.horarios = horariosEditando.map(h => ({ 
-                dias: [...h.dias], 
-                abre: h.abre, 
-                fecha: h.fecha,
-                modo: setor.semModo ? 'ambos' : (h.modo || 'ambos')
-            }));
-
+            setor.horarios = horariosEditando.map(h => ({ dias: [...h.dias], abre: h.abre, fecha: h.fecha, modo: h.modo || 'ambos' }));
             setor.endereco = document.getElementById('inputEnderecoSetor').value.trim();
 
             const temAlmoco = document.getElementById('switchTemAlmoco').classList.contains('ativo');
@@ -2619,8 +2188,7 @@
                 const ini = document.getElementById('inputAlmocoInicio').value;
                 const fim = document.getElementById('inputAlmocoFim').value;
                 if (!ini || !fim) { alert('⚠️ Preencha o horário de almoço!'); return; }
-                const iDec = horaParaDecimal(ini);
-                const fDec = horaParaDecimal(fim);
+                const iDec = horaParaDecimal(ini), fDec = horaParaDecimal(fim);
                 if (fDec <= iDec) { alert('⚠️ O fim do almoço deve ser maior que o início!'); return; }
                 setor.almocoInicio = iDec;
                 setor.almocoFim = fDec;
@@ -2628,30 +2196,27 @@
                 delete setor.almocoInicio;
                 delete setor.almocoFim;
             }
-
             setor.funcionaEmFeriado = document.getElementById('switchFuncionaFeriado').classList.contains('ativo');
 
             renderizarTodos();
             renderizarInformativos();
             salvarConfiguracoesNoStorage();
-            alert(`✅ Configurações de "${setor.nome}" atualizadas e sincronizadas!`);
+            alert(`✅ Configurações de "${setor.nome}" atualizadas!`);
         }
 
         function resetarSetorPadrao() {
             if (!setorEditandoId) return;
             const padrao = SETORES_PADRAO.find(s => s.id === setorEditandoId);
             if (!padrao) { alert('⚠️ Não há padrão definido para este setor.'); return; }
-            if (!confirm(`Restaurar "${padrao.nome}" para o padrão de fábrica?\n\nSuas alterações neste setor serão perdidas.`)) return;
+            if (!confirm(`Restaurar "${padrao.nome}" para o padrão?\n\nSuas alterações serão perdidas.`)) return;
 
             const setor = setores.find(s => s.id === setorEditandoId);
             if (!setor) return;
 
             setor.horarios = JSON.parse(JSON.stringify(padrao.horarios));
             setor.temAlmoco = padrao.temAlmoco || false;
-            if (padrao.almocoInicio != null) setor.almocoInicio = padrao.almocoInicio;
-            else delete setor.almocoInicio;
-            if (padrao.almocoFim != null) setor.almocoFim = padrao.almocoFim;
-            else delete setor.almocoFim;
+            if (padrao.almocoInicio != null) setor.almocoInicio = padrao.almocoInicio; else delete setor.almocoInicio;
+            if (padrao.almocoFim != null) setor.almocoFim = padrao.almocoFim; else delete setor.almocoFim;
             setor.funcionaEmFeriado = padrao.funcionaEmFeriado || false;
             setor.semModo = padrao.semModo || false;
             setor.endereco = padrao.endereco || '';
@@ -2663,18 +2228,14 @@
             alert('🔄 Setor restaurado ao padrão!');
         }
 
-        // ===== INICIALIZAÇÃO COM FIREBASE EM TEMPO REAL =====
+        // ============ INICIALIZAÇÃO ============
         async function iniciarPainel() {
-            if (!window._firebaseReady) {
-                setTimeout(iniciarPainel, 100);
-                return;
-            }
-
-            console.log('🚀 Iniciando painel...');
+            if (!window._firebaseReady) { setTimeout(iniciarPainel, 100); return; }
+            console.log('🚀 Iniciando painel v2 (canais separados)...');
 
             let cfg = await carregarConfiguracoes();
 
-            if (cfg) {
+            if (cfg && cfg.versao === 2) {
                 feriados = cfg.feriados || [];
                 feriadoManualAtivo = cfg.feriadoManualAtivo || false;
                 feriadoManualNome = cfg.feriadoManualNome || '';
@@ -2683,6 +2244,8 @@
                 setores = cfg.setores || JSON.parse(JSON.stringify(SETORES_PADRAO));
                 alertasAtivos = cfg.alertasAtivos || false;
             } else {
+                // Migração: cria versão nova com canais separados
+                console.log('📝 Migrando para versão 2 com canais separados...');
                 const padrao = {
                     ano: ANO_ATUAL,
                     feriados: gerarFeriadosPorAno(ANO_ATUAL),
@@ -2691,7 +2254,8 @@
                     setores: JSON.parse(JSON.stringify(SETORES_PADRAO)),
                     excecoes: [],
                     informativos: [],
-                    alertasAtivos: false
+                    alertasAtivos: false,
+                    versao: 2
                 };
                 await window._firebase.setDoc(
                     window._firebase.doc(window._firebase.db, 'painel', 'config'),
@@ -2699,13 +2263,11 @@
                 );
                 feriados = padrao.feriados;
                 setores = padrao.setores;
-                console.log('📝 Documento inicial criado no Firestore');
             }
 
+            // Normaliza
             setores.forEach(setor => {
-                if (setor.horarios) {
-                    setor.horarios.forEach(h => { if (!h.modo) h.modo = 'ambos'; });
-                }
+                if (setor.horarios) setor.horarios.forEach(h => { if (!h.modo) h.modo = 'ambos'; });
                 if (setor.endereco === undefined) setor.endereco = '';
             });
 
@@ -2738,9 +2300,7 @@
                 alertasAtivos = cfg.alertasAtivos || false;
 
                 setores.forEach(setor => {
-                    if (setor.horarios) {
-                        setor.horarios.forEach(h => { if (!h.modo) h.modo = 'ambos'; });
-                    }
+                    if (setor.horarios) setor.horarios.forEach(h => { if (!h.modo) h.modo = 'ambos'; });
                     if (setor.endereco === undefined) setor.endereco = '';
                 });
 
@@ -2755,8 +2315,7 @@
                     atualizarListaExcecoes();
                     atualizarListaInformativos();
                 }
-
-                console.log('🔄 Sincronizado em tempo real:', new Date().toLocaleTimeString());
+                console.log('🔄 Sincronizado:', new Date().toLocaleTimeString());
             });
 
             setInterval(atualizarRelogio, 1000);
@@ -2765,7 +2324,6 @@
             setInterval(atualizarInfoHoje, 60000);
             setInterval(verificarAlertas, 15000);
             resetDiarioAlertas();
-
             if (alertasAtivos) setTimeout(verificarAlertas, 2000);
 
             document.addEventListener('click', function desbloquearAudio() {
@@ -2782,8 +2340,7 @@
                     if (alertasAtivos) verificarAlertas();
                 }
             });
-
-            console.log(`📊 Painel iniciado - ${ANO_ATUAL}`);
+            console.log(`📊 Painel v2 iniciado - ${ANO_ATUAL}`);
         }
 
         iniciarPainel();
@@ -2799,6 +2356,7 @@
             if (e.target === e.currentTarget) fecharModal();
         });
 
+        // Exports globais
         window.abrirModal = abrirModal;
         window.fecharModal = fecharModal;
         window.toggleFeriadoGeral = toggleFeriadoGeral;
@@ -2829,7 +2387,6 @@
         window.toggleFuncionaFeriadoEdicao = toggleFuncionaFeriadoEdicao;
         window.salvarEdicaoSetor = salvarEdicaoSetor;
         window.resetarSetorPadrao = resetarSetorPadrao;
-        window.atualizarPreviewEndereco = atualizarPreviewEndereco;
     </script>
 
 </body>
