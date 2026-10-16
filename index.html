@@ -86,7 +86,6 @@
         }
         .btn-alerta:hover { background: #ffab40; transform: scale(1.05); }
         .btn-alerta.ativo { background: #00c853; color: #fff; }
-        .btn-alerta.ativo:hover { background: #69f0ae; }
 
         .banner-feriado {
             display: none;
@@ -97,7 +96,7 @@
             border-radius: 14px;
             padding: 20px 26px;
             margin-bottom: 15px;
-            box-shadow: 0 0 30px rgba(156, 39, 176, 0.5), inset 0 0 30px rgba(156, 39, 176, 0.1);
+            box-shadow: 0 0 30px rgba(156, 39, 176, 0.5);
             animation: feriadoBackground 4s ease infinite, slideDown 0.4s ease;
         }
         .banner-feriado.ativo { display: block; }
@@ -106,24 +105,20 @@
         .banner-feriado .titulo {
             font-size: 24px; font-weight: 900; color: #fff;
             display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
-            text-shadow: 0 0 20px rgba(206, 147, 216, 0.9), 0 0 40px rgba(156, 39, 176, 0.6);
-            letter-spacing: 1px; animation: feriadoPulse 2s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(206, 147, 216, 0.9);
             text-transform: uppercase;
         }
-        @keyframes feriadoPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
         .banner-feriado .conteudo { font-size: 15px; color: #fff; line-height: 1.9; font-weight: 600; }
         .banner-feriado .conteudo .linha { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 8px 0; padding: 6px 0; }
         .banner-feriado .chip-funcionando {
             background: rgba(0, 200, 83, 0.25); color: #fff; padding: 6px 16px;
             border-radius: 50px; font-size: 14px; font-weight: 800;
-            border: 2px solid #00c853; text-shadow: 0 0 8px rgba(0, 200, 83, 0.8);
-            box-shadow: 0 0 15px rgba(0, 200, 83, 0.5); text-transform: uppercase;
+            border: 2px solid #00c853; text-transform: uppercase;
         }
         .banner-feriado .chip-fechado {
             background: rgba(255, 23, 68, 0.25); color: #fff; padding: 6px 16px;
             border-radius: 50px; font-size: 14px; font-weight: 800;
-            border: 2px solid #ff1744; text-shadow: 0 0 8px rgba(255, 23, 68, 0.8);
-            box-shadow: 0 0 15px rgba(255, 23, 68, 0.5); text-transform: uppercase;
+            border: 2px solid #ff1744; text-transform: uppercase;
         }
 
         .ticker-wrap {
@@ -134,12 +129,6 @@
             position: relative; box-shadow: 0 0 25px rgba(0, 212, 255, 0.3);
         }
         .ticker-wrap.ativo { display: block; }
-        .ticker-wrap::before, .ticker-wrap::after {
-            content: ''; position: absolute; top: 0; bottom: 0; width: 80px;
-            z-index: 2; pointer-events: none;
-        }
-        .ticker-wrap::before { left: 0; background: linear-gradient(90deg, #12121f, transparent); }
-        .ticker-wrap::after { right: 0; background: linear-gradient(270deg, #12121f, transparent); }
         .ticker {
             display: inline-block; white-space: nowrap;
             animation: ticker 40s linear infinite; padding-left: 100%;
@@ -151,7 +140,7 @@
             font-size: 22px; font-weight: 900; color: #fff;
             border-right: 2px solid rgba(0, 212, 255, 0.4);
             text-shadow: 0 0 15px rgba(0, 212, 255, 0.9);
-            letter-spacing: 0.8px; text-transform: uppercase;
+            text-transform: uppercase;
         }
         .ticker-item:last-child { border-right: none; }
         .ticker-item .emoji { font-size: 26px; margin-right: 10px; }
@@ -165,7 +154,6 @@
             font-size: 20px; font-weight: 800; color: #fff;
             display: flex; align-items: center; gap: 16px;
             box-shadow: 0 0 20px rgba(255, 145, 0, 0.4);
-            position: relative; overflow: hidden;
         }
         .aviso-fixo .icone { font-size: 36px; flex-shrink: 0; }
         .aviso-fixo.tipo-urgente {
@@ -199,6 +187,7 @@
         .bolinha.whatsapp { background: #25d366; }
         .bolinha.telefonia { background: #2196f3; }
         .bolinha.ambos { background: #9c27b0; }
+        .bolinha.presencial { background: #00bcd4; }
 
         .search-bar {
             display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
@@ -221,21 +210,21 @@
             border: 1px solid #1a1a2e;
         }
         .card:hover { transform: translateY(-3px); border-color: #2a2a4a; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); }
-        .card.aberto { 
+        .card.aberto {
             border-left: 12px solid #00c853 !important; border-color: #00c853 !important;
-            box-shadow: 0 0 25px rgba(0, 200, 83, 0.35), inset 0 0 20px rgba(0, 200, 83, 0.05);
+            box-shadow: 0 0 25px rgba(0, 200, 83, 0.35);
         }
         .card.alerta { border-left: 8px solid #ff9100; }
         .card.fechado { border-left: 8px solid #ff1744; }
         .card.indisponivel { border-left: 8px solid #555; opacity: 0.5; }
         .card.feriado { border-left: 8px solid #9c27b0; }
-        .card.almoco { 
+        .card.almoco {
             border-left: 12px solid #ffab40 !important; border-color: #ffab40 !important;
             background: linear-gradient(145deg, #1f1a12, #12121f) !important;
             box-shadow: 0 0 25px rgba(255, 171, 64, 0.35);
         }
         .card.excecao { border-left: 8px solid #00bcd4; }
-        .card.reuniao { 
+        .card.reuniao {
             border-left: 12px solid #ff6b9d !important; border-color: #ff6b9d !important;
             background: linear-gradient(145deg, #1f1218, #12121f) !important;
             box-shadow: 0 0 25px rgba(255, 107, 157, 0.35);
@@ -264,7 +253,6 @@
             50% { box-shadow: 0 0 20px rgba(255,145,0,0.9); }
         }
 
-        /* ===== NOVO: canais ativos ===== */
         .card-canais {
             margin-top: 8px;
             display: flex;
@@ -275,12 +263,14 @@
             display: inline-flex; align-items: center; gap: 4px;
             padding: 5px 12px; border-radius: 50px;
             font-size: 11px; font-weight: 700;
-            border: 1px solid; letter-spacing: 0.3px;
+            border: 1px solid;
         }
         .canal-chip.ativo.whatsapp { background: rgba(37,211,102,0.15); border-color: #25d366; color: #25d366; }
         .canal-chip.ativo.telefonia { background: rgba(33,150,243,0.15); border-color: #2196f3; color: #42a5f5; }
+        .canal-chip.ativo.presencial { background: rgba(0,188,212,0.15); border-color: #00bcd4; color: #4dd0e1; }
         .canal-chip.inativo.whatsapp { background: rgba(37,211,102,0.03); border-color: rgba(37,211,102,0.2); color: rgba(37,211,102,0.4); text-decoration: line-through; }
         .canal-chip.inativo.telefonia { background: rgba(33,150,243,0.03); border-color: rgba(33,150,243,0.2); color: rgba(33,150,243,0.4); text-decoration: line-through; }
+        .canal-chip.inativo.presencial { background: rgba(0,188,212,0.03); border-color: rgba(0,188,212,0.2); color: rgba(0,188,212,0.4); text-decoration: line-through; }
         .canal-chip .canal-hora { font-size: 10px; opacity: 0.85; margin-left: 2px; }
 
         .card-endereco {
@@ -484,6 +474,7 @@
         .editor-horario-item.tel { border-left-color: #2196f3; }
         .editor-horario-item.wpp { border-left-color: #25d366; }
         .editor-horario-item.amb { border-left-color: #9c27b0; }
+        .editor-horario-item.pre { border-left-color: #00bcd4; }
 
         .editor-dias { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
         .editor-dias .dia-btn {
@@ -508,6 +499,7 @@
         .editor-modo .modo-btn.selecionado.whatsapp { border-color: #25d366; color: #25d366; background: rgba(37, 211, 102, 0.1); }
         .editor-modo .modo-btn.selecionado.telefonia { border-color: #2196f3; color: #42a5f5; background: rgba(33, 150, 243, 0.1); }
         .editor-modo .modo-btn.selecionado.ambos { border-color: #9c27b0; color: #ce93d8; background: rgba(156, 39, 176, 0.1); }
+        .editor-modo .modo-btn.selecionado.presencial { border-color: #00bcd4; color: #4dd0e1; background: rgba(0, 188, 212, 0.1); }
         .editor-modo .modo-btn .modo-emoji { display: block; font-size: 16px; margin-bottom: 2px; }
 
         .btn-add-linha {
@@ -604,6 +596,7 @@
             <span class="legenda-item"><span class="bolinha whatsapp"></span> 💬 Somente WhatsApp</span>
             <span class="legenda-item"><span class="bolinha telefonia"></span> 📞 Somente Telefonia</span>
             <span class="legenda-item"><span class="bolinha ambos"></span> 📞💬 Telefonia + WhatsApp</span>
+            <span class="legenda-item"><span class="bolinha presencial"></span> 🏢 Presencial</span>
         </div>
 
         <div class="search-bar">
@@ -769,9 +762,10 @@
         const DURACAO_ALERTA_SEGUNDOS = 5;
 
         const MODOS_ATENDIMENTO = {
-            'whatsapp': { label: 'Somente WhatsApp', emoji: '💬', curto: 'WhatsApp', cor: 'whatsapp' },
-            'telefonia': { label: 'Somente Telefonia', emoji: '📞', curto: 'Telefonia', cor: 'telefonia' },
-            'ambos': { label: 'Telefonia + WhatsApp', emoji: '📞💬', curto: 'Telefonia + WhatsApp', cor: 'ambos' }
+            'whatsapp':   { label: 'Somente WhatsApp',       emoji: '💬',   curto: 'WhatsApp',             cor: 'whatsapp' },
+            'telefonia':  { label: 'Somente Telefonia',      emoji: '📞',   curto: 'Telefonia',            cor: 'telefonia' },
+            'ambos':      { label: 'Telefonia + WhatsApp',   emoji: '📞💬', curto: 'Telefonia + WhatsApp', cor: 'ambos' },
+            'presencial': { label: 'Atendimento Presencial', emoji: '🏢',   curto: 'Presencial',           cor: 'presencial' }
         };
 
         function calcularPascoa(ano) {
@@ -817,7 +811,7 @@
             return feriados;
         }
 
-        // ============ SETORES PADRÃO COM FAIXAS SEPARADAS POR CANAL ============
+        // ============ SETORES PADRÃO ============
         const SETORES_PADRAO = [
             {
                 id: 'cross', nome: '🔄 CROSS',
@@ -871,49 +865,48 @@
             {
                 id: 'loja-linhares', nome: '🏪 Loja Linhares',
                 subtitulo: 'Atendimento Presencial',
-                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                canais: ['🏢 Presencial'],
                 horarios: [
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'telefonia' },
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'whatsapp' },
-                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'presencial' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'presencial' }
                 ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
-                semModo: false, endereco: 'Av. Rui Barbosa, n° 603 - Centro'
+                alertaMinutos: 30, funcionaEmFeriado: false,
+                temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: true, endereco: 'Av. Rui Barbosa, n° 603 - Centro'
             },
             {
                 id: 'loja-teixeira', nome: '🏪 Loja Teixeira',
                 subtitulo: 'Atendimento Presencial',
-                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                canais: ['🏢 Presencial'],
                 horarios: [
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'telefonia' },
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'whatsapp' },
-                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'presencial' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'presencial' }
                 ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
-                semModo: false, endereco: 'R. Teixeira de Freitas, 199 - Centro'
+                alertaMinutos: 30, funcionaEmFeriado: false,
+                temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: true, endereco: 'R. Teixeira de Freitas, 199 - Centro'
             },
             {
                 id: 'loja-sao-matheus', nome: '🏪 Loja São Matheus',
                 subtitulo: 'Atendimento Presencial',
-                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                canais: ['🏢 Presencial'],
                 horarios: [
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'telefonia' },
-                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'whatsapp' },
-                    { dias: [6], abre: 8, fecha: 12, modo: 'whatsapp' }
+                    { dias: [1,2,3,4,5], abre: 8.5, fecha: 17.5, modo: 'presencial' },
+                    { dias: [6], abre: 8, fecha: 12, modo: 'presencial' }
                 ],
-                alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
-                semModo: false, endereco: 'Av. José Tozzi, 2056 - Centro'
+                alertaMinutos: 30, funcionaEmFeriado: false,
+                temAlmoco: true, almocoInicio: 12, almocoFim: 13.2,
+                semModo: true, endereco: 'Av. José Tozzi, 2056 - Centro'
             },
             {
                 id: 'loja-itapua', nome: '🏪 Loja Itapuã',
                 subtitulo: 'Atendimento Presencial',
-                canais: ['📞 Telefonia', '💬 WhatsApp', '🏢 Presencial'],
+                canais: ['🏢 Presencial'],
                 horarios: [
-                    { dias: [1,2,3,4,5], abre: 8, fecha: 17.5, modo: 'telefonia' },
-                    { dias: [1,2,3,4,5], abre: 8, fecha: 17.5, modo: 'whatsapp' }
+                    { dias: [1,2,3,4,5], abre: 8, fecha: 17.5, modo: 'presencial' }
                 ],
                 alertaMinutos: 30, funcionaEmFeriado: false, temAlmoco: false,
-                semModo: false, endereco: 'R. Juiz Alexandre Martins de Castro Filho, 6 - Itapuã, Vila Velha'
+                semModo: true, endereco: 'R. Juiz Alexandre Martins de Castro Filho, 6 - Itapuã, Vila Velha'
             }
         ];
 
@@ -948,7 +941,7 @@
                 excecoes: excecoes,
                 alertasAtivos: alertasAtivos,
                 informativos: informativos,
-                versao: 2 // marca como versão nova com canais separados
+                versao: 4
             };
         }
 
@@ -1036,15 +1029,11 @@
             return null;
         }
 
-        // ============ NOVA LÓGICA: MÚLTIPLAS FAIXAS SIMULTÂNEAS ============
-        /**
-         * Retorna todas as faixas que casam com o dia de hoje
-         */
+        // ============ LÓGICA DE MÚLTIPLAS FAIXAS ============
         function getFaixasDoDia(setor, feriado) {
             const dia = new Date().getDay();
             const excecao = buscarExcecaoHoje(setor.id);
 
-            // Exceção especial sobrescreve tudo
             if (excecao && excecao.tipo === 'especial') {
                 return [{
                     dias: [0,1,2,3,4,5,6],
@@ -1056,23 +1045,17 @@
 
             let faixas = setor.horarios.filter(h => h.dias.includes(dia));
 
-            // Se feriado e o setor funciona em feriado mas não tem faixa no dia atual,
-            // usa as faixas de um dia útil como referência
             if (faixas.length === 0 && feriado && setor.funcionaEmFeriado) {
                 faixas = setor.horarios.filter(h => h.dias.includes(1) || h.dias.includes(2) || h.dias.includes(3) || h.dias.includes(4) || h.dias.includes(5));
             }
             return faixas;
         }
 
-        /**
-         * Analisa quais canais estão ativos AGORA e o modo combinado.
-         * Retorna: { modo, ativos: {whatsapp: bool, telefonia: bool}, faixasAtivas, proximaAbertura, proximoFechamento, faixaQueFechaAntes }
-         */
         function calcularCanaisAgora(setor, feriado) {
             const hora = new Date().getHours() + (new Date().getMinutes() / 60);
             const faixas = getFaixasDoDia(setor, feriado);
 
-            const ativos = { whatsapp: false, telefonia: false };
+            const ativos = { whatsapp: false, telefonia: false, presencial: false };
             const faixasAtivas = [];
             let proximaAbertura = null;
             let proximoFechamento = null;
@@ -1081,12 +1064,13 @@
             for (const f of faixas) {
                 const canalWpp = f.modo === 'whatsapp' || f.modo === 'ambos';
                 const canalTel = f.modo === 'telefonia' || f.modo === 'ambos';
+                const canalPre = f.modo === 'presencial';
 
                 if (hora >= f.abre && hora <= f.fecha) {
                     faixasAtivas.push(f);
                     if (canalWpp) ativos.whatsapp = true;
                     if (canalTel) ativos.telefonia = true;
-                    // Detectar a faixa que fecha primeiro (para alerta de transição)
+                    if (canalPre) ativos.presencial = true;
                     if (!proximoFechamento || f.fecha < proximoFechamento) {
                         proximoFechamento = f.fecha;
                         faixaQueFechaAntes = f;
@@ -1096,51 +1080,26 @@
                 }
             }
 
-            // Modo combinado final
             let modo = null;
-            if (ativos.whatsapp && ativos.telefonia) modo = 'ambos';
+            if (ativos.presencial) modo = 'presencial';
+            else if (ativos.whatsapp && ativos.telefonia) modo = 'ambos';
             else if (ativos.whatsapp) modo = 'whatsapp';
             else if (ativos.telefonia) modo = 'telefonia';
 
             return {
-                modo,
-                ativos,
-                faixasAtivas,
-                proximaAbertura,
-                proximoFechamento,
-                faixaQueFechaAntes
+                modo, ativos, faixasAtivas,
+                proximaAbertura, proximoFechamento, faixaQueFechaAntes
             };
         }
 
-        /**
-         * Retorna descrição resumida do dia: "📞 até 19h · 💬 até 22h"
-         */
+        // ============ SEM REDUNDÂNCIA: linha mostra só o range total ============
         function descricaoFaixasDoDia(setor, feriado) {
             const faixas = getFaixasDoDia(setor, feriado);
             if (faixas.length === 0) return null;
 
-            // Agrupa por modo
-            const porModo = { telefonia: [], whatsapp: [], ambos: [] };
-            for (const f of faixas) {
-                const m = f.modo || 'ambos';
-                if (porModo[m]) porModo[m].push(f);
-            }
-
-            const partes = [];
-            if (porModo.ambos.length > 0) {
-                // pega a faixa mais ampla de "ambos"
-                const f = porModo.ambos.reduce((a, b) => (a.fecha >= b.fecha ? a : b));
-                partes.push(`📞💬 até ${formatarHoraCurta(f.fecha)}`);
-            }
-            if (porModo.telefonia.length > 0) {
-                const f = porModo.telefonia.reduce((a, b) => (a.fecha >= b.fecha ? a : b));
-                partes.push(`📞 até ${formatarHoraCurta(f.fecha)}`);
-            }
-            if (porModo.whatsapp.length > 0) {
-                const f = porModo.whatsapp.reduce((a, b) => (a.fecha >= b.fecha ? a : b));
-                partes.push(`💬 até ${formatarHoraCurta(f.fecha)}`);
-            }
-            return partes.join(' · ');
+            const abreMin = Math.min(...faixas.map(f => f.abre));
+            const fechaMax = Math.max(...faixas.map(f => f.fecha));
+            return `${formatarHora(abreMin)} - ${formatarHora(fechaMax)}`;
         }
 
         // ============ STATUS DO SETOR ============
@@ -1227,11 +1186,9 @@
                 }
             }
 
-            // -------- CÁLCULO DOS CANAIS ATIVOS AGORA --------
             const canaisInfo = calcularCanaisAgora(setor, feriado);
             const minAlerta = setor.alertaMinutos || 30;
 
-            // Aguardando abertura
             if (canaisInfo.proximaAbertura != null && hora < canaisInfo.proximaAbertura) {
                 const minAbrir = Math.round((canaisInfo.proximaAbertura - hora) * 60);
                 if (minAbrir <= minAlerta) {
@@ -1244,36 +1201,35 @@
                     cor: 'fechado', modo: null, canaisInfo };
             }
 
-            // Tem algo aberto
             if (canaisInfo.modo) {
                 const minFechar = Math.round((canaisInfo.proximoFechamento - hora) * 60);
 
-                // Verifica se ALGUM canal vai fechar em breve, mas outro continua
                 const faixasQueFechamBrevemente = [];
                 for (const f of canaisInfo.faixasAtivas) {
                     const min = Math.round((f.fecha - hora) * 60);
                     if (min <= minAlerta) faixasQueFechamBrevemente.push(f);
                 }
                 const vaiPerderCanal = faixasQueFechamBrevemente.some(f => {
-                    // O canal dessa faixa está presente em outra faixa ativa com fechamento posterior?
                     const outros = canaisInfo.faixasAtivas.filter(x => x !== f);
                     const mesmoCanalEmOutra = outros.some(x => {
                         const wppX = x.modo === 'whatsapp' || x.modo === 'ambos';
                         const telX = x.modo === 'telefonia' || x.modo === 'ambos';
+                        const preX = x.modo === 'presencial';
                         const wppF = f.modo === 'whatsapp' || f.modo === 'ambos';
                         const telF = f.modo === 'telefonia' || f.modo === 'ambos';
-                        return (wppF && wppX) || (telF && telX);
+                        const preF = f.modo === 'presencial';
+                        return (wppF && wppX) || (telF && telX) || (preF && preX);
                     });
                     return !mesmoCanalEmOutra && f.fecha > hora;
                 });
 
                 if (minFechar <= minAlerta) {
                     if (vaiPerderCanal) {
-                        // Uma faixa vai fechar mas outra continua → transição
                         const faixa = faixasQueFechamBrevemente[0];
                         const canaisFechando = [];
                         if (faixa.modo === 'telefonia' || faixa.modo === 'ambos') canaisFechando.push('📞 Telefonia');
                         if (faixa.modo === 'whatsapp' || faixa.modo === 'ambos') canaisFechando.push('💬 WhatsApp');
+                        if (faixa.modo === 'presencial') canaisFechando.push('🏢 Presencial');
                         return { status: 'alerta',
                             mensagem: `⏰ ${canaisFechando.join(' e ')} encerra em ${minFechar} min!`,
                             descricao: `Até ${formatarHora(faixa.fecha)} — depois segue o restante`,
@@ -1288,7 +1244,6 @@
                     cor: 'aberto', modo: canaisInfo.modo, canaisInfo };
             }
 
-            // Nenhum canal aberto e não é antes da abertura → encerrado
             const proximoDia = calcularProximoDiaUtil(setor);
             return { status: 'fechado', mensagem: '❌ Expediente encerrado',
                 descricao: proximoDia ? `Volta ${proximoDia}` : 'Volta em breve',
@@ -1374,7 +1329,7 @@
             const feriado = hojeEhFeriado();
             const excecaoHoje = buscarExcecaoHoje(setor.id);
 
-            // Linha de horário: descreve faixas do dia
+            // ===== LINHA DE HORÁRIO: range total sem redundância =====
             let horarioTexto = '📅 Indisponível hoje';
             const faixasHoje = getFaixasDoDia(setor, feriado);
             if (faixasHoje.length > 0) {
@@ -1407,10 +1362,20 @@
                 badgeExtra += `<span class="badge-transicao">🔔 Transição de canal</span>`;
             }
 
-            // ===== Canais ativos =====
+            // ===== CHIPS DE CANAIS =====
             let canaisHtml = '';
-            if (faixasHoje.length > 0 || statusInfo.canaisInfo) {
-                // Descobre todos os canais possíveis hoje
+
+            if (setor.semModo) {
+                const info = statusInfo.canaisInfo;
+                const estaAberto = info && info.modo === 'presencial';
+                canaisHtml = `
+                    <div class="card-canais">
+                        <span class="canal-chip ${estaAberto ? 'ativo' : 'inativo'} presencial">
+                            🏢 Atendimento Presencial
+                        </span>
+                    </div>
+                `;
+            } else if (faixasHoje.length > 0 || statusInfo.canaisInfo) {
                 let temWppHoje = false;
                 let temTelHoje = false;
                 for (const f of faixasHoje) {
@@ -1421,7 +1386,6 @@
                 const wppAtivo = info ? info.ativos.whatsapp : false;
                 const telAtivo = info ? info.ativos.telefonia : false;
 
-                // Horário final do WhatsApp hoje e da Telefonia hoje
                 let fechaWpp = null, fechaTel = null;
                 for (const f of faixasHoje) {
                     if ((f.modo === 'whatsapp' || f.modo === 'ambos') && (fechaWpp === null || f.fecha > fechaWpp)) fechaWpp = f.fecha;
@@ -1609,7 +1573,6 @@
                     valor = Math.round((statusInfo.excecao && statusInfo.excecao.fim ? statusInfo.excecao.fim : 0) * 60);
                     mensagem = statusInfo.descricao;
                 } else {
-                    // Alerta de abertura/fechamento/transição
                     if (statusInfo.transicao) {
                         tipoAlerta = 'transicao';
                         valor = Math.round((statusInfo.canaisInfo.proximoFechamento) * 60);
@@ -2070,12 +2033,16 @@
         function renderizarEditorHorarios() {
             const diasNomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
             const container = document.getElementById('horariosEditor');
+            const setor = setores.find(s => s.id === setorEditandoId);
+            const mostrarModo = setor && !setor.semModo;
 
             container.innerHTML = horariosEditando.map((h, idx) => {
                 let classeModo = '';
                 if (h.modo === 'telefonia') classeModo = 'tel';
                 else if (h.modo === 'whatsapp') classeModo = 'wpp';
+                else if (h.modo === 'presencial') classeModo = 'pre';
                 else classeModo = 'amb';
+
                 return `
                     <div class="editor-horario-item ${classeModo}">
                         <div class="editor-dias">
@@ -2086,6 +2053,7 @@
                             <input type="time" value="${decimalParaHoraStr(h.fecha)}" step="60" onchange="alterarHoraEditor(${idx}, 'fecha', this.value)">
                             <button class="btn-remover-linha" onclick="removerLinhaHorario(${idx})" title="Remover faixa">🗑️</button>
                         </div>
+                        ${mostrarModo ? `
                         <div class="editor-modo">
                             <button class="modo-btn whatsapp ${h.modo === 'whatsapp' ? 'selecionado' : ''}" onclick="alterarModoEditor(${idx}, 'whatsapp')">
                                 <span class="modo-emoji">💬</span>Somente WhatsApp
@@ -2097,6 +2065,11 @@
                                 <span class="modo-emoji">📞💬</span>Telefonia + WhatsApp
                             </button>
                         </div>
+                        ` : `
+                        <div style="margin-top:8px;padding-top:8px;border-top:1px dashed #2a2a4a;font-size:11px;color:#4dd0e1;">
+                            🏢 Setor somente presencial (sem telefonia/whatsapp)
+                        </div>
+                        `}
                     </div>
                 `;
             }).join('') || '<p style="color:#666;font-size:13px;">Nenhuma faixa cadastrada. Clique em "Adicionar faixa".</p>';
@@ -2131,7 +2104,9 @@
         }
 
         function adicionarLinhaHorario() {
-            horariosEditando.push({ dias: [1,2,3,4,5], abre: 9, fecha: 18, modo: 'ambos' });
+            const setor = setores.find(s => s.id === setorEditandoId);
+            const modoPadrao = setor && setor.semModo ? 'presencial' : 'ambos';
+            horariosEditando.push({ dias: [1,2,3,4,5], abre: 9, fecha: 18, modo: modoPadrao });
             renderizarEditorHorarios();
         }
 
@@ -2175,11 +2150,14 @@
             for (const h of horariosEditando) {
                 if (h.dias.length === 0) { alert('⚠️ Cada faixa precisa ter ao menos 1 dia!'); return; }
                 if (h.fecha <= h.abre) { alert('⚠️ O fechamento deve ser maior que a abertura!'); return; }
-                if (!h.modo) { alert('⚠️ Selecione um modo de atendimento em cada faixa!'); return; }
+                if (!setor.semModo && !h.modo) { alert('⚠️ Selecione um modo de atendimento em cada faixa!'); return; }
             }
             if (horariosEditando.length === 0) { alert('⚠️ Adicione ao menos uma faixa!'); return; }
 
-            setor.horarios = horariosEditando.map(h => ({ dias: [...h.dias], abre: h.abre, fecha: h.fecha, modo: h.modo || 'ambos' }));
+            setor.horarios = horariosEditando.map(h => ({
+                dias: [...h.dias], abre: h.abre, fecha: h.fecha,
+                modo: setor.semModo ? 'presencial' : (h.modo || 'ambos')
+            }));
             setor.endereco = document.getElementById('inputEnderecoSetor').value.trim();
 
             const temAlmoco = document.getElementById('switchTemAlmoco').classList.contains('ativo');
@@ -2231,11 +2209,11 @@
         // ============ INICIALIZAÇÃO ============
         async function iniciarPainel() {
             if (!window._firebaseReady) { setTimeout(iniciarPainel, 100); return; }
-            console.log('🚀 Iniciando painel v2 (canais separados)...');
+            console.log('🚀 Iniciando painel v4 (sem redundância)...');
 
             let cfg = await carregarConfiguracoes();
 
-            if (cfg && cfg.versao === 2) {
+            if (cfg && cfg.versao === 4) {
                 feriados = cfg.feriados || [];
                 feriadoManualAtivo = cfg.feriadoManualAtivo || false;
                 feriadoManualNome = cfg.feriadoManualNome || '';
@@ -2244,30 +2222,56 @@
                 setores = cfg.setores || JSON.parse(JSON.stringify(SETORES_PADRAO));
                 alertasAtivos = cfg.alertasAtivos || false;
             } else {
-                // Migração: cria versão nova com canais separados
-                console.log('📝 Migrando para versão 2 com canais separados...');
+                console.log('📝 Migrando para versão 4...');
+                let setoresBase = cfg && cfg.setores ? cfg.setores : JSON.parse(JSON.stringify(SETORES_PADRAO));
+
+                setoresBase = setoresBase.map(s => {
+                    if (s.id && s.id.startsWith('loja-')) {
+                        const padrao = SETORES_PADRAO.find(p => p.id === s.id);
+                        if (padrao) {
+                            return {
+                                ...s,
+                                horarios: JSON.parse(JSON.stringify(padrao.horarios)),
+                                semModo: true,
+                                canais: ['🏢 Presencial']
+                            };
+                        }
+                    }
+                    return s;
+                });
+
+                for (const padrao of SETORES_PADRAO) {
+                    if (!setoresBase.find(s => s.id === padrao.id)) {
+                        setoresBase.push(JSON.parse(JSON.stringify(padrao)));
+                    }
+                }
+
                 const padrao = {
                     ano: ANO_ATUAL,
-                    feriados: gerarFeriadosPorAno(ANO_ATUAL),
-                    feriadoManualAtivo: false,
-                    feriadoManualNome: '',
-                    setores: JSON.parse(JSON.stringify(SETORES_PADRAO)),
-                    excecoes: [],
-                    informativos: [],
-                    alertasAtivos: false,
-                    versao: 2
+                    feriados: cfg && cfg.feriados ? cfg.feriados : gerarFeriadosPorAno(ANO_ATUAL),
+                    feriadoManualAtivo: cfg ? (cfg.feriadoManualAtivo || false) : false,
+                    feriadoManualNome: cfg ? (cfg.feriadoManualNome || '') : '',
+                    setores: setoresBase,
+                    excecoes: cfg ? (cfg.excecoes || []) : [],
+                    informativos: cfg ? (cfg.informativos || []) : [],
+                    alertasAtivos: cfg ? (cfg.alertasAtivos || false) : false,
+                    versao: 4
                 };
                 await window._firebase.setDoc(
                     window._firebase.doc(window._firebase.db, 'painel', 'config'),
                     padrao
                 );
                 feriados = padrao.feriados;
+                feriadoManualAtivo = padrao.feriadoManualAtivo;
+                feriadoManualNome = padrao.feriadoManualNome;
                 setores = padrao.setores;
+                excecoes = padrao.excecoes;
+                informativos = padrao.informativos;
+                alertasAtivos = padrao.alertasAtivos;
             }
 
-            // Normaliza
             setores.forEach(setor => {
-                if (setor.horarios) setor.horarios.forEach(h => { if (!h.modo) h.modo = 'ambos'; });
+                if (setor.horarios) setor.horarios.forEach(h => { if (!h.modo) h.modo = setor.semModo ? 'presencial' : 'ambos'; });
                 if (setor.endereco === undefined) setor.endereco = '';
             });
 
@@ -2300,7 +2304,7 @@
                 alertasAtivos = cfg.alertasAtivos || false;
 
                 setores.forEach(setor => {
-                    if (setor.horarios) setor.horarios.forEach(h => { if (!h.modo) h.modo = 'ambos'; });
+                    if (setor.horarios) setor.horarios.forEach(h => { if (!h.modo) h.modo = setor.semModo ? 'presencial' : 'ambos'; });
                     if (setor.endereco === undefined) setor.endereco = '';
                 });
 
@@ -2340,7 +2344,7 @@
                     if (alertasAtivos) verificarAlertas();
                 }
             });
-            console.log(`📊 Painel v2 iniciado - ${ANO_ATUAL}`);
+            console.log(`📊 Painel v4 iniciado - ${ANO_ATUAL}`);
         }
 
         iniciarPainel();
@@ -2356,7 +2360,6 @@
             if (e.target === e.currentTarget) fecharModal();
         });
 
-        // Exports globais
         window.abrirModal = abrirModal;
         window.fecharModal = fecharModal;
         window.toggleFeriadoGeral = toggleFeriadoGeral;
